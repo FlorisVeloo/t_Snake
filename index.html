@@ -86,7 +86,8 @@
 
         function resetGame() {
             clearInterval(gameInterval);
-            snake = [{ x: 9 * box, y: 10 * box }];
+            // Startpositie van de slang rechtsboven instellen
+            snake = [{ x: canvas.width - box, y: 0 }]; 
             food = { x: Math.floor(Math.random() * 19 + 1) * box, y: Math.floor(Math.random() * 19 + 1) * box };
             score = 0;
             d = null;
