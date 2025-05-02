@@ -1,183 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Game</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #333;
-            color: white;
-        }
-        canvas {
-            border: 1px solid #000;
-            background-color: #fff;
-            margin-top: 20px;
-        }
-        #menu, #gameOver, #videoModal {
-            display: none;
-            text-align: center;
-        }
-        #menu.active, #gameOver.active, #videoModal.active {
-            display: block;
-        }
-        #startButton, #restartButton {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #555;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-        #startButton:hover, #restartButton:hover {
-            background-color: #777;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snake Game</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #333;
+      color: white;
+      overflow: hidden;
+    }
+    canvas {
+      border: 1px solid #000;
+      background-color: #fff;
+      margin-top: 20px;
+      touch-action: none;
+    }
+    #menu, #gameOver, #videoModal {
+      display: none;
+      text-align: center;
+    }
+    #menu.active, #gameOver.active, #videoModal.active {
+      display: block;
+    }
+    #startButton, #restartButton {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #555;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    #startButton:hover, #restartButton:hover {
+      background-color: #777;
+    }
+  </style>
 </head>
 <body>
-    <div id="menu" class="active">
-        <h1>Welkom bij Snake!</h1>
-        <p>Joop is een slang en heeft trek in koekjes. Kijk hoeveel koekjes hij kan eten</p>
-        <button id="twoPlayer">Linkshandig</button>
-        <button id="singlePlayer">Rechtshandig</button>
-    </div>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <div id="gameOver">
-        <h2>Game Over!</h2>
-        <button id="restartButton">Opnieuw spelen</button>
-    </div>
-    <div id="videoModal">
-        <h2>Gefeliciteerd!</h2>
-         <iframe width="400" height="225" src="https://www.youtube.com/embed/NYB1wJ99FZo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
-    <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
-        const box = 20;
-        const snakeImg = new Image();
-        snakeImg.src = 'Monster.png'; // Snake segment image
-        const foodImg = new Image();
-        foodImg.src = 'Koek.png'; // Food image
-        const obstacleImg = new Image();
-        obstacleImg.src = 'ublock.png'; // Obstacle image
-        
-        let snake, food, score, d, playerCount, gameInterval;
+  <div id="menu" class="active">
+    <h1>Welkom bij Snake!</h1>
+    <p>Joop is een slang en heeft trek in koekjes. Kijk hoeveel koekjes hij kan eten</p>
+    <button id="twoPlayer">Linkshandig</button>
+    <button id="singlePlayer">Rechtshandig</button>
+  </div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="gameOver">
+    <h2>Game Over!</h2>
+    <button id="restartButton">Opnieuw spelen</button>
+  </div>
+  <div id="videoModal">
+    <h2>Gefeliciteerd!</h2>
+    <iframe width="300" height="169" src="https://www.youtube.com/embed/NYB1wJ99FZo" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
 
-        document.getElementById("singlePlayer").addEventListener("click", () => startGame(1));
-        document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
-        document.getElementById("restartButton").addEventListener("click", resetGame);
+    // Responsive canvas
+    const box = 20;
+    const cols = 20;
+    const rows = 20;
+    canvas.width = box * cols;
+    canvas.height = box * rows;
 
-        function startGame(players) {
-            playerCount = players;
-            resetGame();
-            document.getElementById("menu").classList.remove("active");
-            document.getElementById("gameCanvas").style.display = 'block';
-            gameInterval = setInterval(draw, 100);
-        }
+    const snakeImg = new Image();
+    snakeImg.src = 'Monster.png';
+    const foodImg = new Image();
+    foodImg.src = 'Koek.png';
+    const obstacleImg = new Image();
+    obstacleImg.src = 'ublock.png';
 
-        function resetGame() {
-            clearInterval(gameInterval);
-            // Startpositie van de slang rechtsboven instellen
-            snake = [{ x: canvas.width - box, y: 0 }]; 
-            food = { x: Math.floor(Math.random() * 19 + 1) * box, y: Math.floor(Math.random() * 19 + 1) * box };
-            score = 0;
-            d = null;
-            document.getElementById("gameOver").classList.remove("active");
-            document.getElementById("videoModal").classList.remove("active");
-        }
+    let snake, food, score, d, playerCount, gameInterval;
 
-        document.addEventListener("keydown", (event) => {
-            if (playerCount === 1) {
-                if (event.keyCode === 37 && d !== "RIGHT") d = "LEFT";
-                else if (event.keyCode === 38 && d !== "DOWN") d = "UP";
-                else if (event.keyCode === 39 && d !== "LEFT") d = "RIGHT";
-                else if (event.keyCode === 40 && d !== "UP") d = "DOWN";
-            } else if (playerCount === 2) {
-                if (event.keyCode === 65 && d !== "RIGHT") d = "LEFT"; // 'A' key
-                else if (event.keyCode === 87 && d !== "DOWN") d = "UP"; // 'W' key
-                else if (event.keyCode === 68 && d !== "LEFT") d = "RIGHT"; // 'D' key
-                else if (event.keyCode === 83 && d !== "UP") d = "DOWN"; // 'S' key
-            }
-        });
+    document.getElementById("singlePlayer").addEventListener("click", () => startGame(1));
+    document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
+    document.getElementById("restartButton").addEventListener("click", resetGame);
 
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function startGame(players) {
+      playerCount = players;
+      resetGame();
+      document.getElementById("menu").classList.remove("active");
+      canvas.style.display = 'block';
+      gameInterval = setInterval(draw, 100);
+    }
 
-            // Obstakel in het midden
-            const obstacleX = 9 * box;
-            const obstacleY = 9 * box;
-            ctx.drawImage(obstacleImg, obstacleX, obstacleY, box * 2, box * 2);
+    function resetGame() {
+      clearInterval(gameInterval);
+      snake = [{ x: canvas.width - box, y: 0 }];
+      food = {
+        x: Math.floor(Math.random() * (cols - 1) + 1) * box,
+        y: Math.floor(Math.random() * (rows - 1) + 1) * box
+      };
+      score = 0;
+      d = null;
+      document.getElementById("gameOver").classList.remove("active");
+      document.getElementById("videoModal").classList.remove("active");
+    }
 
-            // Tekenen van de slang
-            for (let i = 0; i < snake.length; i++) {
-                ctx.drawImage(snakeImg, snake[i].x, snake[i].y, box, box);
-            }
+    document.addEventListener("keydown", (event) => {
+      if (playerCount === 1) {
+        if (event.key === "ArrowLeft" && d !== "RIGHT") d = "LEFT";
+        else if (event.key === "ArrowUp" && d !== "DOWN") d = "UP";
+        else if (event.key === "ArrowRight" && d !== "LEFT") d = "RIGHT";
+        else if (event.key === "ArrowDown" && d !== "UP") d = "DOWN";
+      } else if (playerCount === 2) {
+        if (event.key === "a" && d !== "RIGHT") d = "LEFT";
+        else if (event.key === "w" && d !== "DOWN") d = "UP";
+        else if (event.key === "d" && d !== "LEFT") d = "RIGHT";
+        else if (event.key === "s" && d !== "UP") d = "DOWN";
+      }
+    });
 
-            // Tekenen van het voedsel
-            ctx.drawImage(foodImg, food.x, food.y, box, box);
+    // Mobile swipe
+    let touchStartX = 0, touchStartY = 0;
+    canvas.addEventListener("touchstart", (e) => {
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    });
+    canvas.addEventListener("touchmove", (e) => {
+      if (!touchStartX || !touchStartY) return;
 
-            // Slangpositie berekenen
-            let snakeX = snake[0].x;
-            let snakeY = snake[0].y;
+      const touch = e.touches[0];
+      const dx = touch.clientX - touchStartX;
+      const dy = touch.clientY - touchStartY;
 
-            if (d === "LEFT") snakeX -= box;
-            if (d === "UP") snakeY -= box;
-            if (d === "RIGHT") snakeX += box;
-            if (d === "DOWN") snakeY += box;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 0 && d !== "LEFT") d = "RIGHT";
+        else if (dx < 0 && d !== "RIGHT") d = "LEFT";
+      } else {
+        if (dy > 0 && d !== "UP") d = "DOWN";
+        else if (dy < 0 && d !== "DOWN") d = "UP";
+      }
 
-            // Slang gaat door de muren
-            if (snakeX < 0) snakeX = canvas.width - box;
-            if (snakeX >= canvas.width) snakeX = 0;
-            if (snakeY < 0) snakeY = canvas.height - box;
-            if (snakeY >= canvas.height) snakeY = 0;
+      touchStartX = 0;
+      touchStartY = 0;
+    });
 
-            // Check of de slang het voedsel eet
-            if (snakeX === food.x && snakeY === food.y) {
-                score++;
-                food = { x: Math.floor(Math.random() * 19 + 1) * box, y: Math.floor(Math.random() * 19 + 1) * box };
-            } else {
-                snake.pop();
-            }
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const obstacleX = 9 * box;
+      const obstacleY = 9 * box;
+      ctx.drawImage(obstacleImg, obstacleX, obstacleY, box * 2, box * 2);
 
-            const newHead = { x: snakeX, y: snakeY };
+      for (let i = 0; i < snake.length; i++) {
+        ctx.drawImage(snakeImg, snake[i].x, snake[i].y, box, box);
+      }
 
-            // Controle voor obstakel en slangzelf
-            if (
-                (snakeX >= obstacleX && snakeX < obstacleX + 2 * box && snakeY >= obstacleY && snakeY < obstacleY + 2 * box) ||
-                collision(newHead, snake)
-            ) {
-                endGame();
-            }
+      ctx.drawImage(foodImg, food.x, food.y, box, box);
 
-            snake.unshift(newHead);
+      let snakeX = snake[0].x;
+      let snakeY = snake[0].y;
 
-            if (score >= 10) {
-                showVideo();
-            }
-        }
+      if (d === "LEFT") snakeX -= box;
+      if (d === "UP") snakeY -= box;
+      if (d === "RIGHT") snakeX += box;
+      if (d === "DOWN") snakeY += box;
 
-        function collision(head, array) {
-            for (let i = 0; i < array.length; i++) {
-                if (head.x === array[i].x && head.y === array[i].y) return true;
-            }
-            return false;
-        }
+      if (snakeX < 0) snakeX = canvas.width - box;
+      if (snakeX >= canvas.width) snakeX = 0;
+      if (snakeY < 0) snakeY = canvas.height - box;
+      if (snakeY >= canvas.height) snakeY = 0;
 
-        function endGame() {
-            clearInterval(gameInterval);
-            document.getElementById("gameOver").classList.add("active");
-        }
+      if (snakeX === food.x && snakeY === food.y) {
+        score++;
+        food = {
+          x: Math.floor(Math.random() * (cols - 1) + 1) * box,
+          y: Math.floor(Math.random() * (rows - 1) + 1) * box
+        };
+      } else {
+        snake.pop();
+      }
 
-        function showVideo() {
-            clearInterval(gameInterval);
-            document.getElementById("videoModal").classList.add("active");
-        }
-    </script>
+      const newHead = { x: snakeX, y: snakeY };
+
+      if (
+        (snakeX >= obstacleX && snakeX < obstacleX + 2 * box && snakeY >= obstacleY && snakeY < obstacleY + 2 * box) ||
+        collision(newHead, snake)
+      ) {
+        endGame();
+      }
+
+      snake.unshift(newHead);
+
+      if (score >= 10) {
+        showVideo();
+      }
+    }
+
+    function collision(head, array) {
+      for (let i = 0; i < array.length; i++) {
+        if (head.x === array[i].x && head.y === array[i].y) return true;
+      }
+      return false;
+    }
+
+    function endGame() {
+      clearInterval(gameInterval);
+      document.getElementById("gameOver").classList.add("active");
+    }
+
+    function showVideo() {
+      clearInterval(gameInterval);
+      document.getElementById("videoModal").classList.add("active");
+    }
+  </script>
 </body>
 </html>
