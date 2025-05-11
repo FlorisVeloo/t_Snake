@@ -75,7 +75,7 @@
   <div id="menu" class="active">
     <h1>Welkom in Joopies kelder!</h1>
     <p>Volg het spoor van koekjes. Vind Joop, maar pas op voor de Uil!</p>
-    <button id="twoPlayer">Linkshandig (awsd)</button>
+    <button id="twoPlayer">Linkshandig</button>
     <button id="singlePlayer">Rechtshandig (pijltoetsen)</button>
   </div>
 
@@ -188,13 +188,13 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const obstacleX = 14 * box;
       const obstacleY = 14 * box;
-      ctx.drawImage(obstacleImg, obstacleX, obstacleY, box * 2, box * 2);
+      ctx.drawImage(obstacleImg, obstacleX, obstacleY, box * 6, box * 6);
 
       for (let i = 0; i < snake.length; i++) {
-        ctx.drawImage(snakeImg, snake[i].x, snake[i].y, box, box);
+        ctx.drawImage(snakeImg, snake[i].x - (box * (scale - 1)) / 2, snake[i].y - (box * (scale - 1)) / 2, box * scale, box * scale);
       }
 
-      ctx.drawImage(foodImg, food.x, food.y, box, box);
+      ctx.drawImage(foodImg, food.x - (box * (scale - 1)) / 2, food.y - (box * (scale - 1)) / 2, box * scale, box * scale);
 
       let snakeX = snake[0].x;
       let snakeY = snake[0].y;
