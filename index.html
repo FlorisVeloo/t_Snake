@@ -117,8 +117,7 @@
 
     document.getElementById("singlePlayer").addEventListener("click", () => startGame(1));
     document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
-    document.getElementById("restartButton").addEventListener("click", () => {
-    location.reload(); // herlaadt de pagina, zoals F5
+    document.getElementById("restartButton").addEventListener("click", () => { location.reload(); // herlaadt de pagina, zoals F5
 
     function startGame(players) {
       playerCount = players;
