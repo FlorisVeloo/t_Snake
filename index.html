@@ -11,21 +11,10 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      margin-top: 50;
       font-family: Arial, sans-serif;
       background-color: black;
       color: white;
       overflow: hidden;
-    }
-
-    #background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      opacity: 0.9;
     }
 
     canvas {
@@ -70,7 +59,7 @@
   </style>
 </head>
 <body>
-  <img id="background" src="pad_hel.png" alt="pad met hel">
+  <canvas id="gameCanvas"></canvas>
 
   <div id="menu" class="active">
     <h1>Welkom in Joopies kelder!</h1>
@@ -79,12 +68,10 @@
     <button id="singlePlayer">Rechtshandig (pijltoetsen)</button>
   </div>
 
-  <canvas id="gameCanvas"></canvas>
-
   <div id="gameOver">
     <h2>Game over</h2>
     <p>Je bent een pannenkoek!</p>
-    <button id="restartButton">Herstart de zoektocht naar koekjes</button>
+    <button id="restartButton">Herstart</button>
     <div id="extraLink">
       <a href="https://joopvanhetgroenewoud.nl" target="_blank" style="color: lightblue;">Home</a>
     </div>
@@ -102,6 +89,7 @@
     const ctx = canvas.getContext("2d");
 
     const box = 20;
+    const scale = 1.5; // Vergroting
     const cols = 30;
     const rows = 30;
     canvas.width = box * cols;
@@ -118,11 +106,11 @@
 
     document.getElementById("singlePlayer").addEventListener("click", () => startGame(1));
     document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
-    document.getElementById("restartButton").addEventListener("click", () => {
-      location.reload(); // herlaadt de pagina, zoals F5
-    });
+    document.getElementById("restartButton").addEventListener("click", () => location.reload());
 
-
+    const obstacleSize = box * 6;
+    const obstacleX = (canvas.width - obstacleSize) / 2;
+    const obstacleY = (canvas.height - obstacleSize) / 2;
 
     function startGame(players) {
       playerCount = players;
@@ -134,15 +122,19 @@
 
     function resetGame() {
       clearInterval(gameInterval);
-      snake = [{ x: canvas.width - box, y: 0 }];
-      food = {
-        x: Math.floor(Math.random() * (cols - 1) + 1) * box,
-        y: Math.floor(Math.random() * (rows - 1) + 1) * box
-      };
+      snake = [{ x: box * 5, y: box * 5 }];
+      food = randomFoodPosition();
       score = 0;
       d = null;
       document.getElementById("gameOver").classList.remove("active");
       document.getElementById("videoModal").classList.remove("active");
+    }
+
+    function randomFoodPosition() {
+      return {
+        x: Math.floor(Math.random() * cols) * box,
+        y: Math.floor(Math.random() * rows) * box
+      };
     }
 
     document.addEventListener("keydown", (event) => {
@@ -159,7 +151,6 @@
       }
     });
 
-    let touchStartX = 0, touchStartY = 0;
     canvas.addEventListener("touchstart", (e) => {
       const touch = e.touches[0];
       touchStartX = touch.clientX;
@@ -186,15 +177,25 @@
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const obstacleX = 14 * box;
-      const obstacleY = 14 * box;
-      ctx.drawImage(obstacleImg, obstacleX, obstacleY, box * 6, box * 6);
 
+      // Uil centreren
+      ctx.drawImage(obstacleImg, obstacleX, obstacleY, obstacleSize, obstacleSize);
+
+      // Slang tekenen
       for (let i = 0; i < snake.length; i++) {
-        ctx.drawImage(snakeImg, snake[i].x - (box * (scale - 1)) / 2, snake[i].y - (box * (scale - 1)) / 2, box * scale, box * scale);
+        ctx.drawImage(snakeImg,
+          snake[i].x - (box * (scale - 1)) / 2,
+          snake[i].y - (box * (scale - 1)) / 2,
+          box * scale,
+          box * scale);
       }
 
-      ctx.drawImage(foodImg, food.x - (box * (scale - 1)) / 2, food.y - (box * (scale - 1)) / 2, box * scale, box * scale);
+      // Koek tekenen
+      ctx.drawImage(foodImg,
+        food.x - (box * (scale - 1)) / 2,
+        food.y - (box * (scale - 1)) / 2,
+        box * scale,
+        box * scale);
 
       let snakeX = snake[0].x;
       let snakeY = snake[0].y;
@@ -204,27 +205,34 @@
       if (d === "RIGHT") snakeX += box;
       if (d === "DOWN") snakeY += box;
 
+      // Rand teleport
       if (snakeX < 0) snakeX = canvas.width - box;
       if (snakeX >= canvas.width) snakeX = 0;
       if (snakeY < 0) snakeY = canvas.height - box;
       if (snakeY >= canvas.height) snakeY = 0;
 
+      // Eten
       if (snakeX === food.x && snakeY === food.y) {
         score++;
-        food = {
-          x: Math.floor(Math.random() * (cols - 1) + 1) * box,
-          y: Math.floor(Math.random() * (rows - 1) + 1) * box
-        };
+        food = randomFoodPosition();
       } else {
         snake.pop();
       }
 
       const newHead = { x: snakeX, y: snakeY };
 
+      // Botsing met obstakel (uil)
       if (
-        (snakeX >= obstacleX && snakeX < obstacleX + 2 * box && snakeY >= obstacleY && snakeY < obstacleY + 2 * box) ||
-        collision(newHead, snake)
+        snakeX >= obstacleX &&
+        snakeX < obstacleX + obstacleSize &&
+        snakeY >= obstacleY &&
+        snakeY < obstacleY + obstacleSize
       ) {
+        endGame();
+      }
+
+      // Botsing met zichzelf
+      if (collision(newHead, snake)) {
         endGame();
       }
 
