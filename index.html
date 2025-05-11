@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Snake Game</title>
   <style>
+    #introText {
+       background-color: black;
+       padding: 20px;
+       border-radius: 10px;
+       color: #b40000;
+       box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+       max-width: 90vw;
+       margin-bottom: 10px;
+    }
+
     body {
       display: flex;
       flex-direction: column;
@@ -77,8 +87,10 @@
   <img id="background" src="pad_hel.png" alt="pad met hel">
 
   <div id="menu" class="active">
+    <div id="introText">
     <h1>Welkom in Joopies kelder!</h1>
     <p>Volg het spoor van koekjes. Vind Joop, maar pas op voor de Uil!</p>
+    </div>
     <button id="twoPlayer">Linkshandig</button>
     <button id="singlePlayer">Rechtshandig (pijltoetsen)</button>
   </div>
