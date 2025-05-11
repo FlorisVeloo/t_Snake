@@ -194,7 +194,7 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Teken obstakel (Uil)
-      ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, box * 2, box * 2);
+      ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, box * 4, box * 4);
 
       for (let i = 0; i < snake.length; i++) {
         ctx.drawImage(snakeImg, snake[i].x, snake[i].y, box, box);
