@@ -266,6 +266,12 @@
       clearInterval(gameInterval);
       document.getElementById("videoModal").classList.add("active");
     }
+    function startGame(selectedPlayerCount) {
+      playerCount = selectedPlayerCount;
+      document.getElementById("menu").classList.remove("active");
+      resetGame();
+      gameInterval = setInterval(draw, 100);
+    }
   </script>
 </body>
 </html>
