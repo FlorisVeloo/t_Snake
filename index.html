@@ -11,7 +11,7 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      margin-top: 100;
+      margin-top: 50;
       font-family: Arial, sans-serif;
       background-color: black;
       color: white;
@@ -29,9 +29,9 @@
     }
 
     canvas {
-      border: 5px solid #fff;
+      border: 5px solid #810000;
       background-color: #000000;
-      margin-top: 200px;
+      margin-top: 100px;
       touch-action: none;
     }
 
@@ -186,8 +186,8 @@
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const obstacleX = 9 * box;
-      const obstacleY = 9 * box;
+      const obstacleX = 14 * box;
+      const obstacleY = 14 * box;
       ctx.drawImage(obstacleImg, obstacleX, obstacleY, box * 2, box * 2);
 
       for (let i = 0; i < snake.length; i++) {
