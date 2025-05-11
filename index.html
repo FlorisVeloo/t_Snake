@@ -255,6 +255,7 @@
 
     if (snakeX === food.x && snakeY === food.y) {
       score++;
+      obstacle = getRandomPosition(6, [food]); // Uil verplaatst
       food = getRandomPosition(1, [{ x: obstacle.x, y: obstacle.y, width: box * 6, height: box * 6 }]);
     } else {
       snake.pop();
