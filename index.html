@@ -82,6 +82,20 @@
       border: none;
       cursor: pointer;
     }
+    .buttonLink {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #000000;
+      color: #b40000;
+      border: none;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer;
+     }
+     .buttonLink:hover {
+      background-color: #777;
+     }
   </style>
 </head>
 <body>
@@ -101,12 +115,9 @@
   <div id="gameOver">
     <h2>Game over</h2>
     <p>Je bent een pannenkoek!</p>
-    <button id="restartButton">Herstart de zoektocht naar koekjes</button>
-    <div id="extraLink">
-      <a href="https://joopvanhetgroenewoud.nl" target="_blank" style="color: lightblue;">Home</a>
+    <button id="restartButton">Herstart de zoektocht naar koekjes</button>  <!-- Herstart-knop -->
+    <a href="https://joopvanhetgroenewoud.nl" target="_blank" class="buttonLink">Home</a> <!-- Home-link gestyled als knop -->
     </div>
-  </div>
-
   <div id="videoModal">
     <h2>Gefeliciteerd!</h2>
     <a href="https://onderweg8.joopvanhetgroenewoud.nl" target="_blank">
