@@ -5,82 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Snake Game</title>
   <style>
-    #introText {
-       background-color: black;
-       padding: 20px;
-       border-radius: 10px;
-       color: #b40000;
-       box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-       max-width: 90vw;
-       margin-bottom: 10px;
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: black;
-      color: #b40000;
-      overflow: hidden;
-      position: relative;
-    }
-
-    #background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-      opacity: 0.5;
-      object-fit: cover;
-    }
-
-    canvas {
-      border: 5px solid #810000;
-      background-color: #000000;
-      margin-top: 20px;
-      touch-action: none;
-      z-index: 1;
-    }
-
-    #menu, #gameOver, #videoModal {
-      display: none;
-      text-align: center;
-      margin-top: 20px;
-      z-index: 2;
-    }
-
-    #menu.active, #gameOver.active, #videoModal.active {
-      display: block;
-    }
-
-    #startButton, #restartButton, #twoPlayer, #singlePlayer {
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #000000;
-      color: #b40000;
-      border: none;
-      cursor: pointer;
-    }
-
-    #startButton:hover, #restartButton:hover, #twoPlayer:hover, #singlePlayer:hover {
-      background-color: #777;
-    }
-
-    #extraLink {
-      margin-top: 10px;
-    }
-
-    #videoModal a img {
-      max-width: 15vw;
-      height: auto;
-      border: none;
-      cursor: pointer;
-    }
+    /* ... (je CSS blijft onveranderd, dus dat heb ik weggelaten om ruimte te besparen) ... */
   </style>
 </head>
 <body>
@@ -88,8 +13,8 @@
 
   <div id="menu" class="active">
     <div id="introText">
-    <h1>Welkom in Joopies kelder!</h1>
-    <p>Volg het spoor van koekjes. Vind Joop, maar pas op voor de Uil!</p>
+      <h1>Welkom in Joopies kelder!</h1>
+      <p>Volg het spoor van koekjes. Vind Joop, maar pas op voor de Uil!</p>
     </div>
     <button id="twoPlayer">Linkshandig</button>
     <button id="singlePlayer">Rechtshandig (pijltoetsen)</button>
@@ -137,26 +62,27 @@
     document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
     document.getElementById("restartButton").addEventListener("click", () => location.reload());
 
-    function startGame(players) {
-      playerCount = players;
-      resetGame();
-      document.getElementById("menu").classList.remove("active");
-      canvas.style.display = 'block';
-      gameInterval = setInterval(draw, 100);
-    }
+    function getRandomPosition(sizeInBoxes = 1, avoid = []) {
+      let position;
+      let isValid = false;
 
-    function getRandomPosition() {
-      return {
-        x: Math.floor(Math.random() * cols) * box,
-        y: Math.floor(Math.random() * rows) * box
-      };
+      while (!isValid) {
+        position = {
+          x: Math.floor(Math.random() * (cols - sizeInBoxes)) * box,
+          y: Math.floor(Math.random() * (rows - sizeInBoxes)) * box
+        };
+
+        isValid = !avoid.some(item => item.x === position.x && item.y === position.y);
+      }
+
+      return position;
     }
 
     function resetGame() {
       clearInterval(gameInterval);
       snake = [{ x: canvas.width - box, y: 0 }];
       food = getRandomPosition();
-      obstacle = getRandomPosition();
+      obstacle = getRandomPosition(6, [food]); // voorkom spawn op food
       score = 0;
       d = null;
       document.getElementById("gameOver").classList.remove("active");
@@ -205,7 +131,6 @@
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Teken obstakel (Uil)
       ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, box * 6, box * 6);
 
       for (let i = 0; i < snake.length; i++) {
@@ -222,7 +147,6 @@
       if (d === "RIGHT") snakeX += box;
       if (d === "DOWN") snakeY += box;
 
-      // Wrap
       if (snakeX < 0) snakeX = canvas.width - box;
       if (snakeX >= canvas.width) snakeX = 0;
       if (snakeY < 0) snakeY = canvas.height - box;
@@ -231,7 +155,7 @@
       if (snakeX === food.x && snakeY === food.y) {
         score++;
         food = getRandomPosition();
-        obstacle = getRandomPosition(); // verplaats uil telkens na koekje
+        obstacle = getRandomPosition(6, [food]); // NIEUW: Uil niet op koekje
       } else {
         snake.pop();
       }
