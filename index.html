@@ -15,34 +15,49 @@
       background-color: black;
       color: white;
       overflow: hidden;
+      position: relative;
+    }
+
+    #background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      opacity: 0.5;
+      object-fit: cover;
     }
 
     canvas {
       border: 5px solid #810000;
       background-color: #000000;
-      margin-top: 100px;
+      margin-top: 20px;
       touch-action: none;
+      z-index: 1;
     }
 
     #menu, #gameOver, #videoModal {
       display: none;
       text-align: center;
+      margin-top: 20px;
+      z-index: 2;
     }
 
     #menu.active, #gameOver.active, #videoModal.active {
       display: block;
     }
 
-    #startButton, #restartButton {
-      margin-top: 20px;
+    #startButton, #restartButton, #twoPlayer, #singlePlayer {
+      margin-top: 10px;
       padding: 10px 20px;
-      background-color: #555;
-      color: #fff;
+      background-color: #000000;
+      color: #810000;
       border: none;
       cursor: pointer;
     }
 
-    #startButton:hover, #restartButton:hover {
+    #startButton:hover, #restartButton:hover, #twoPlayer:hover, #singlePlayer:hover {
       background-color: #777;
     }
 
@@ -59,7 +74,7 @@
   </style>
 </head>
 <body>
-  <canvas id="gameCanvas"></canvas>
+  <img id="background" src="pad_hel.png" alt="pad met hel">
 
   <div id="menu" class="active">
     <h1>Welkom in Joopies kelder!</h1>
@@ -68,10 +83,12 @@
     <button id="singlePlayer">Rechtshandig (pijltoetsen)</button>
   </div>
 
+  <canvas id="gameCanvas"></canvas>
+
   <div id="gameOver">
     <h2>Game over</h2>
     <p>Je bent een pannenkoek!</p>
-    <button id="restartButton">Herstart</button>
+    <button id="restartButton">Herstart de zoektocht naar koekjes</button>
     <div id="extraLink">
       <a href="https://joopvanhetgroenewoud.nl" target="_blank" style="color: lightblue;">Home</a>
     </div>
@@ -89,7 +106,6 @@
     const ctx = canvas.getContext("2d");
 
     const box = 20;
-    const scale = 1.5; // Vergroting
     const cols = 30;
     const rows = 30;
     canvas.width = box * cols;
@@ -103,14 +119,11 @@
     obstacleImg.src = 'Uil.png';
 
     let snake, food, score, d, playerCount, gameInterval;
+    let obstacle;
 
     document.getElementById("singlePlayer").addEventListener("click", () => startGame(1));
     document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
     document.getElementById("restartButton").addEventListener("click", () => location.reload());
-
-    const obstacleSize = box * 6;
-    const obstacleX = (canvas.width - obstacleSize) / 2;
-    const obstacleY = (canvas.height - obstacleSize) / 2;
 
     function startGame(players) {
       playerCount = players;
@@ -120,21 +133,22 @@
       gameInterval = setInterval(draw, 100);
     }
 
-    function resetGame() {
-      clearInterval(gameInterval);
-      snake = [{ x: box * 5, y: box * 5 }];
-      food = randomFoodPosition();
-      score = 0;
-      d = null;
-      document.getElementById("gameOver").classList.remove("active");
-      document.getElementById("videoModal").classList.remove("active");
-    }
-
-    function randomFoodPosition() {
+    function getRandomPosition() {
       return {
         x: Math.floor(Math.random() * cols) * box,
         y: Math.floor(Math.random() * rows) * box
       };
+    }
+
+    function resetGame() {
+      clearInterval(gameInterval);
+      snake = [{ x: canvas.width - box, y: 0 }];
+      food = getRandomPosition();
+      obstacle = getRandomPosition();
+      score = 0;
+      d = null;
+      document.getElementById("gameOver").classList.remove("active");
+      document.getElementById("videoModal").classList.remove("active");
     }
 
     document.addEventListener("keydown", (event) => {
@@ -143,7 +157,7 @@
         else if (event.key === "ArrowUp" && d !== "DOWN") d = "UP";
         else if (event.key === "ArrowRight" && d !== "LEFT") d = "RIGHT";
         else if (event.key === "ArrowDown" && d !== "UP") d = "DOWN";
-      } else if (playerCount === 2) {
+      } else {
         if (event.key === "a" && d !== "RIGHT") d = "LEFT";
         else if (event.key === "w" && d !== "DOWN") d = "UP";
         else if (event.key === "d" && d !== "LEFT") d = "RIGHT";
@@ -151,6 +165,7 @@
       }
     });
 
+    let touchStartX = 0, touchStartY = 0;
     canvas.addEventListener("touchstart", (e) => {
       const touch = e.touches[0];
       touchStartX = touch.clientX;
@@ -178,24 +193,14 @@
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Uil centreren
-      ctx.drawImage(obstacleImg, obstacleX, obstacleY, obstacleSize, obstacleSize);
+      // Teken obstakel (Uil)
+      ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, box * 2, box * 2);
 
-      // Slang tekenen
       for (let i = 0; i < snake.length; i++) {
-        ctx.drawImage(snakeImg,
-          snake[i].x - (box * (scale - 1)) / 2,
-          snake[i].y - (box * (scale - 1)) / 2,
-          box * scale,
-          box * scale);
+        ctx.drawImage(snakeImg, snake[i].x, snake[i].y, box, box);
       }
 
-      // Koek tekenen
-      ctx.drawImage(foodImg,
-        food.x - (box * (scale - 1)) / 2,
-        food.y - (box * (scale - 1)) / 2,
-        box * scale,
-        box * scale);
+      ctx.drawImage(foodImg, food.x, food.y, box, box);
 
       let snakeX = snake[0].x;
       let snakeY = snake[0].y;
@@ -205,34 +210,27 @@
       if (d === "RIGHT") snakeX += box;
       if (d === "DOWN") snakeY += box;
 
-      // Rand teleport
+      // Wrap
       if (snakeX < 0) snakeX = canvas.width - box;
       if (snakeX >= canvas.width) snakeX = 0;
       if (snakeY < 0) snakeY = canvas.height - box;
       if (snakeY >= canvas.height) snakeY = 0;
 
-      // Eten
       if (snakeX === food.x && snakeY === food.y) {
         score++;
-        food = randomFoodPosition();
+        food = getRandomPosition();
+        obstacle = getRandomPosition(); // verplaats uil telkens na koekje
       } else {
         snake.pop();
       }
 
       const newHead = { x: snakeX, y: snakeY };
 
-      // Botsing met obstakel (uil)
       if (
-        snakeX >= obstacleX &&
-        snakeX < obstacleX + obstacleSize &&
-        snakeY >= obstacleY &&
-        snakeY < obstacleY + obstacleSize
+        (snakeX >= obstacle.x && snakeX < obstacle.x + box * 2 &&
+         snakeY >= obstacle.y && snakeY < obstacle.y + box * 2) ||
+        collision(newHead, snake)
       ) {
-        endGame();
-      }
-
-      // Botsing met zichzelf
-      if (collision(newHead, snake)) {
         endGame();
       }
 
