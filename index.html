@@ -206,7 +206,7 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Teken obstakel (Uil)
-      ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, box * 4, box * 4);
+      ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, box * 6, box * 6);
 
       for (let i = 0; i < snake.length; i++) {
         ctx.drawImage(snakeImg, snake[i].x, snake[i].y, box, box);
@@ -239,8 +239,8 @@
       const newHead = { x: snakeX, y: snakeY };
 
       if (
-        (snakeX >= obstacle.x && snakeX < obstacle.x + box * 2 &&
-         snakeY >= obstacle.y && snakeY < obstacle.y + box * 2) ||
+        (snakeX >= obstacle.x && snakeX < obstacle.x + box * 6 &&
+         snakeY >= obstacle.y && snakeY < obstacle.y + box * 6) ||
         collision(newHead, snake)
       ) {
         endGame();
