@@ -53,8 +53,16 @@
       text-align: center;
       margin-top: 20px;
       z-index: 2;
+      position: relative; /* Zorg dat je relatieve positie hebt voor absolute positionering binnenin */
     }
-
+    .wolkje {
+      position: absolute;
+      top: 100;
+      right: 100;
+      width: 80px; /* Pas dit aan naar wens */
+      height: auto;
+      pointer-events: none; /* Zodat het geen klikbare zones blokkeert */
+    }
     #menu.active, #gameOver.active, #videoModal.active {
       display: block;
     }
@@ -129,6 +137,7 @@
     <a href="https://onderweg8.joopvanhetgroenewoud.nl" target="_blank">
       <img src="Uil.png" alt="Klik hier om door te gaan">
     </a>
+    <img src="Wolkje.png" alt="Wolk" class="wolkje">
   </div>
 
   <script>
