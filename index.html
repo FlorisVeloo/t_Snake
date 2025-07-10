@@ -55,14 +55,16 @@
       z-index: 2;
       position: relative; /* Zorg dat je relatieve positie hebt voor absolute positionering binnenin */
     }
-    .wolkje {
-      position: absolute;
-      top: 100;
-      right: 100;
-      width: 80px; /* Pas dit aan naar wens */
-      height: auto;
-      pointer-events: none; /* Zodat het geen klikbare zones blokkeert */
-    }
+.wolkje {
+  position: absolute;
+  top: 100px;
+  right: 100px;
+  width: 160px; /* 2x zo groot */
+  height: auto;
+  z-index: 3; /* Voorgrond */
+  pointer-events: auto; /* Nu aanklikbaar */
+  cursor: pointer;
+}
     #menu.active, #gameOver.active, #videoModal.active {
       display: block;
     }
@@ -133,10 +135,10 @@
     <button id="restartButton">RESTART</button>  <!-- Herstart-knop -->
     </div>
   <div id="videoModal">
-    <a href="https://onderweg8.joopvanhetgroenewoud.nl" target="_blank">
-      <img src="Uil.png" alt="Klik hier om door te gaan">
-      <img src="Wolkje_snake.png" alt="Wolk" class="wolkje">
-    </a>
+<a href="https://onderweg8.joopvanhetgroenewoud.nl" target="_blank">
+  <img src="Uil.png" alt="Klik hier om door te gaan">
+  <img src="Wolkje_snake.png" alt="Klik hier om naar de wolk te gaan" class="wolkje">
+</a>
   </div>
 
   <script>
