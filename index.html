@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Snake Game</title>
   <style>
+    :root {
+      --cloud-width: min(50vw, 450px);
+    }
+
     #introText {
        background-color: black;
        padding: 20px;
@@ -53,18 +57,9 @@
       text-align: center;
       margin-top: 20px;
       z-index: 2;
-      position: relative; /* Zorg dat je relatieve positie hebt voor absolute positionering binnenin */
+      position: relative;
     }
-.wolkje {
-  position: absolute;
-  top: -220px;
-  right: -270px;
-  width: 320px; /* 2x zo groot */
-  height: auto;
-  z-index: 3; /* Voorgrond */
-  pointer-events: auto; /* Nu aanklikbaar */
-  cursor: pointer;
-}
+
     #menu.active, #gameOver.active, #videoModal.active {
       display: block;
     }
@@ -94,6 +89,7 @@
       border: none;
       cursor: pointer;
     }
+
     .buttonLink {
       display: inline-block;
       margin-top: 10px;
@@ -103,12 +99,66 @@
       border: none;
       text-align: center;
       cursor: pointer;
-      text-decoration: none; /* <- Voegt dit toe om onderstreping te verwijderen */
-      font-family: Arial, sans-serif; /* <- Optioneel, consistentie */
-      font-size: 16px; /* <- Optioneel, consistentie */
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
     }
+
     .buttonLink:hover {
       background-color: #000000;
+    }
+
+    /* Wolkje styling (met hover en responsiviteit uit eerste HTML) */
+    .wolkje {
+      position: absolute;
+      top: -220px;
+      right: -270px;
+      max-width: var(--cloud-width);
+      height: auto;
+      z-index: 3;
+      pointer-events: auto;
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .wolkje:hover {
+      transform: scale(1.1) translateY(-7%);
+    }
+
+    .wolkje.touched {
+      transform: scale(1.1) translateY(-7%) !important;
+    }
+
+    /* Responsiviteit */
+    @media (orientation: landscape) {
+      :root {
+        --cloud-width: clamp(100px, 25vw, 800px);
+      }
+    }
+
+    @media (orientation: portrait) {
+      .wolkje {
+        right: -180px;
+        top: -180px;
+      }
+    }
+
+    @media (max-width: 320px) {
+      :root {
+        --cloud-width: clamp(120px, 40vw, 250px);
+      }
+    }
+
+    @media (min-width: 1025px) {
+      :root {
+        --cloud-width: clamp(300px, 15vw, 600px);
+      }
+    }
+
+    @media (min-width: 1921px) {
+      :root {
+        --cloud-width: clamp(300px, 12vw, 600px);
+      }
     }
   </style>
 </head>
@@ -131,183 +181,197 @@
       <h2>Game over</h2>
       <p>Je bent een pannenkoek!</p>
     </div>
-    <a href="https://joopvanhetgroenewoud.nl" target="_blank" class="buttonLink">HOME</a> <!-- Home-link gestyled als knop -->
-    <button id="restartButton">RESTART</button>  <!-- Herstart-knop -->
-    </div>
+    <a href="https://joopvanhetgroenewoud.nl" target="_blank" class="buttonLink">HOME</a>
+    <button id="restartButton">RESTART</button>
+  </div>
+
   <div id="videoModal">
-<a href="https://onderweg8.joopvanhetgroenewoud.nl" target="_blank">
-  <img src="Uil.png" alt="Klik hier om door te gaan">
-  <img src="Wolkje_snake.png" alt="Klik hier om naar de wolk te gaan" class="wolkje">
-</a>
+    <a href="https://onderweg8.joopvanhetgroenewoud.nl" target="_blank">
+      <img src="Uil.png" alt="Klik hier om door te gaan">
+      <img src="Wolkje_snake.png" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="cloud">
+    </a>
   </div>
 
   <script>
-  const canvas = document.getElementById("gameCanvas");
-  const ctx = canvas.getContext("2d");
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
 
-  const box = 20;
-  const cols = 30;
-  const rows = 30;
-  canvas.width = box * cols;
-  canvas.height = box * rows;
+    const box = 20;
+    const cols = 30;
+    const rows = 30;
+    canvas.width = box * cols;
+    canvas.height = box * rows;
 
-  const snakeImg = new Image();
-  snakeImg.src = 'Monster.png';
-  const foodImg = new Image();
-  foodImg.src = 'Koek.png';
-  const obstacleImg = new Image();
-  obstacleImg.src = 'Uil.png';
+    const snakeImg = new Image();
+    snakeImg.src = 'Monster.png';
+    const foodImg = new Image();
+    foodImg.src = 'Koek.png';
+    const obstacleImg = new Image();
+    obstacleImg.src = 'Uil.png';
 
-  let snake, food, score, d, playerCount, gameInterval;
-  let obstacle;
+    let snake, food, score, d, playerCount, gameInterval;
+    let obstacle;
 
-  document.getElementById("singlePlayer").addEventListener("click", () => startGame(1));
-  document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
-  document.getElementById("restartButton").addEventListener("click", () => location.reload());
+    document.getElementById("singlePlayer").addEventListener("click", () => startGame(1));
+    document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
+    document.getElementById("restartButton").addEventListener("click", () => location.reload());
 
-  function getRandomPosition(sizeInBoxes = 1, avoid = []) {
-    let position;
-    let isValid = false;
+    function getRandomPosition(sizeInBoxes = 1, avoid = []) {
+      let position;
+      let isValid = false;
 
-    while (!isValid) {
-      position = {
-        x: Math.floor(Math.random() * (cols - sizeInBoxes)) * box,
-        y: Math.floor(Math.random() * (rows - sizeInBoxes)) * box
-      };
+      while (!isValid) {
+        position = {
+          x: Math.floor(Math.random() * (cols - sizeInBoxes)) * box,
+          y: Math.floor(Math.random() * (rows - sizeInBoxes)) * box
+        };
 
-      // Controleer of deze positie in het vermijdgebied zit
-      const inAvoidList = avoid.some(item =>
-        position.x >= item.x &&
-        position.x < item.x + (item.width || box) &&
-        position.y >= item.y &&
-        position.y < item.y + (item.height || box)
-      );
+        const inAvoidList = avoid.some(item =>
+          position.x >= item.x &&
+          position.x < item.x + (item.width || box) &&
+          position.y >= item.y &&
+          position.y < item.y + (item.height || box)
+        );
 
-      isValid = !inAvoidList;
+        isValid = !inAvoidList;
+      }
+
+      return position;
     }
 
-    return position;
-  }
-
-  function resetGame() {
-    clearInterval(gameInterval);
-    snake = [{ x: canvas.width - box, y: 0 }];
-    obstacle = getRandomPosition(6);
-    food = getRandomPosition(1, [{ x: obstacle.x, y: obstacle.y, width: box * 6, height: box * 6 }]);
-    score = 0;
-    d = null;
-    document.getElementById("gameOver").classList.remove("active");
-    document.getElementById("videoModal").classList.remove("active");
-  }
-
-  document.addEventListener("keydown", (event) => {
-    if (playerCount === 1) {
-      if (event.key === "ArrowLeft" && d !== "RIGHT") d = "LEFT";
-      else if (event.key === "ArrowUp" && d !== "DOWN") d = "UP";
-      else if (event.key === "ArrowRight" && d !== "LEFT") d = "RIGHT";
-      else if (event.key === "ArrowDown" && d !== "UP") d = "DOWN";
-    } else {
-      if (event.key === "a" && d !== "RIGHT") d = "LEFT";
-      else if (event.key === "w" && d !== "DOWN") d = "UP";
-      else if (event.key === "d" && d !== "LEFT") d = "RIGHT";
-      else if (event.key === "s" && d !== "UP") d = "DOWN";
-    }
-  });
-
-  let touchStartX = 0, touchStartY = 0;
-  canvas.addEventListener("touchstart", (e) => {
-    const touch = e.touches[0];
-    touchStartX = touch.clientX;
-    touchStartY = touch.clientY;
-  });
-
-  canvas.addEventListener("touchmove", (e) => {
-    if (!touchStartX || !touchStartY) return;
-    const touch = e.touches[0];
-    const dx = touch.clientX - touchStartX;
-    const dy = touch.clientY - touchStartY;
-
-    if (Math.abs(dx) > Math.abs(dy)) {
-      if (dx > 0 && d !== "LEFT") d = "RIGHT";
-      else if (dx < 0 && d !== "RIGHT") d = "LEFT";
-    } else {
-      if (dy > 0 && d !== "UP") d = "DOWN";
-      else if (dy < 0 && d !== "DOWN") d = "UP";
-    }
-
-    touchStartX = 0;
-    touchStartY = 0;
-  });
-
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, box * 6, box * 6);
-
-    for (let i = 0; i < snake.length; i++) {
-      ctx.drawImage(snakeImg, snake[i].x, snake[i].y, box, box);
-    }
-
-    ctx.drawImage(foodImg, food.x, food.y, box, box);
-
-    let snakeX = snake[0].x;
-    let snakeY = snake[0].y;
-
-    if (d === "LEFT") snakeX -= box;
-    if (d === "UP") snakeY -= box;
-    if (d === "RIGHT") snakeX += box;
-    if (d === "DOWN") snakeY += box;
-
-    if (snakeX < 0) snakeX = canvas.width - box;
-    if (snakeX >= canvas.width) snakeX = 0;
-    if (snakeY < 0) snakeY = canvas.height - box;
-    if (snakeY >= canvas.height) snakeY = 0;
-
-    if (snakeX === food.x && snakeY === food.y) {
-      score++;
-      obstacle = getRandomPosition(6, [food]); // Uil verplaatst
+    function resetGame() {
+      clearInterval(gameInterval);
+      snake = [{ x: canvas.width - box, y: 0 }];
+      obstacle = getRandomPosition(6);
       food = getRandomPosition(1, [{ x: obstacle.x, y: obstacle.y, width: box * 6, height: box * 6 }]);
-    } else {
-      snake.pop();
+      score = 0;
+      d = null;
+      document.getElementById("gameOver").classList.remove("active");
+      document.getElementById("videoModal").classList.remove("active");
     }
 
-    const newHead = { x: snakeX, y: snakeY };
+    document.addEventListener("keydown", (event) => {
+      if (playerCount === 1) {
+        if (event.key === "ArrowLeft" && d !== "RIGHT") d = "LEFT";
+        else if (event.key === "ArrowUp" && d !== "DOWN") d = "UP";
+        else if (event.key === "ArrowRight" && d !== "LEFT") d = "RIGHT";
+        else if (event.key === "ArrowDown" && d !== "UP") d = "DOWN";
+      } else {
+        if (event.key === "a" && d !== "RIGHT") d = "LEFT";
+        else if (event.key === "w" && d !== "DOWN") d = "UP";
+        else if (event.key === "d" && d !== "LEFT") d = "RIGHT";
+        else if (event.key === "s" && d !== "UP") d = "DOWN";
+      }
+    });
 
-    if (
-      (snakeX >= obstacle.x && snakeX < obstacle.x + box * 6 &&
-       snakeY >= obstacle.y && snakeY < obstacle.y + box * 6) ||
-      collision(newHead, snake)
-    ) {
-      endGame();
+    let touchStartX = 0, touchStartY = 0;
+    canvas.addEventListener("touchstart", (e) => {
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    });
+
+    canvas.addEventListener("touchmove", (e) => {
+      if (!touchStartX || !touchStartY) return;
+      const touch = e.touches[0];
+      const dx = touch.clientX - touchStartX;
+      const dy = touch.clientY - touchStartY;
+
+      if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 0 && d !== "LEFT") d = "RIGHT";
+        else if (dx < 0 && d !== "RIGHT") d = "LEFT";
+      } else {
+        if (dy > 0 && d !== "UP") d = "DOWN";
+        else if (dy < 0 && d !== "DOWN") d = "UP";
+      }
+
+      touchStartX = 0;
+      touchStartY = 0;
+    });
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, box * 6, box * 6);
+
+      for (let i = 0; i < snake.length; i++) {
+        ctx.drawImage(snakeImg, snake[i].x, snake[i].y, box, box);
+      }
+
+      ctx.drawImage(foodImg, food.x, food.y, box, box);
+
+      let snakeX = snake[0].x;
+      let snakeY = snake[0].y;
+
+      if (d === "LEFT") snakeX -= box;
+      if (d === "UP") snakeY -= box;
+      if (d === "RIGHT") snakeX += box;
+      if (d === "DOWN") snakeY += box;
+
+      if (snakeX < 0) snakeX = canvas.width - box;
+      if (snakeX >= canvas.width) snakeX = 0;
+      if (snakeY < 0) snakeY = canvas.height - box;
+      if (snakeY >= canvas.height) snakeY = 0;
+
+      if (snakeX === food.x && snakeY === food.y) {
+        score++;
+        obstacle = getRandomPosition(6, [food]);
+        food = getRandomPosition(1, [{ x: obstacle.x, y: obstacle.y, width: box * 6, height: box * 6 }]);
+      } else {
+        snake.pop();
+      }
+
+      const newHead = { x: snakeX, y: snakeY };
+
+      if (
+        (snakeX >= obstacle.x && snakeX < obstacle.x + box * 6 &&
+         snakeY >= obstacle.y && snakeY < obstacle.y + box * 6) ||
+        collision(newHead, snake)
+      ) {
+        endGame();
+      }
+
+      snake.unshift(newHead);
+
+      if (score >= 1) {
+        showVideo();
+      }
     }
 
-    snake.unshift(newHead);
-
-    if (score >= 1) {
-      showVideo();
+    function collision(head, array) {
+      return array.some(segment => segment.x === head.x && segment.y === head.y);
     }
-  }
 
-  function collision(head, array) {
-    return array.some(segment => segment.x === head.x && segment.y === head.y);
-  }
+    function endGame() {
+      clearInterval(gameInterval);
+      document.getElementById("gameOver").classList.add("active");
+    }
 
-  function endGame() {
-    clearInterval(gameInterval);
-    document.getElementById("gameOver").classList.add("active");
-  }
+    function showVideo() {
+      clearInterval(gameInterval);
+      document.getElementById("videoModal").classList.add("active");
+    }
 
-  function showVideo() {
-    clearInterval(gameInterval);
-    document.getElementById("videoModal").classList.add("active");
-  }
+    function startGame(selectedPlayerCount) {
+      playerCount = selectedPlayerCount;
+      document.getElementById("menu").classList.remove("active");
+      resetGame();
+      gameInterval = setInterval(draw, 100);
+    }
 
-  function startGame(selectedPlayerCount) {
-    playerCount = selectedPlayerCount;
-    document.getElementById("menu").classList.remove("active");
-    resetGame();
-    gameInterval = setInterval(draw, 100);
-  }
-</script>
+    // Hover/touch gedrag voor wolkje
+    const cloud = document.getElementById("cloud");
+    if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
+      cloud.addEventListener("touchstart", () => {
+        cloud.classList.add("touched");
+      });
+
+      cloud.addEventListener("touchend", () => {
+        setTimeout(() => {
+          cloud.classList.remove("touched");
+        }, 300);
+      });
+    }
+  </script>
 </body>
 </html>
