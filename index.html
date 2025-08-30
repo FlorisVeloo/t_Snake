@@ -7,36 +7,30 @@
   <style>
     :root {
       --cloud-width: min(50vw, 450px);
-    }
-
-    #introText {
-       background-color: black;
-       padding: 20px;
-       border-radius: 10px;
-       color: #810000;
-       box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-       max-width: 90vw;
-       margin-bottom: 10px;
+      --font-size: clamp(0.9rem, 1vw + 0.5rem, 1.5rem);
+      --button-padding: clamp(8px, 2vw, 16px);
+      --button-font: clamp(0.9rem, 1vw + 0.5rem, 1.2rem);
     }
 
     body {
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
       height: 100vh;
+      height: 100dvh; /* Beter voor mobiel */
       margin: 0;
       font-family: Arial, sans-serif;
+      font-size: var(--font-size);
       background-color: black;
-      color: #b;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+      color: #810000;
       overflow: hidden;
       position: relative;
     }
 
     #background {
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 100vw;
       height: 100vh;
       z-index: -1;
@@ -46,119 +40,96 @@
 
     canvas {
       border: 5px solid #810000;
-      background-color: #000000;
+      background-color: #000;
       margin-top: 20px;
       touch-action: none;
       z-index: 1;
+      max-width: 95vw;
+      max-height: 70vh;
+      width: 100%;
+      height: auto;
     }
 
     #menu, #gameOver, #videoModal {
       display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      margin-top: 20px;
+      margin-top: 10px;
       z-index: 2;
       position: relative;
+      max-width: 90vw;
     }
 
     #menu.active, #gameOver.active, #videoModal.active {
-      display: block;
+      display: flex;
     }
 
-    #startButton, #restartButton, #twoPlayer, #singlePlayer {
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #000000;
+    #introText {
+      background-color: rgba(0,0,0,0.8);
+      padding: 1rem;
+      border-radius: 12px;
+      color: #810000;
+      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+      margin-bottom: 1rem;
+      max-width: 90vw;
+      word-wrap: break-word;
+    }
+
+    /* Knoppen */
+    #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink {
+      margin-top: 0.5rem;
+      padding: var(--button-padding);
+      background-color: #000;
       color: #b40000;
-      border: none;
+      border: 2px solid #810000;
       cursor: pointer;
       font-family: Arial, sans-serif;
-      font-size: 16px;
+      font-size: var(--button-font);
+      border-radius: 8px;
+      min-width: 120px;
+      text-align: center;
     }
 
-    #startButton:hover, #restartButton:hover, #twoPlayer:hover, #singlePlayer:hover {
-      background-color: #000000;
-    }
-
-    #extraLink {
-      margin-top: 10px;
-    }
-
-    #videoModal a img {
-      max-width: 15vw;
-      height: auto;
-      border: none;
-      cursor: pointer;
+    #startButton:hover, #restartButton:hover,
+    #twoPlayer:hover, #singlePlayer:hover,
+    .buttonLink:hover {
+      background-color: #111;
     }
 
     .buttonLink {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #000000;
-      color: #b40000;
-      border: none;
-      text-align: center;
-      cursor: pointer;
       text-decoration: none;
-      font-family: Arial, sans-serif;
-      font-size: 16px;
+      display: inline-block;
     }
 
-    .buttonLink:hover {
-      background-color: #000000;
+    /* Afbeeldingen */
+    #videoModal a img {
+      max-width: 40vw;
+      height: auto;
+      margin: 0.5rem;
     }
 
-    /* Wolkje styling (met hover en responsiviteit uit eerste HTML) */
     .wolkje {
-      position: absolute;
-      top: -220px;
-      right: -270px;
+      width: auto;
       max-width: var(--cloud-width);
       height: auto;
       z-index: 3;
-      pointer-events: auto;
-      cursor: pointer;
+      border: none;
       transition: transform 0.3s ease-in-out;
     }
+    .wolkje:hover { transform: scale(1.05); }
+    .wolkje.touched { transform: scale(1.05) !important; }
 
-    .wolkje:hover {
-      transform: scale(1.1) translateY(-7%);
-    }
-
-    .wolkje.touched {
-      transform: scale(1.1) translateY(-7%) !important;
-    }
-
-    /* Responsiviteit */
-    @media (orientation: landscape) {
-      :root {
-        --cloud-width: clamp(100px, 25vw, 800px);
-      }
-    }
-
-    @media (orientation: portrait) {
-      .wolkje {
-        right: -180px;
-        top: -180px;
-      }
-    }
-
-    @media (max-width: 320px) {
-      :root {
-        --cloud-width: clamp(120px, 40vw, 250px);
-      }
+    /* Responsive fixes */
+    @media (orientation: portrait) and (max-width: 768px) {
+      canvas { max-height: 50vh; }
+      #videoModal a img { max-width: 60vw; }
+      .wolkje { max-width: 50vw; }
     }
 
     @media (min-width: 1025px) {
-      :root {
-        --cloud-width: clamp(300px, 15vw, 600px);
-      }
-    }
-
-    @media (min-width: 1921px) {
-      :root {
-        --cloud-width: clamp(300px, 12vw, 600px);
-      }
+      :root { --cloud-width: clamp(300px, 15vw, 600px); }
     }
   </style>
 </head>
@@ -168,7 +139,7 @@
   <div id="menu" class="active">
     <div id="introText">
       <h1>Welkom in Joopies kelder!</h1>
-      <p>Vind Joop, maar pas op voor de Uil! Volg het spoor van koekjes. </p>
+      <p>Vind Joop, maar pas op voor de Uil! Volg het spoor van koekjes.</p>
     </div>
     <button id="twoPlayer">Ga linksaf</button>
     <button id="singlePlayer">Ga rechtsaf</button>
@@ -188,7 +159,7 @@
   <div id="videoModal">
     <a href="https://onderweg8.joopvanhetgroenewoud.nl" target="_blank">
       <img src="Uil.png" alt="Klik hier om door te gaan">
-      <img src="Wolkje_snake.png" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="cloud">
+      <img src="Wolkje_snake.png" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkje">
     </a>
   </div>
 
@@ -196,46 +167,41 @@
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    const box = 20;
-    const cols = 30;
-    const rows = 30;
+    const box = 20, cols = 30, rows = 30;
     canvas.width = box * cols;
     canvas.height = box * rows;
 
-    const snakeImg = new Image();
-    snakeImg.src = 'Monster.png';
-    const foodImg = new Image();
-    foodImg.src = 'Koek.png';
-    const obstacleImg = new Image();
-    obstacleImg.src = 'Uil.png';
+    const snakeImg = new Image(); snakeImg.src = 'Monster.png';
+    const foodImg = new Image(); foodImg.src = 'Koek.png';
+    const obstacleImg = new Image(); obstacleImg.src = 'Uil.png';
 
-    let snake, food, score, d, playerCount, gameInterval;
-    let obstacle;
+    let snake, food, score, d, playerCount, gameInterval, obstacle;
+
+    // Wolkje touch support
+    const wolkje = document.getElementById("wolkje");
+    if (wolkje && ("ontouchstart" in window || navigator.maxTouchPoints > 0)) {
+      wolkje.addEventListener("touchstart", () => wolkje.classList.add("touched"));
+      wolkje.addEventListener("touchend", () => setTimeout(() => wolkje.classList.remove("touched"), 300));
+    }
 
     document.getElementById("singlePlayer").addEventListener("click", () => startGame(1));
     document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
     document.getElementById("restartButton").addEventListener("click", () => location.reload());
 
     function getRandomPosition(sizeInBoxes = 1, avoid = []) {
-      let position;
-      let isValid = false;
-
+      let position, isValid = false;
       while (!isValid) {
         position = {
           x: Math.floor(Math.random() * (cols - sizeInBoxes)) * box,
           y: Math.floor(Math.random() * (rows - sizeInBoxes)) * box
         };
-
-        const inAvoidList = avoid.some(item =>
+        isValid = !avoid.some(item =>
           position.x >= item.x &&
           position.x < item.x + (item.width || box) &&
           position.y >= item.y &&
           position.y < item.y + (item.height || box)
         );
-
-        isValid = !inAvoidList;
       }
-
       return position;
     }
 
@@ -243,40 +209,36 @@
       clearInterval(gameInterval);
       snake = [{ x: canvas.width - box, y: 0 }];
       obstacle = getRandomPosition(6);
-      food = getRandomPosition(1, [{ x: obstacle.x, y: obstacle.y, width: box * 6, height: box * 6 }]);
+      food = getRandomPosition(1, [{ x: obstacle.x, y: obstacle.y, width: box*6, height: box*6 }]);
       score = 0;
       d = null;
       document.getElementById("gameOver").classList.remove("active");
       document.getElementById("videoModal").classList.remove("active");
     }
 
-    document.addEventListener("keydown", (event) => {
+    document.addEventListener("keydown", (e) => {
       if (playerCount === 1) {
-        if (event.key === "ArrowLeft" && d !== "RIGHT") d = "LEFT";
-        else if (event.key === "ArrowUp" && d !== "DOWN") d = "UP";
-        else if (event.key === "ArrowRight" && d !== "LEFT") d = "RIGHT";
-        else if (event.key === "ArrowDown" && d !== "UP") d = "DOWN";
+        if (e.key === "ArrowLeft" && d !== "RIGHT") d = "LEFT";
+        else if (e.key === "ArrowUp" && d !== "DOWN") d = "UP";
+        else if (e.key === "ArrowRight" && d !== "LEFT") d = "RIGHT";
+        else if (e.key === "ArrowDown" && d !== "UP") d = "DOWN";
       } else {
-        if (event.key === "a" && d !== "RIGHT") d = "LEFT";
-        else if (event.key === "w" && d !== "DOWN") d = "UP";
-        else if (event.key === "d" && d !== "LEFT") d = "RIGHT";
-        else if (event.key === "s" && d !== "UP") d = "DOWN";
+        if (e.key === "a" && d !== "RIGHT") d = "LEFT";
+        else if (e.key === "w" && d !== "DOWN") d = "UP";
+        else if (e.key === "d" && d !== "LEFT") d = "RIGHT";
+        else if (e.key === "s" && d !== "UP") d = "DOWN";
       }
     });
 
     let touchStartX = 0, touchStartY = 0;
     canvas.addEventListener("touchstart", (e) => {
-      const touch = e.touches[0];
-      touchStartX = touch.clientX;
-      touchStartY = touch.clientY;
+      const t = e.touches[0];
+      touchStartX = t.clientX; touchStartY = t.clientY;
     });
-
     canvas.addEventListener("touchmove", (e) => {
       if (!touchStartX || !touchStartY) return;
-      const touch = e.touches[0];
-      const dx = touch.clientX - touchStartX;
-      const dy = touch.clientY - touchStartY;
-
+      const t = e.touches[0];
+      const dx = t.clientX - touchStartX, dy = t.clientY - touchStartY;
       if (Math.abs(dx) > Math.abs(dy)) {
         if (dx > 0 && d !== "LEFT") d = "RIGHT";
         else if (dx < 0 && d !== "RIGHT") d = "LEFT";
@@ -284,25 +246,16 @@
         if (dy > 0 && d !== "UP") d = "DOWN";
         else if (dy < 0 && d !== "DOWN") d = "UP";
       }
-
-      touchStartX = 0;
-      touchStartY = 0;
+      touchStartX = 0; touchStartY = 0;
     });
 
     function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, box * 6, box * 6);
-
-      for (let i = 0; i < snake.length; i++) {
-        ctx.drawImage(snakeImg, snake[i].x, snake[i].y, box, box);
-      }
-
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, box*6, box*6);
+      snake.forEach(seg => ctx.drawImage(snakeImg, seg.x, seg.y, box, box));
       ctx.drawImage(foodImg, food.x, food.y, box, box);
 
-      let snakeX = snake[0].x;
-      let snakeY = snake[0].y;
-
+      let snakeX = snake[0].x, snakeY = snake[0].y;
       if (d === "LEFT") snakeX -= box;
       if (d === "UP") snakeY -= box;
       if (d === "RIGHT") snakeX += box;
@@ -316,61 +269,35 @@
       if (snakeX === food.x && snakeY === food.y) {
         score++;
         obstacle = getRandomPosition(6, [food]);
-        food = getRandomPosition(1, [{ x: obstacle.x, y: obstacle.y, width: box * 6, height: box * 6 }]);
+        food = getRandomPosition(1, [{ x: obstacle.x, y: obstacle.y, width: box*6, height: box*6 }]);
       } else {
         snake.pop();
       }
 
       const newHead = { x: snakeX, y: snakeY };
-
-      if (
-        (snakeX >= obstacle.x && snakeX < obstacle.x + box * 6 &&
-         snakeY >= obstacle.y && snakeY < obstacle.y + box * 6) ||
-        collision(newHead, snake)
-      ) {
+      if ((snakeX >= obstacle.x && snakeX < obstacle.x+box*6 && snakeY >= obstacle.y && snakeY < obstacle.y+box*6) || collision(newHead, snake)) {
         endGame();
       }
-
       snake.unshift(newHead);
-
-      if (score >= 1) {
-        showVideo();
-      }
+      if (score >= 1) showVideo();
     }
 
     function collision(head, array) {
-      return array.some(segment => segment.x === head.x && segment.y === head.y);
+      return array.some(seg => seg.x === head.x && seg.y === head.y);
     }
-
     function endGame() {
       clearInterval(gameInterval);
       document.getElementById("gameOver").classList.add("active");
     }
-
     function showVideo() {
       clearInterval(gameInterval);
       document.getElementById("videoModal").classList.add("active");
     }
-
     function startGame(selectedPlayerCount) {
       playerCount = selectedPlayerCount;
       document.getElementById("menu").classList.remove("active");
       resetGame();
       gameInterval = setInterval(draw, 100);
-    }
-
-    // Hover/touch gedrag voor wolkje
-    const cloud = document.getElementById("cloud");
-    if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
-      cloud.addEventListener("touchstart", () => {
-        cloud.classList.add("touched");
-      });
-
-      cloud.addEventListener("touchend", () => {
-        setTimeout(() => {
-          cloud.classList.remove("touched");
-        }, 300);
-      });
     }
   </script>
 </body>
