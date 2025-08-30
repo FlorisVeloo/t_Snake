@@ -412,9 +412,29 @@
     }
 
     // Canvas logische grootte (altijd hetzelfde voor game logic)
-    const box = 20, cols = 30, rows = 30;
+    const cols = 30, rows = 30;
+    let box = 20; // Wordt nu dynamisch berekend
     canvas.width = box * cols;
     canvas.height = box * rows;
+
+    // Functie om box grootte te berekenen gebaseerd op canvas grootte
+    function calculateBoxSize() {
+      const canvasRect = canvas.getBoundingClientRect();
+      const displayWidth = canvasRect.width;
+      const displayHeight = canvasRect.height;
+      
+      // Box grootte gebaseerd op kleinste dimensie voor vierkante boxes
+      const boxWidth = displayWidth / cols;
+      const boxHeight = displayHeight / rows;
+      return Math.min(boxWidth, boxHeight);
+    }
+
+    // Functie om afbeelding grootte te berekenen (responsief)
+    function calculateImageSize() {
+      const currentBoxSize = calculateBoxSize();
+      // Schaal afbeeldingen relatief aan box grootte, maar met minimum/maximum
+      return Math.max(8, Math.min(currentBoxSize * 0.8, 40));
+    }
 
     const snakeImg = new Image(); snakeImg.src = 'Monster.png';
     const foodImg = new Image(); foodImg.src = 'Koek.png';
@@ -442,9 +462,26 @@
     document.getElementById("restartButton").addEventListener("click", () => location.reload());
 
     // Resize handler
-    window.addEventListener('resize', updateCanvasSize);
+    window.addEventListener('resize', () => {
+      updateCanvasSize();
+      // Herbereken box grootte na resize
+      if (gameInterval) {
+        box = Math.floor(Math.min(canvas.width / cols, canvas.height / rows));
+        canvas.width = box * cols;
+        canvas.height = box * rows;
+      }
+    });
+    
     window.addEventListener('orientationchange', () => {
-      setTimeout(updateCanvasSize, 100);
+      setTimeout(() => {
+        updateCanvasSize();
+        // Herbereken box grootte na orientation change
+        if (gameInterval) {
+          box = Math.floor(Math.min(canvas.width / cols, canvas.height / rows));
+          canvas.width = box * cols;
+          canvas.height = box * rows;
+        }
+      }, 100);
     });
 
     function getRandomPosition(sizeInBoxes = 1, avoid = []) {
@@ -511,9 +548,15 @@
 
     function draw() {
       ctx.clearRect(0,0,canvas.width,canvas.height);
-      ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, box*6, box*6);
-      snake.forEach(seg => ctx.drawImage(snakeImg, seg.x, seg.y, box, box));
-      ctx.drawImage(foodImg, food.x, food.y, box, box);
+      
+      // Bereken responsieve afbeelding groottes
+      const imageSize = calculateImageSize();
+      const obstacleSize = imageSize * 6; // Uil is 6x groter
+      
+      // Teken afbeeldingen met responsieve grootte maar behoud game grid posities
+      ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, obstacleSize, obstacleSize);
+      snake.forEach(seg => ctx.drawImage(snakeImg, seg.x, seg.y, imageSize, imageSize));
+      ctx.drawImage(foodImg, food.x, food.y, imageSize, imageSize);
 
       let snakeX = snake[0].x, snakeY = snake[0].y;
       if (d === "LEFT") snakeX -= box;
@@ -560,6 +603,12 @@
       playerCount = selectedPlayerCount;
       document.getElementById("menu").classList.remove("active");
       updateCanvasSize(); // Update canvas grootte bij game start
+      
+      // Herbereken box grootte na canvas update
+      box = Math.floor(Math.min(canvas.width / cols, canvas.height / rows));
+      canvas.width = box * cols;
+      canvas.height = box * rows;
+      
       resetGame();
       gameInterval = setInterval(draw, 100);
     }
