@@ -397,26 +397,24 @@ function updateCanvasSize() {
   let displayWidth, displayHeight;
   
   if (isPortrait) {
-    displayWidth = window.innerWidth - (2 * margin);
-    displayHeight = window.innerHeight - (2 * margin);
+    displayWidth = window.innerWidth - 2 * margin;
+    displayHeight = window.innerHeight - 2 * margin;
   } else {
-    // Landscape: gebruik clamped waardes
     displayWidth = Math.min(Math.max(window.innerWidth * 0.7, 400), 800);
     displayHeight = Math.min(Math.max(window.innerHeight * 0.5, 300), 600);
   }
 
-  // Houd het canvas vierkant
+  // Houd canvas vierkant
   const size = Math.min(displayWidth, displayHeight);
 
+  // **Stel alleen de visuele grootte in**
   canvas.style.width = size + "px";
   canvas.style.height = size + "px";
-  canvas.width = size;
-  canvas.height = size;
 
-  // Herbereken box size (grid moet zich aanpassen!)
-  box = Math.floor(size / cols);
+  // **Canvas logische grootte blijft constant**
+  canvas.width = cols * box;
+  canvas.height = rows * box;
 }
-
 
     // Canvas logische grootte (altijd hetzelfde voor game logic)
     const cols = 30, rows = 30;
@@ -639,19 +637,15 @@ if (snakeX === food.x && snakeY === food.y) {
       document.getElementById("videoModal").classList.add("active");
     }
     
-    function startGame(selectedPlayerCount) {
-      playerCount = selectedPlayerCount;
-      document.getElementById("menu").classList.remove("active");
-      updateCanvasSize(); // Update canvas grootte bij game start
-      
-      // Herbereken box grootte na canvas update
-      box = Math.floor(Math.min(canvas.width / cols, canvas.height / rows));
-      canvas.width = box * cols;
-      canvas.height = box * rows;
-      
-      resetGame();
-      gameInterval = setInterval(draw, 100);
-    }
+function startGame(selectedPlayerCount) {
+  playerCount = selectedPlayerCount;
+  document.getElementById("menu").classList.remove("active");
+
+  resetGame();        // reset snake/food/obstacle
+  updateCanvasSize();  // visuele canvasgrootte
+
+  gameInterval = setInterval(draw, 100);
+}
 
     // Initialiseer canvas grootte
     updateCanvasSize();
