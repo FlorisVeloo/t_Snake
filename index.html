@@ -491,33 +491,54 @@ function updateCanvasSize() {
       }, 100);
     });
 
-    function getRandomPosition(sizeInBoxes = 1, avoid = []) {
-      let position, isValid = false;
-      while (!isValid) {
-        position = {
-          x: Math.floor(Math.random() * (cols - sizeInBoxes)) * box,
-          y: Math.floor(Math.random() * (rows - sizeInBoxes)) * box
-        };
-        isValid = !avoid.some(item =>
-          position.x >= item.x &&
-          position.x < item.x + (item.width || box) &&
-          position.y >= item.y &&
-          position.y < item.y + (item.height || box)
-        );
-      }
-      return position;
-    }
+function getRandomPosition(sizeInBoxes = 1, avoid = []) {
+  let position, isValid = false;
 
-    function resetGame() {
-      clearInterval(gameInterval);
-      snake = [{ x: Math.floor(cols/2) * box, y: Math.floor(rows/2) * box }];
-      obstacle = getRandomPosition(6);
-      food = getRandomPosition(1, [{ x: obstacle.x, y: obstacle.y, width: box*6, height: box*6 }]);
-      score = 0;
-      d = null;
-      document.getElementById("gameOver").classList.remove("active");
-      document.getElementById("videoModal").classList.remove("active");
-    }
+  // Zorg dat snake altijd wordt meegenomen in "avoid"
+  const snakeAreas = snake.map(seg => ({
+    x: seg.x,
+    y: seg.y,
+    width: box,
+    height: box
+  }));
+  const allAvoid = avoid.concat(snakeAreas);
+
+  while (!isValid) {
+    position = {
+      x: Math.floor(Math.random() * (cols - sizeInBoxes)) * box,
+      y: Math.floor(Math.random() * (rows - sizeInBoxes)) * box
+    };
+
+    isValid = !allAvoid.some(item =>
+      position.x >= item.x &&
+      position.x < item.x + (item.width || box) &&
+      position.y >= item.y &&
+      position.y < item.y + (item.height || box)
+    );
+  }
+
+  return position;
+}
+
+function resetGame() {
+  clearInterval(gameInterval);
+
+  snake = [{ x: Math.floor(cols/2) * box, y: Math.floor(rows/2) * box }];
+
+  // Obstakel mag niet op slang staan
+  obstacle = getRandomPosition(6);
+
+  // Food mag niet op slang of obstakel staan
+  food = getRandomPosition(1, [
+    { x: obstacle.x, y: obstacle.y, width: box*6, height: box*6 }
+  ]);
+
+  score = 0;
+  d = null;
+  document.getElementById("gameOver").classList.remove("active");
+  document.getElementById("videoModal").classList.remove("active");
+}
+
 
     document.addEventListener("keydown", (e) => {
       if (playerCount === 1) {
@@ -575,13 +596,21 @@ function updateCanvasSize() {
       if (snakeY < 0) snakeY = canvas.height - box;
       if (snakeY >= canvas.height) snakeY = 0;
 
-      if (snakeX === food.x && snakeY === food.y) {
-        score++;
-        obstacle = getRandomPosition(6, [food]);
-        food = getRandomPosition(1, [{ x: obstacle.x, y: obstacle.y, width: box*6, height: box*6 }]);
-      } else {
-        snake.pop();
-      }
+if (snakeX === food.x && snakeY === food.y) {
+  score++;
+
+  // Nieuw obstakel (vermijdt slang en eten)
+  obstacle = getRandomPosition(6, [
+    { x: food.x, y: food.y, width: box, height: box }
+  ]);
+
+  // Nieuw voedsel (vermijdt slang en obstakel)
+  food = getRandomPosition(1, [
+    { x: obstacle.x, y: obstacle.y, width: box*6, height: box*6 }
+  ]);
+} else {
+  snake.pop();
+}
 
       const newHead = { x: snakeX, y: snakeY };
       if ((snakeX >= obstacle.x && snakeX < obstacle.x+box*6 && snakeY >= obstacle.y && snakeY < obstacle.y+box*6) || collision(newHead, snake)) {
