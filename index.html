@@ -385,17 +385,27 @@
     </a>
   </div>
 
-  <script>
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
-    // Dynamische canvas grootte aanpassing
+// Canvas logische grootte
+const cols = 30, rows = 30;
+let box = 20;
+
+// Afbeeldingen
+const snakeImg = new Image(); snakeImg.src = 'Monster.png';
+const foodImg = new Image(); foodImg.src = 'Koek.png';
+const obstacleImg = new Image(); obstacleImg.src = 'Uil.png';
+
+let snake, food, score, d, playerCount, gameInterval, obstacle;
+
+// Canvas grootte updaten en box berekenen
 function updateCanvasSize() {
   const isPortrait = window.innerHeight > window.innerWidth;
   const margin = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--canvas-margin'));
-
   let displayWidth, displayHeight;
-  
+
   if (isPortrait) {
     displayWidth = window.innerWidth - 2 * margin;
     displayHeight = window.innerHeight - 2 * margin;
@@ -404,100 +414,25 @@ function updateCanvasSize() {
     displayHeight = Math.min(Math.max(window.innerHeight * 0.5, 300), 600);
   }
 
-  // Houd canvas vierkant
   const size = Math.min(displayWidth, displayHeight);
 
-  // **Stel alleen de visuele grootte in**
-  canvas.style.width = size + "px";
-  canvas.style.height = size + "px";
+  // Stel canvas logische grootte gelijk aan visuele grootte
+  canvas.width = size;
+  canvas.height = size;
 
-  // **Canvas logische grootte blijft constant**
-  canvas.width = cols * box;
-  canvas.height = rows * box;
+  // Bereken boxgrootte voor vierkante vakjes
+  box = Math.floor(size / cols);
 }
 
-    // Canvas logische grootte (altijd hetzelfde voor game logic)
-    const cols = 30, rows = 30;
-    let box = 20; // Wordt nu dynamisch berekend
-    canvas.width = box * cols;
-    canvas.height = box * rows;
+// Bereken afbeelding grootte (max 0.8 van box, min 8, max 40)
+function calculateImageSize() {
+  return Math.max(8, Math.min(box * 0.8, 40));
+}
 
-    // Functie om box grootte te berekenen gebaseerd op canvas grootte
-    function calculateBoxSize() {
-      const canvasRect = canvas.getBoundingClientRect();
-      const displayWidth = canvasRect.width;
-      const displayHeight = canvasRect.height;
-      
-      // Box grootte gebaseerd op kleinste dimensie voor vierkante boxes
-      const boxWidth = displayWidth / cols;
-      const boxHeight = displayHeight / rows;
-      return Math.min(boxWidth, boxHeight);
-    }
-
-    // Functie om afbeelding grootte te berekenen (responsief)
-    function calculateImageSize() {
-      const currentBoxSize = calculateBoxSize();
-      // Schaal afbeeldingen relatief aan box grootte, maar met minimum/maximum
-      return Math.max(8, Math.min(currentBoxSize * 0.8, 40));
-    }
-
-    const snakeImg = new Image(); snakeImg.src = 'Monster.png';
-    const foodImg = new Image(); foodImg.src = 'Koek.png';
-    const obstacleImg = new Image(); obstacleImg.src = 'Uil.png';
-
-    let snake, food, score, d, playerCount, gameInterval, obstacle;
-
-    // Wolkje touch support uit eerste HTML
-    const cloud = document.getElementById("wolkje");
-    if (cloud && ("ontouchstart" in window || navigator.maxTouchPoints > 0)) {
-      cloud.addEventListener("touchstart", () => {
-        cloud.classList.add("touched");
-      });
-
-      cloud.addEventListener("touchend", () => {
-        setTimeout(() => {
-          cloud.classList.remove("touched");
-        }, 300);
-      });
-    }
-
-    // Event listeners
-    document.getElementById("singlePlayer").addEventListener("click", () => startGame(1));
-    document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
-    document.getElementById("restartButton").addEventListener("click", () => location.reload());
-
-    // Resize handler
-    window.addEventListener('resize', () => {
-      updateCanvasSize();
-      // Herbereken box grootte na resize
-      if (gameInterval) {
-        box = Math.floor(Math.min(canvas.width / cols, canvas.height / rows));
-        canvas.width = box * cols;
-        canvas.height = box * rows;
-      }
-    });
-    
-    window.addEventListener('orientationchange', () => {
-      setTimeout(() => {
-        updateCanvasSize();
-        // Herbereken box grootte na orientation change
-        if (gameInterval) {
-          box = Math.floor(Math.min(canvas.width / cols, canvas.height / rows));
-          canvas.width = box * cols;
-          canvas.height = box * rows;
-        }
-      }, 100);
-    });
-
+// Random positie, vermijd obstakels en slang
 function getRandomPosition(sizeInBoxes = 1, avoid = []) {
   let position, isValid = false;
-
-  const snakeAreas = snake.map(seg => ({
-    x: seg.x,
-    y: seg.y,
-    width: box,
-    height: box
-  }));
+  const snakeAreas = snake.map(seg => ({ x: seg.x, y: seg.y, width: box, height: box }));
   const allAvoid = avoid.concat(snakeAreas);
 
   while (!isValid) {
@@ -507,7 +442,6 @@ function getRandomPosition(sizeInBoxes = 1, avoid = []) {
     };
 
     isValid = !allAvoid.some(item =>
-      // RECTANGLE overlap check
       position.x < item.x + (item.width || box) &&
       position.x + sizeInBoxes * box > item.x &&
       position.y < item.y + (item.height || box) &&
@@ -518,137 +452,137 @@ function getRandomPosition(sizeInBoxes = 1, avoid = []) {
   return position;
 }
 
+// Reset game
 function resetGame() {
   clearInterval(gameInterval);
-
-  // Slang start in het midden van het canvas
   snake = [{ x: Math.floor(cols/2) * box, y: Math.floor(rows/2) * box }];
-
-  // Obstakel mag niet op slang staan
   obstacle = getRandomPosition(6, snake);
-
-  // Food mag niet op slang of obstakel staan
   food = getRandomPosition(1, [
     { x: snake[0].x, y: snake[0].y, width: box, height: box },
     { x: obstacle.x, y: obstacle.y, width: box*6, height: box*6 }
   ]);
-
-  // Reset score en richting
   score = 0;
   d = null;
 
-  // Zorg dat menu, game-over en video modal verborgen zijn
   document.getElementById("menu").classList.remove("active");
   document.getElementById("gameOver").classList.remove("active");
   document.getElementById("videoModal").classList.remove("active");
 }
 
-    document.addEventListener("keydown", (e) => {
-      if (playerCount === 1) {
-        if (e.key === "ArrowLeft" && d !== "RIGHT") d = "LEFT";
-        else if (e.key === "ArrowUp" && d !== "DOWN") d = "UP";
-        else if (e.key === "ArrowRight" && d !== "LEFT") d = "RIGHT";
-        else if (e.key === "ArrowDown" && d !== "UP") d = "DOWN";
-      } else {
-        if (e.key === "a" && d !== "RIGHT") d = "LEFT";
-        else if (e.key === "w" && d !== "DOWN") d = "UP";
-        else if (e.key === "d" && d !== "LEFT") d = "RIGHT";
-        else if (e.key === "s" && d !== "UP") d = "DOWN";
-      }
-    });
+// Draw functie
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const imageSize = calculateImageSize();
 
-    let touchStartX = 0, touchStartY = 0;
-    canvas.addEventListener("touchstart", (e) => {
-      const t = e.touches[0];
-      touchStartX = t.clientX; touchStartY = t.clientY;
-    });
-    
-    canvas.addEventListener("touchmove", (e) => {
-      if (!touchStartX || !touchStartY) return;
-      const t = e.touches[0];
-      const dx = t.clientX - touchStartX, dy = t.clientY - touchStartY;
-      if (Math.abs(dx) > Math.abs(dy)) {
-        if (dx > 0 && d !== "LEFT") d = "RIGHT";
-        else if (dx < 0 && d !== "RIGHT") d = "LEFT";
-      } else {
-        if (dy > 0 && d !== "UP") d = "DOWN";
-        else if (dy < 0 && d !== "DOWN") d = "UP";
-      }
-      touchStartX = 0; touchStartY = 0;
-    });
+  // Obstakel
+  ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, box*6, box*6);
 
-    function draw() {
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      
-      // Bereken responsieve afbeelding groottes
-      const imageSize = calculateImageSize();
-      
-      // Teken afbeeldingen met responsieve grootte maar behoud game grid posities
-      ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, box * 6, box * 6);
-      snake.forEach(seg => ctx.drawImage(snakeImg, seg.x, seg.y, box, box));
-      ctx.drawImage(foodImg, food.x, food.y, box, box);
+  // Snake
+  snake.forEach(seg => ctx.drawImage(snakeImg, seg.x, seg.y, box, box));
 
-      let snakeX = snake[0].x, snakeY = snake[0].y;
-      if (d === "LEFT") snakeX -= box;
-      if (d === "UP") snakeY -= box;
-      if (d === "RIGHT") snakeX += box;
-      if (d === "DOWN") snakeY += box;
+  // Food
+  ctx.drawImage(foodImg, food.x, food.y, box, box);
 
-      if (snakeX < 0) snakeX = canvas.width - box;
-      if (snakeX >= canvas.width) snakeX = 0;
-      if (snakeY < 0) snakeY = canvas.height - box;
-      if (snakeY >= canvas.height) snakeY = 0;
+  // Volgende positie slang
+  let snakeX = snake[0].x;
+  let snakeY = snake[0].y;
+  if (d === "LEFT") snakeX -= box;
+  if (d === "UP") snakeY -= box;
+  if (d === "RIGHT") snakeX += box;
+  if (d === "DOWN") snakeY += box;
 
-if (snakeX === food.x && snakeY === food.y) {
-  score++;
+  // Wrapping
+  if (snakeX < 0) snakeX = canvas.width - box;
+  if (snakeX >= canvas.width) snakeX = 0;
+  if (snakeY < 0) snakeY = canvas.height - box;
+  if (snakeY >= canvas.height) snakeY = 0;
 
-  // Nieuw obstakel (vermijdt slang en eten)
-  obstacle = getRandomPosition(6, [
-    { x: food.x, y: food.y, width: box, height: box }
-  ]);
+  // Eten pakken
+  if (snakeX === food.x && snakeY === food.y) {
+    score++;
+    obstacle = getRandomPosition(6, [{ x: food.x, y: food.y, width: box, height: box }]);
+    food = getRandomPosition(1, [{ x: obstacle.x, y: obstacle.y, width: box*6, height: box*6 }]);
+  } else {
+    snake.pop();
+  }
 
-  // Nieuw voedsel (vermijdt slang en obstakel)
-  food = getRandomPosition(1, [
-    { x: obstacle.x, y: obstacle.y, width: box*6, height: box*6 }
-  ]);
-} else {
-  snake.pop();
+  const newHead = { x: snakeX, y: snakeY };
+  if ((snakeX >= obstacle.x && snakeX < obstacle.x+box*6 && snakeY >= obstacle.y && snakeY < obstacle.y+box*6) || collision(newHead, snake)) {
+    endGame();
+  }
+  snake.unshift(newHead);
+
+  if (score >= 1) showVideo();
 }
 
-      const newHead = { x: snakeX, y: snakeY };
-      if ((snakeX >= obstacle.x && snakeX < obstacle.x+box*6 && snakeY >= obstacle.y && snakeY < obstacle.y+box*6) || collision(newHead, snake)) {
-        endGame();
-      }
-      snake.unshift(newHead);
-      if (score >= 1) showVideo();
-    }
+function collision(head, array) {
+  return array.some(seg => seg.x === head.x && seg.y === head.y);
+}
 
-    function collision(head, array) {
-      return array.some(seg => seg.x === head.x && seg.y === head.y);
-    }
-    
-    function endGame() {
-      clearInterval(gameInterval);
-      document.getElementById("gameOver").classList.add("active");
-    }
-    
-    function showVideo() {
-      clearInterval(gameInterval);
-      document.getElementById("videoModal").classList.add("active");
-    }
-    
+function endGame() {
+  clearInterval(gameInterval);
+  document.getElementById("gameOver").classList.add("active");
+}
+
+function showVideo() {
+  clearInterval(gameInterval);
+  document.getElementById("videoModal").classList.add("active");
+}
+
 function startGame(selectedPlayerCount) {
   playerCount = selectedPlayerCount;
-  document.getElementById("menu").classList.remove("active");
-
-  resetGame();        // reset snake/food/obstacle
-  updateCanvasSize();  // visuele canvasgrootte
-
+  resetGame();
+  updateCanvasSize();
   gameInterval = setInterval(draw, 100);
 }
 
-    // Initialiseer canvas grootte
-    updateCanvasSize();
-  </script>
+// Event listeners
+document.getElementById("singlePlayer").addEventListener("click", () => startGame(1));
+document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
+document.getElementById("restartButton").addEventListener("click", () => location.reload());
+
+// Keyboard input
+document.addEventListener("keydown", (e) => {
+  if (playerCount === 1) {
+    if (e.key === "ArrowLeft" && d !== "RIGHT") d = "LEFT";
+    else if (e.key === "ArrowUp" && d !== "DOWN") d = "UP";
+    else if (e.key === "ArrowRight" && d !== "LEFT") d = "RIGHT";
+    else if (e.key === "ArrowDown" && d !== "UP") d = "DOWN";
+  } else {
+    if (e.key === "a" && d !== "RIGHT") d = "LEFT";
+    else if (e.key === "w" && d !== "DOWN") d = "UP";
+    else if (e.key === "d" && d !== "LEFT") d = "RIGHT";
+    else if (e.key === "s" && d !== "UP") d = "DOWN";
+  }
+});
+
+// Touch input
+let touchStartX = 0, touchStartY = 0;
+canvas.addEventListener("touchstart", (e) => {
+  const t = e.touches[0];
+  touchStartX = t.clientX; touchStartY = t.clientY;
+});
+canvas.addEventListener("touchmove", (e) => {
+  if (!touchStartX || !touchStartY) return;
+  const t = e.touches[0];
+  const dx = t.clientX - touchStartX, dy = t.clientY - touchStartY;
+  if (Math.abs(dx) > Math.abs(dy)) {
+    if (dx > 0 && d !== "LEFT") d = "RIGHT";
+    else if (dx < 0 && d !== "RIGHT") d = "LEFT";
+  } else {
+    if (dy > 0 && d !== "UP") d = "DOWN";
+    else if (dy < 0 && d !== "DOWN") d = "UP";
+  }
+  touchStartX = 0; touchStartY = 0;
+});
+
+// Resize en orientationchange
+window.addEventListener('resize', updateCanvasSize);
+window.addEventListener('orientationchange', () => setTimeout(updateCanvasSize, 100));
+
+// Initial canvas
+updateCanvasSize();
+</script>
+
 </body>
 </html>
