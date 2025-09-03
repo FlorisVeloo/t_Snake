@@ -494,7 +494,6 @@ function updateCanvasSize() {
 function getRandomPosition(sizeInBoxes = 1, avoid = []) {
   let position, isValid = false;
 
-  // Zorg dat snake altijd wordt meegenomen in "avoid"
   const snakeAreas = snake.map(seg => ({
     x: seg.x,
     y: seg.y,
@@ -510,12 +509,16 @@ function getRandomPosition(sizeInBoxes = 1, avoid = []) {
     };
 
     isValid = !allAvoid.some(item =>
-      position.x >= item.x &&
+      // RECTANGLE overlap check
       position.x < item.x + (item.width || box) &&
-      position.y >= item.y &&
-      position.y < item.y + (item.height || box)
+      position.x + sizeInBoxes * box > item.x &&
+      position.y < item.y + (item.height || box) &&
+      position.y + sizeInBoxes * box > item.y
     );
   }
+
+  return position;
+}
 
   return position;
 }
