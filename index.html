@@ -1,588 +1,610 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Snake Game</title>
-  <style>
-    :root {
-      /* Basis variabelen uit eerste HTML */
-      --title-x-shift: clamp(10vw, 15vw, 19vw);
-      --title-y-shift: clamp(-10vh, -8vh, -5vh);
-      --cloud-width: min(50vw, 450px);
-      --bg-size: cover;
-      --font-size: clamp(0.9rem, 1vw + 0.5rem, 1.5rem);
-      --button-padding: clamp(8px, 2vw, 16px);
-      --button-font: clamp(0.9rem, 1vw + 0.5rem, 1.2rem);
-      --canvas-margin: clamp(10px, 3vw, 50px);
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake Game</title>
+    <style>
+        :root {
+            /* Basis variabelen uit eerste HTML */
+            --title-x-shift: clamp(10vw, 15vw, 19vw);
+            --title-y-shift: clamp(-10vh, -8vh, -5vh);
+            --cloud-width: min(50vw, 450px);
+            --bg-size: cover;
+            --font-size: clamp(0.9rem, 1vw + 0.5rem, 1.5rem);
+            --button-padding: clamp(8px, 2vw, 16px);
+            --button-font: clamp(0.9rem, 1vw + 0.5rem, 1.2rem);
+            --canvas-margin: clamp(10px, 3vw, 50px);
+        }
 
-    html {
-      height: 100%;
-      margin: 0;
-      overflow-y: auto;
-      overscroll-behavior: auto;
-      position: static;
-      width: 100%;
-    }
+        html {
+            height: 100%;
+            margin: 0;
+            overflow-y: auto;
+            overscroll-behavior: auto;
+            position: static;
+            width: 100%;
+        }
 
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      margin: 0;
-      height: 100vh;
-      height: 100dvh;
-      max-height: 100vh;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-      font-size: var(--font-size);
-      background-color: black;
-      color: #810000;
-      position: relative;
-    }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            margin: 0;
+            height: 100vh;
+            height: 100dvh;
+            max-height: 100vh;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            font-size: var(--font-size);
+            background-color: black;
+            color: #810000;
+            position: relative;
+        }
 
-    #background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      opacity: 0.5;
-      object-fit: cover;
-    }
+        #background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+            object-fit: cover;
+        }
 
-    canvas {
-      border: 5px solid #810000;
-      background-color: #000;
-      touch-action: none;
-      z-index: 1;
-      margin-top: var(--canvas-margin);
-    }
+        canvas {
+            border: 5px solid #810000;
+            background-color: #000;
+            touch-action: none;
+            z-index: 1;
+            margin-top: var(--canvas-margin);
+        }
 
-    /* Portrait mode - speelveld beslaat heel scherm minus marges */
-    @media (orientation: portrait) {
-      canvas {
-        width: calc(100vw - 2 * var(--canvas-margin));
-        height: calc(100vh - 2 * var(--canvas-margin));
-        max-width: none;
-        max-height: none;
-      }
+        /* Portrait mode - speelveld beslaat heel scherm minus marges */
+        @media (orientation: portrait) {
+            canvas {
+                width: calc(100vw - 2 * var(--canvas-margin));
+                height: calc(100vh - 2 * var(--canvas-margin));
+                max-width: none;
+                max-height: none;
+            }
+            #background {
+                background-position: 25% center;
+            }
+        }
 
-      #background {
-        background-position: 25% center;
-      }
-    }
+        /* Landscape mode - behoud originele grootte maar responsief */
+        @media (orientation: landscape) {
+            canvas {
+                width: clamp(400px, 70vw, 800px);
+                height: clamp(300px, 50vh, 600px);
+            }
+            :root {
+                --title-x-shift: clamp(0vw, 1vw, 2vw);
+                --title-y-shift: clamp(-15vh, -12vh, -10vh);
+                --cloud-width: clamp(100px, 25vw, 800px);
+            }
+            #background {
+                background-size: auto 100%;
+                background-position: center top;
+            }
+        }
 
-    /* Landscape mode - behoud originele grootte maar responsief */
-    @media (orientation: landscape) {
-      canvas {
-        width: clamp(400px, 70vw, 800px);
-        height: clamp(300px, 50vh, 600px);
-      }
+        #menu, #gameOver, #videoModal {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 10px;
+            z-index: 2;
+            position: relative;
+            max-width: 90vw;
+            width: 100%;
+        }
 
-      :root {
-        --title-x-shift: clamp(0vw, 1vw, 2vw);
-        --title-y-shift: clamp(-15vh, -12vh, -10vh);
-        --cloud-width: clamp(100px, 25vw, 800px);
-      }
+        #menu.active, #gameOver.active, #videoModal.active {
+            display: flex;
+        }
 
-      #background {
-        background-size: auto 100%;
-        background-position: center top;
-      }
-    }
+        #introText {
+            background-color: rgba(0,0,0,0.8);
+            padding: clamp(0.8rem, 2vw, 1.5rem);
+            border-radius: 12px;
+            color: #810000;
+            box-shadow: 0 0 10px rgba(255,255,255,0.2);
+            margin-bottom: 1rem;
+            max-width: 90vw;
+            word-wrap: break-word;
+        }
 
-    #menu, #gameOver, #videoModal {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      margin-top: 10px;
-      z-index: 2;
-      position: relative;
-      max-width: 90vw;
-      width: 100%;
-    }
+        /* Button container voor horizontale layout */
+        .button-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(10px, 3vw, 20px);
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 500px;
+        }
 
-    #menu.active, #gameOver.active, #videoModal.active {
-      display: flex;
-    }
+        /* Knoppen */
+        #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink {
+            margin: 0.25rem;
+            padding: var(--button-padding);
+            background-color: #000;
+            color: #b40000;
+            border: 2px solid #810000;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-size: var(--button-font);
+            border-radius: 8px;
+            min-width: clamp(100px, 20vw, 150px);
+            text-align: center;
+            white-space: nowrap;
+            flex: 1;
+            max-width: 200px;
+        }
 
-    #introText {
-      background-color: rgba(0,0,0,0.8);
-      padding: clamp(0.8rem, 2vw, 1.5rem);
-      border-radius: 12px;
-      color: #810000;
-      box-shadow: 0 0 10px rgba(255,255,255,0.2);
-      margin-bottom: 1rem;
-      max-width: 90vw;
-      word-wrap: break-word;
-    }
+        #startButton:hover, #restartButton:hover, #twoPlayer:hover, #singlePlayer:hover, .buttonLink:hover {
+            background-color: #111;
+            transform: scale(1.02);
+            transition: all 0.2s ease;
+        }
 
-    /* Button container voor horizontale layout */
-    .button-container {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      gap: clamp(10px, 3vw, 20px);
-      flex-wrap: wrap;
-      width: 100%;
-      max-width: 500px;
-    }
+        .buttonLink {
+            text-decoration: none;
+            display: inline-block;
+        }
 
-    /* Knoppen */
-    #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink {
-      margin: 0.25rem;
-      padding: var(--button-padding);
-      background-color: #000;
-      color: #b40000;
-      border: 2px solid #810000;
-      cursor: pointer;
-      font-family: Arial, sans-serif;
-      font-size: var(--button-font);
-      border-radius: 8px;
-      min-width: clamp(100px, 20vw, 150px);
-      text-align: center;
-      white-space: nowrap;
-      flex: 1;
-      max-width: 200px;
-    }
+        /* Game Over en Video Modal layout */
+        #gameOver .button-container, #videoModal .button-container {
+            margin-top: 1rem;
+        }
 
-    #startButton:hover, #restartButton:hover,
-    #twoPlayer:hover, #singlePlayer:hover,
-    .buttonLink:hover {
-      background-color: #111;
-      transform: scale(1.02);
-      transition: all 0.2s ease;
-    }
+        /* Video Modal - geen zwarte overlay, horizontale layout */
+        #videoModal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            /* Geen background-color meer voor transparantie */
+        }
 
-    .buttonLink {
-      text-decoration: none;
-      display: inline-block;
-    }
+        #videoModal a {
+            display: flex;
+            flex-direction: row; /* Horizontaal naast elkaar */
+            align-items: center;
+            gap: clamp(20px, 5vw, 50px);
+            text-decoration: none;
+        }
 
-    /* Game Over en Video Modal layout */
-    #gameOver .button-container,
-    #videoModal .button-container {
-      margin-top: 1rem;
-    }
+        /* Wolkje styling met hover effect */
+        .wolkje {
+            max-width: var(--cloud-width);
+            height: auto;
+            border: none;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
 
-    /* Video Modal - geen zwarte overlay, horizontale layout */
-    #videoModal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 10;
-      /* Geen background-color meer voor transparantie */
-    }
+        .wolkje:hover {
+            transform: scale(1.1) translateY(-7%);
+        }
 
-    #videoModal a {
-      display: flex;
-      flex-direction: row; /* Horizontaal naast elkaar */
-      align-items: center;
-      gap: clamp(20px, 5vw, 50px);
-      text-decoration: none;
-    }
+        .wolkje.touched {
+            transform: scale(1.1) translateY(-7%) !important;
+        }
 
-    /* Wolkje styling met hover effect */
-    .wolkje {
-      max-width: var(--cloud-width);
-      height: auto;
-      border: none;
-      transition: transform 0.3s ease-in-out;
-      cursor: pointer;
-    }
+        /* Uil afbeelding */
+        #videoModal a img:not(.wolkje) {
+            max-width: var(--cloud-width);
+            height: auto;
+            border: none;
+            transition: transform 0.3s ease-in-out;
+        }
 
-    .wolkje:hover {
-      transform: scale(1.1) translateY(-7%);
-    }
+        #videoModal a img:not(.wolkje):hover {
+            transform: scale(1.05);
+        }
 
-    .wolkje.touched {
-      transform: scale(1.1) translateY(-7%) !important;
-    }
+        /* ========== SMALL DEVICES (max 320px) ========== */
+        @media (max-width: 320px) {
+            :root {
+                --title-x-shift: clamp(0vw, 3vw, 6vw);
+                --title-y-shift: clamp(-10vh, -7vh, -5vh);
+                --canvas-margin: 8px;
+                --button-font: clamp(0.8rem, 3vw, 1rem);
+                --button-padding: clamp(6px, 3vw, 12px);
+            }
+            .button-container {
+                gap: 8px;
+            }
+            #introText {
+                padding: 0.6rem;
+                margin-bottom: 0.8rem;
+            }
+            #videoModal a {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .wolkje, #videoModal a img:not(.wolkje) {
+                max-width: 60vw;
+            }
+        }
 
-    /* Uil afbeelding */
-    #videoModal a img:not(.wolkje) {
-      max-width: var(--cloud-width);
-      height: auto;
-      border: none;
-      transition: transform 0.3s ease-in-out;
-    }
+        /* ========== TABLET LANDSCAPE ========== */
+        @media (max-width: 1024px) and (min-height: 350px) and (orientation: landscape) {
+            :root {
+                --title-x-shift: clamp(3vw, 5vw, 8vw);
+                --title-y-shift: clamp(-15vh, -12vh, -10vh);
+                --canvas-margin: 12px;
+            }
+            canvas {
+                width: clamp(350px, 60vw, 700px);
+                height: clamp(250px, 45vh, 500px);
+            }
+            .wolkje, #videoModal a img:not(.wolkje) {
+                max-width: clamp(150px, 25vw, 300px);
+            }
+        }
 
-    #videoModal a img:not(.wolkje):hover {
-      transform: scale(1.05);
-    }
+        /* ========== MEDIUM DESKTOP LANDSCAPE ========== */
+        @media (min-width: 1025px) and (max-width: 1500px) and (max-height: 750px) and (orientation: landscape) {
+            :root {
+                --title-x-shift: clamp(-7vw, -5vw, -2vw);
+                --title-y-shift: clamp(-20vh, -17vh, -15vh);
+                --canvas-margin: 16px;
+            }
+            .wolkje, #videoModal a img:not(.wolkje) {
+                max-width: clamp(200px, 20vw, 350px);
+            }
+        }
 
-    /* ========== SMALL DEVICES (max 320px) ========== */
-    @media (max-width: 320px) {
-      :root {
-        --title-x-shift: clamp(0vw, 3vw, 6vw);
-        --title-y-shift: clamp(-10vh, -7vh, -5vh);
-        --canvas-margin: 8px;
-        --button-font: clamp(0.8rem, 3vw, 1rem);
-        --button-padding: clamp(6px, 3vw, 12px);
-      }
+        /* ========== DESKTOP (min-width: 1025px) ========== */
+        @media (min-width: 1025px) {
+            :root {
+                --title-x-shift: clamp(0vw, 2vw, 5vw);
+                --title-y-shift: clamp(-10vh, -8vh, -5vh);
+                --cloud-width: clamp(300px, 15vw, 600px);
+                --canvas-margin: 20px;
+            }
+            canvas {
+                width: 600px;
+                height: 600px;
+            }
+            .wolkje, #videoModal a img:not(.wolkje) {
+                max-width: clamp(250px, 20vw, 400px);
+            }
+        }
 
-      .button-container {
-        gap: 8px;
-      }
+        /* ========== ULTRA-WIDE SCREENS (min-width: 1921px) ========== */
+        @media (min-width: 1921px) {
+            :root {
+                --title-x-shift: clamp(0vw, 1vw, 2vw);
+                --title-y-shift: clamp(-5vh, -2vh, 0vh);
+                --cloud-width: clamp(300px, 12vw, 600px);
+            }
+            canvas {
+                width: 700px;
+                height: 700px;
+            }
+            .wolkje, #videoModal a img:not(.wolkje) {
+                max-width: clamp(300px, 18vw, 450px);
+            }
+        }
 
-      #introText {
-        padding: 0.6rem;
-        margin-bottom: 0.8rem;
-      }
-
-      #videoModal a {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .wolkje, #videoModal a img:not(.wolkje) {
-        max-width: 60vw;
-      }
-    }
-
-    /* ========== TABLET LANDSCAPE ========== */
-    @media (max-width: 1024px) and (min-height: 350px) and (orientation: landscape) {
-      :root {
-        --title-x-shift: clamp(3vw, 5vw, 8vw);
-        --title-y-shift: clamp(-15vh, -12vh, -10vh);
-        --canvas-margin: 12px;
-      }
-
-      canvas {
-        width: clamp(350px, 60vw, 700px);
-        height: clamp(250px, 45vh, 500px);
-      }
-
-      .wolkje, #videoModal a img:not(.wolkje) {
-        max-width: clamp(150px, 25vw, 300px);
-      }
-    }
-
-    /* ========== MEDIUM DESKTOP LANDSCAPE ========== */
-    @media (min-width: 1025px) and (max-width: 1500px) and (max-height: 750px) and (orientation: landscape) {
-      :root {
-        --title-x-shift: clamp(-7vw, -5vw, -2vw);
-        --title-y-shift: clamp(-20vh, -17vh, -15vh);
-        --canvas-margin: 16px;
-      }
-
-      .wolkje, #videoModal a img:not(.wolkje) {
-        max-width: clamp(200px, 20vw, 350px);
-      }
-    }
-
-    /* ========== DESKTOP (min-width: 1025px) ========== */
-    @media (min-width: 1025px) {
-      :root {
-        --title-x-shift: clamp(0vw, 2vw, 5vw);
-        --title-y-shift: clamp(-10vh, -8vh, -5vh);
-        --cloud-width: clamp(300px, 15vw, 600px);
-        --canvas-margin: 20px;
-      }
-
-      canvas {
-        width: 600px;
-        height: 600px;
-      }
-
-      .wolkje, #videoModal a img:not(.wolkje) {
-        max-width: clamp(250px, 20vw, 400px);
-      }
-    }
-
-    /* ========== ULTRA-WIDE SCREENS (min-width: 1921px) ========== */
-    @media (min-width: 1921px) {
-      :root {
-        --title-x-shift: clamp(0vw, 1vw, 2vw);
-        --title-y-shift: clamp(-5vh, -2vh, 0vh);
-        --cloud-width: clamp(300px, 12vw, 600px);
-      }
-
-      canvas {
-        width: 700px;
-        height: 700px;
-      }
-
-      .wolkje, #videoModal a img:not(.wolkje) {
-        max-width: clamp(300px, 18vw, 450px);
-      }
-    }
-
-    /* ========== PORTRAIT MODE SPECIFIEKE AANPASSINGEN ========== */
-    @media (orientation: portrait) and (max-width: 768px) {
-      body {
-        justify-content: flex-start;
-        padding-top: var(--canvas-margin);
-      }
-
-      canvas {
-        margin-top: 0;
-      }
-
-      #menu, #gameOver {
-        position: absolute;
-        top: var(--canvas-margin);
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 10;
-        background-color: rgba(0,0,0,0.95);
-        padding: 1rem;
-        border-radius: 15px;
-        width: calc(100% - 4 * var(--canvas-margin));
-        max-width: none;
-      }
-
-      #videoModal a {
-        flex-direction: column;
-        gap: clamp(15px, 4vw, 30px);
-      }
-
-      .wolkje, #videoModal a img:not(.wolkje) {
-        max-width: clamp(200px, 50vw, 300px);
-      }
-    }
-  </style>
+        /* ========== PORTRAIT MODE SPECIFIEKE AANPASSINGEN ========== */
+        @media (orientation: portrait) and (max-width: 768px) {
+            body {
+                justify-content: flex-start;
+                padding-top: var(--canvas-margin);
+            }
+            canvas {
+                margin-top: 0;
+            }
+            #menu, #gameOver {
+                position: absolute;
+                top: var(--canvas-margin);
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 10;
+                background-color: rgba(0,0,0,0.95);
+                padding: 1rem;
+                border-radius: 15px;
+                width: calc(100% - 4 * var(--canvas-margin));
+                max-width: none;
+            }
+            #videoModal a {
+                flex-direction: column;
+                gap: clamp(15px, 4vw, 30px);
+            }
+            .wolkje, #videoModal a img:not(.wolkje) {
+                max-width: clamp(200px, 50vw, 300px);
+            }
+        }
+    </style>
 </head>
 <body>
-  <img id="background" src="pad_hel.png" alt="pad met hel">
-
-  <div id="menu" class="active">
-    <div id="introText">
-      <h1>Welkom in Joopies kelder!</h1>
-      <p>Vind Joop, maar pas op voor de Uil! Volg het spoor van koekjes.</p>
+    <img id="background" src="pad_hel.png" alt="pad met hel">
+    <div id="menu" class="active">
+        <div id="introText">
+            <h1>Welkom in Joopies kelder!</h1>
+            <p>Vind Joop, maar pas op voor de Uil! Volg het spoor van koekjes.</p>
+        </div>
+        <div class="button-container">
+            <button id="twoPlayer">Ga linksaf</button>
+            <button id="singlePlayer">Ga rechtsaf</button>
+        </div>
     </div>
-    <div class="button-container">
-      <button id="twoPlayer">Ga linksaf</button>
-      <button id="singlePlayer">Ga rechtsaf</button>
+    <canvas id="gameCanvas"></canvas>
+    <div id="gameOver">
+        <div id="introText">
+            <h2>Game over</h2>
+            <p>Je bent een pannenkoek!</p>
+        </div>
+        <div class="button-container">
+            <a href="https://joopvanhetgroenewoud.nl" target="_blank" class="buttonLink">HOME</a>
+            <button id="restartButton">RESTART</button>
+        </div>
     </div>
-  </div>
-
-  <canvas id="gameCanvas"></canvas>
-
-  <div id="gameOver">
-    <div id="introText">
-      <h2>Game over</h2>
-      <p>Je bent een pannenkoek!</p>
+    <div id="videoModal">
+        <a href="https://onderweg8.joopvanhetgroenewoud.nl" target="_blank">
+            <img src="Uil.png" alt="Klik hier om door te gaan">
+            <img src="Wolkje_snake.png" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkje">
+        </a>
     </div>
-    <div class="button-container">
-      <a href="https://joopvanhetgroenewoud.nl" target="_blank" class="buttonLink">HOME</a>
-      <button id="restartButton">RESTART</button>
-    </div>
-  </div>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
 
-  <div id="videoModal">
-    <a href="https://onderweg8.joopvanhetgroenewoud.nl" target="_blank">
-      <img src="Uil.png" alt="Klik hier om door te gaan">
-      <img src="Wolkje_snake.png" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkje">
-    </a>
-  </div>
+        // Canvas logische grootte (altijd hetzelfde voor game logic)
+        const cols = 30, rows = 30;
+        const LOGICAL_BOX_SIZE = 20; // Constante voor game logic
+        
+        // Stel canvas logische grootte in (dit blijft altijd hetzelfde)
+        canvas.width = LOGICAL_BOX_SIZE * cols;
+        canvas.height = LOGICAL_BOX_SIZE * rows;
 
-<script>
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+        // Dynamische canvas grootte aanpassing (alleen visueel)
+        function updateCanvasSize() {
+            const isPortrait = window.innerHeight > window.innerWidth;
+            const margin = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--canvas-margin'));
+            
+            let displayWidth, displayHeight;
+            
+            if (isPortrait) {
+                displayWidth = window.innerWidth - 2 * margin;
+                displayHeight = window.innerHeight - 2 * margin;
+            } else {
+                displayWidth = Math.min(Math.max(window.innerWidth * 0.7, 400), 800);
+                displayHeight = Math.min(Math.max(window.innerHeight * 0.5, 300), 600);
+            }
 
-// Canvas logische grootte
-const cols = 30, rows = 30;
-let box = 20;
+            // Houd canvas vierkant
+            const size = Math.min(displayWidth, displayHeight);
+            
+            // **Stel alleen de visuele grootte in via CSS**
+            canvas.style.width = size + "px";
+            canvas.style.height = size + "px";
+            
+            // **Canvas logische grootte blijft ALTIJD hetzelfde**
+            // canvas.width en canvas.height worden NIET aangepast
+        }
 
-// Afbeeldingen
-const snakeImg = new Image(); snakeImg.src = 'Monster.png';
-const foodImg = new Image(); foodImg.src = 'Koek.png';
-const obstacleImg = new Image(); obstacleImg.src = 'Uil.png';
+        // Functie om daadwerkelijke pixel grootte per box te berekenen
+        function getPixelsPerBox() {
+            const canvasRect = canvas.getBoundingClientRect();
+            return canvasRect.width / cols; // Of canvasRect.height / rows (beide hetzelfde omdat canvas vierkant is)
+        }
 
-let snake, food, score, d, playerCount, gameInterval, obstacle;
+        // Afbeeldingen laden
+        const snakeImg = new Image();
+        snakeImg.src = 'Monster.png';
+        const foodImg = new Image();
+        foodImg.src = 'Koek.png';
+        const obstacleImg = new Image();
+        obstacleImg.src = 'Uil.png';
 
-// Canvas grootte updaten en box berekenen
-function updateCanvasSize() {
-  const isPortrait = window.innerHeight > window.innerWidth;
-  const margin = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--canvas-margin'));
-  let displayWidth, displayHeight;
+        let snake, food, score, d, playerCount, gameInterval, obstacle;
 
-  if (isPortrait) {
-    displayWidth = window.innerWidth - 2 * margin;
-    displayHeight = window.innerHeight - 2 * margin;
-  } else {
-    displayWidth = Math.min(Math.max(window.innerWidth * 0.7, 400), 800);
-    displayHeight = Math.min(Math.max(window.innerHeight * 0.5, 300), 600);
-  }
+        // Wolkje touch support
+        const cloud = document.getElementById("wolkje");
+        if (cloud && ("ontouchstart" in window || navigator.maxTouchPoints > 0)) {
+            cloud.addEventListener("touchstart", () => {
+                cloud.classList.add("touched");
+            });
+            cloud.addEventListener("touchend", () => {
+                setTimeout(() => {
+                    cloud.classList.remove("touched");
+                }, 300);
+            });
+        }
 
-  const size = Math.min(displayWidth, displayHeight);
+        // Event listeners
+        document.getElementById("singlePlayer").addEventListener("click", () => startGame(1));
+        document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
+        document.getElementById("restartButton").addEventListener("click", () => location.reload());
 
-  // Stel canvas logische grootte gelijk aan visuele grootte
-  canvas.width = size;
-  canvas.height = size;
+        // Resize handlers - alleen visuele aanpassingen
+        window.addEventListener('resize', () => {
+            updateCanvasSize();
+        });
 
-  // Bereken boxgrootte voor vierkante vakjes
-  box = Math.floor(size / cols);
-}
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                updateCanvasSize();
+            }, 100);
+        });
 
-// Bereken afbeelding grootte (max 0.8 van box, min 8, max 40)
-function calculateImageSize() {
-  return Math.max(8, Math.min(box * 0.8, 40));
-}
+        function getRandomPosition(sizeInBoxes = 1, avoid = []) {
+            let position, isValid = false;
+            const snakeAreas = snake.map(seg => ({ 
+                x: seg.x, 
+                y: seg.y, 
+                width: LOGICAL_BOX_SIZE, 
+                height: LOGICAL_BOX_SIZE 
+            }));
+            const allAvoid = avoid.concat(snakeAreas);
+            
+            while (!isValid) {
+                position = {
+                    x: Math.floor(Math.random() * (cols - sizeInBoxes)) * LOGICAL_BOX_SIZE,
+                    y: Math.floor(Math.random() * (rows - sizeInBoxes)) * LOGICAL_BOX_SIZE
+                };
+                isValid = !allAvoid.some(item =>
+                    // RECTANGLE overlap check
+                    position.x < item.x + (item.width || LOGICAL_BOX_SIZE) &&
+                    position.x + sizeInBoxes * LOGICAL_BOX_SIZE > item.x &&
+                    position.y < item.y + (item.height || LOGICAL_BOX_SIZE) &&
+                    position.y + sizeInBoxes * LOGICAL_BOX_SIZE > item.y
+                );
+            }
+            return position;
+        }
 
-// Random positie, vermijd obstakels en slang
-function getRandomPosition(sizeInBoxes = 1, avoid = []) {
-  let position, isValid = false;
-  const snakeAreas = snake.map(seg => ({ x: seg.x, y: seg.y, width: box, height: box }));
-  const allAvoid = avoid.concat(snakeAreas);
+        function resetGame() {
+            clearInterval(gameInterval);
+            
+            // Slang start in het midden van het canvas
+            snake = [{ 
+                x: Math.floor(cols/2) * LOGICAL_BOX_SIZE, 
+                y: Math.floor(rows/2) * LOGICAL_BOX_SIZE 
+            }];
+            
+            // Obstakel mag niet op slang staan
+            obstacle = getRandomPosition(6, snake);
+            
+            // Food mag niet op slang of obstakel staan
+            food = getRandomPosition(1, [
+                { x: snake[0].x, y: snake[0].y, width: LOGICAL_BOX_SIZE, height: LOGICAL_BOX_SIZE },
+                { x: obstacle.x, y: obstacle.y, width: LOGICAL_BOX_SIZE*6, height: LOGICAL_BOX_SIZE*6 }
+            ]);
+            
+            // Reset score en richting
+            score = 0;
+            d = null;
+            
+            // Zorg dat menu, game-over en video modal verborgen zijn
+            document.getElementById("menu").classList.remove("active");
+            document.getElementById("gameOver").classList.remove("active");
+            document.getElementById("videoModal").classList.remove("active");
+        }
 
-  while (!isValid) {
-    position = {
-      x: Math.floor(Math.random() * (cols - sizeInBoxes)) * box,
-      y: Math.floor(Math.random() * (rows - sizeInBoxes)) * box
-    };
+        document.addEventListener("keydown", (e) => {
+            if (playerCount === 1) {
+                if (e.key === "ArrowLeft" && d !== "RIGHT") d = "LEFT";
+                else if (e.key === "ArrowUp" && d !== "DOWN") d = "UP";
+                else if (e.key === "ArrowRight" && d !== "LEFT") d = "RIGHT";
+                else if (e.key === "ArrowDown" && d !== "UP") d = "DOWN";
+            } else {
+                if (e.key === "a" && d !== "RIGHT") d = "LEFT";
+                else if (e.key === "w" && d !== "DOWN") d = "UP";
+                else if (e.key === "d" && d !== "LEFT") d = "RIGHT";
+                else if (e.key === "s" && d !== "UP") d = "DOWN";
+            }
+        });
 
-    isValid = !allAvoid.some(item =>
-      position.x < item.x + (item.width || box) &&
-      position.x + sizeInBoxes * box > item.x &&
-      position.y < item.y + (item.height || box) &&
-      position.y + sizeInBoxes * box > item.y
-    );
-  }
+        let touchStartX = 0, touchStartY = 0;
+        canvas.addEventListener("touchstart", (e) => {
+            const t = e.touches[0];
+            touchStartX = t.clientX;
+            touchStartY = t.clientY;
+        });
 
-  return position;
-}
+        canvas.addEventListener("touchmove", (e) => {
+            if (!touchStartX || !touchStartY) return;
+            const t = e.touches[0];
+            const dx = t.clientX - touchStartX, dy = t.clientY - touchStartY;
+            
+            if (Math.abs(dx) > Math.abs(dy)) {
+                if (dx > 0 && d !== "LEFT") d = "RIGHT";
+                else if (dx < 0 && d !== "RIGHT") d = "LEFT";
+            } else {
+                if (dy > 0 && d !== "UP") d = "DOWN";
+                else if (dy < 0 && d !== "DOWN") d = "UP";
+            }
+            touchStartX = 0;
+            touchStartY = 0;
+        });
 
-// Reset game
-function resetGame() {
-  clearInterval(gameInterval);
-  snake = [{ x: Math.floor(cols/2) * box, y: Math.floor(rows/2) * box }];
-  obstacle = getRandomPosition(6, snake);
-  food = getRandomPosition(1, [
-    { x: snake[0].x, y: snake[0].y, width: box, height: box },
-    { x: obstacle.x, y: obstacle.y, width: box*6, height: box*6 }
-  ]);
-  score = 0;
-  d = null;
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Gebruik ALTIJD de logische box grootte voor tekenen
+            // De canvas schaalt automatisch naar de juiste visuele grootte
+            ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, LOGICAL_BOX_SIZE * 6, LOGICAL_BOX_SIZE * 6);
+            snake.forEach(seg => ctx.drawImage(snakeImg, seg.x, seg.y, LOGICAL_BOX_SIZE, LOGICAL_BOX_SIZE));
+            ctx.drawImage(foodImg, food.x, food.y, LOGICAL_BOX_SIZE, LOGICAL_BOX_SIZE);
 
-  document.getElementById("menu").classList.remove("active");
-  document.getElementById("gameOver").classList.remove("active");
-  document.getElementById("videoModal").classList.remove("active");
-}
+            let snakeX = snake[0].x, snakeY = snake[0].y;
+            
+            if (d === "LEFT") snakeX -= LOGICAL_BOX_SIZE;
+            if (d === "UP") snakeY -= LOGICAL_BOX_SIZE;
+            if (d === "RIGHT") snakeX += LOGICAL_BOX_SIZE;
+            if (d === "DOWN") snakeY += LOGICAL_BOX_SIZE;
 
-// Draw functie
-function draw() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  const imageSize = calculateImageSize();
+            if (snakeX < 0) snakeX = canvas.width - LOGICAL_BOX_SIZE;
+            if (snakeX >= canvas.width) snakeX = 0;
+            if (snakeY < 0) snakeY = canvas.height - LOGICAL_BOX_SIZE;
+            if (snakeY >= canvas.height) snakeY = 0;
 
-  // Obstakel
-  ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, box*6, box*6);
+            if (snakeX === food.x && snakeY === food.y) {
+                score++;
+                // Nieuw obstakel (vermijdt slang en eten)
+                obstacle = getRandomPosition(6, [
+                    { x: food.x, y: food.y, width: LOGICAL_BOX_SIZE, height: LOGICAL_BOX_SIZE }
+                ]);
+                // Nieuw voedsel (vermijdt slang en obstakel)
+                food = getRandomPosition(1, [
+                    { x: obstacle.x, y: obstacle.y, width: LOGICAL_BOX_SIZE*6, height: LOGICAL_BOX_SIZE*6 }
+                ]);
+            } else {
+                snake.pop();
+            }
 
-  // Snake
-  snake.forEach(seg => ctx.drawImage(snakeImg, seg.x, seg.y, box, box));
+            const newHead = { x: snakeX, y: snakeY };
+            
+            if ((snakeX >= obstacle.x && snakeX < obstacle.x + LOGICAL_BOX_SIZE*6 && 
+                 snakeY >= obstacle.y && snakeY < obstacle.y + LOGICAL_BOX_SIZE*6) || 
+                collision(newHead, snake)) {
+                endGame();
+            }
+            
+            snake.unshift(newHead);
+            
+            if (score >= 1) showVideo();
+        }
 
-  // Food
-  ctx.drawImage(foodImg, food.x, food.y, box, box);
+        function collision(head, array) {
+            return array.some(seg => seg.x === head.x && seg.y === head.y);
+        }
 
-  // Volgende positie slang
-  let snakeX = snake[0].x;
-  let snakeY = snake[0].y;
-  if (d === "LEFT") snakeX -= box;
-  if (d === "UP") snakeY -= box;
-  if (d === "RIGHT") snakeX += box;
-  if (d === "DOWN") snakeY += box;
+        function endGame() {
+            clearInterval(gameInterval);
+            document.getElementById("gameOver").classList.add("active");
+        }
 
-  // Wrapping
-  if (snakeX < 0) snakeX = canvas.width - box;
-  if (snakeX >= canvas.width) snakeX = 0;
-  if (snakeY < 0) snakeY = canvas.height - box;
-  if (snakeY >= canvas.height) snakeY = 0;
+        function showVideo() {
+            clearInterval(gameInterval);
+            document.getElementById("videoModal").classList.add("active");
+        }
 
-  // Eten pakken
-  if (snakeX === food.x && snakeY === food.y) {
-    score++;
-    obstacle = getRandomPosition(6, [{ x: food.x, y: food.y, width: box, height: box }]);
-    food = getRandomPosition(1, [{ x: obstacle.x, y: obstacle.y, width: box*6, height: box*6 }]);
-  } else {
-    snake.pop();
-  }
+        function startGame(selectedPlayerCount) {
+            playerCount = selectedPlayerCount;
+            document.getElementById("menu").classList.remove("active");
+            resetGame();
+            updateCanvasSize(); // Visuele canvas grootte instellen
+            gameInterval = setInterval(draw, 100);
+        }
 
-  const newHead = { x: snakeX, y: snakeY };
-  if ((snakeX >= obstacle.x && snakeX < obstacle.x+box*6 && snakeY >= obstacle.y && snakeY < obstacle.y+box*6) || collision(newHead, snake)) {
-    endGame();
-  }
-  snake.unshift(newHead);
-
-  if (score >= 1) showVideo();
-}
-
-function collision(head, array) {
-  return array.some(seg => seg.x === head.x && seg.y === head.y);
-}
-
-function endGame() {
-  clearInterval(gameInterval);
-  document.getElementById("gameOver").classList.add("active");
-}
-
-function showVideo() {
-  clearInterval(gameInterval);
-  document.getElementById("videoModal").classList.add("active");
-}
-
-function startGame(selectedPlayerCount) {
-  playerCount = selectedPlayerCount;
-  resetGame();
-  updateCanvasSize();
-  gameInterval = setInterval(draw, 100);
-}
-
-// Event listeners
-document.getElementById("singlePlayer").addEventListener("click", () => startGame(1));
-document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
-document.getElementById("restartButton").addEventListener("click", () => location.reload());
-
-// Keyboard input
-document.addEventListener("keydown", (e) => {
-  if (playerCount === 1) {
-    if (e.key === "ArrowLeft" && d !== "RIGHT") d = "LEFT";
-    else if (e.key === "ArrowUp" && d !== "DOWN") d = "UP";
-    else if (e.key === "ArrowRight" && d !== "LEFT") d = "RIGHT";
-    else if (e.key === "ArrowDown" && d !== "UP") d = "DOWN";
-  } else {
-    if (e.key === "a" && d !== "RIGHT") d = "LEFT";
-    else if (e.key === "w" && d !== "DOWN") d = "UP";
-    else if (e.key === "d" && d !== "LEFT") d = "RIGHT";
-    else if (e.key === "s" && d !== "UP") d = "DOWN";
-  }
-});
-
-// Touch input
-let touchStartX = 0, touchStartY = 0;
-canvas.addEventListener("touchstart", (e) => {
-  const t = e.touches[0];
-  touchStartX = t.clientX; touchStartY = t.clientY;
-});
-canvas.addEventListener("touchmove", (e) => {
-  if (!touchStartX || !touchStartY) return;
-  const t = e.touches[0];
-  const dx = t.clientX - touchStartX, dy = t.clientY - touchStartY;
-  if (Math.abs(dx) > Math.abs(dy)) {
-    if (dx > 0 && d !== "LEFT") d = "RIGHT";
-    else if (dx < 0 && d !== "RIGHT") d = "LEFT";
-  } else {
-    if (dy > 0 && d !== "UP") d = "DOWN";
-    else if (dy < 0 && d !== "DOWN") d = "UP";
-  }
-  touchStartX = 0; touchStartY = 0;
-});
-
-// Resize en orientationchange
-window.addEventListener('resize', updateCanvasSize);
-window.addEventListener('orientationchange', () => setTimeout(updateCanvasSize, 100));
-
-// Initial canvas
-updateCanvasSize();
-</script>
-
+        // Initialiseer canvas grootte
+        updateCanvasSize();
+    </script>
 </body>
 </html>
