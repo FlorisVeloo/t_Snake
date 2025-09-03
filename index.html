@@ -80,14 +80,6 @@
 
         /* ========== ORIENTATION: LANDSCAPE ========== */
         @media (orientation: landscape) {
-            :root {
-                --title-x-shift: clamp(0vw, 1vw, 2vw);
-                --title-y-shift: clamp(-15vh, -12vh, -10vh);
-                --cloud-width: clamp(100px, 25vw, 800px);
-                --snake-image-size: clamp(10px, 2.5vw, 20px);
-                --food-image-size: clamp(10px, 2.5vw, 20px);
-                --obstacle-image-size: clamp(40px, 10vw, 80px);
-            }
             #background {
                 background-size: auto 100%;
                 background-position: center top;
@@ -96,11 +88,6 @@
 
         /* ========== ORIENTATION: PORTRAIT ========== */
         @media (orientation: portrait) {
-            :root {
-                --snake-image-size: clamp(14px, 4vw, 28px);
-                --food-image-size: clamp(14px, 4vw, 28px);
-                --obstacle-image-size: clamp(56px, 16vw, 112px);
-            }
             #background {
                 background-position: 25% center;
             }
