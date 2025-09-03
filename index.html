@@ -523,22 +523,27 @@ function getRandomPosition(sizeInBoxes = 1, avoid = []) {
 function resetGame() {
   clearInterval(gameInterval);
 
+  // Slang start in het midden van het canvas
   snake = [{ x: Math.floor(cols/2) * box, y: Math.floor(rows/2) * box }];
 
   // Obstakel mag niet op slang staan
-  obstacle = getRandomPosition(6);
+  obstacle = getRandomPosition(6, snake);
 
   // Food mag niet op slang of obstakel staan
   food = getRandomPosition(1, [
+    { x: snake[0].x, y: snake[0].y, width: box, height: box },
     { x: obstacle.x, y: obstacle.y, width: box*6, height: box*6 }
   ]);
 
+  // Reset score en richting
   score = 0;
   d = null;
+
+  // Zorg dat menu, game-over en video modal verborgen zijn
+  document.getElementById("menu").classList.remove("active");
   document.getElementById("gameOver").classList.remove("active");
   document.getElementById("videoModal").classList.remove("active");
 }
-
 
     document.addEventListener("keydown", (e) => {
       if (playerCount === 1) {
