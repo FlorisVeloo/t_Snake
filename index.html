@@ -384,12 +384,20 @@
         canvas.width = LOGICAL_BOX_SIZE * cols;
         canvas.height = LOGICAL_BOX_SIZE * rows;
 
-        // Functie om CSS variabelen te lezen
+        // Functie om CSS variabelen te lezen en te converteren naar pixels
         function getCSSVariable(variableName) {
             const value = getComputedStyle(document.documentElement)
                 .getPropertyValue(variableName)
                 .trim();
-            return parseFloat(value);
+            
+            // Als het eindigt op 'px', haal de px eraf en converteer naar nummer
+            if (value.endsWith('px')) {
+                return parseFloat(value.slice(0, -2));
+            }
+            
+            // Als het een ander formaat is, probeer het direct te parsen
+            const parsed = parseFloat(value);
+            return isNaN(parsed) ? 16 : parsed; // fallback naar 16px als er iets fout gaat
         }
 
         // Afbeeldingen laden
