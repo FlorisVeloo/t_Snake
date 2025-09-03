@@ -14,7 +14,7 @@
       --font-size: clamp(0.9rem, 1vw + 0.5rem, 1.5rem);
       --button-padding: clamp(8px, 2vw, 16px);
       --button-font: clamp(0.9rem, 1vw + 0.5rem, 1.2rem);
-      --canvas-margin: clamp(4vw, 8w, 12vw);
+      --canvas-margin: clamp(10px, 3vw, 50px);
     }
 
     html {
@@ -390,25 +390,33 @@
     const ctx = canvas.getContext("2d");
 
     // Dynamische canvas grootte aanpassing
-    function updateCanvasSize() {
-      const isPortrait = window.innerHeight > window.innerWidth;
-      const margin = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--canvas-margin'));
-      
-      if (isPortrait) {
-        // Portrait: canvas neemt bijna hele scherm in beslag
-        const maxWidth = window.innerWidth - (2 * margin);
-        const maxHeight = window.innerHeight - (2 * margin);
-        
-        // Behoud vierkante verhouding
-        const size = Math.min(maxWidth, maxHeight);
-        canvas.style.width = size + 'px';
-        canvas.style.height = size + 'px';
-      } else {
-        // Landscape: gebruik CSS responsieve waarden
-        canvas.style.width = '';
-        canvas.style.height = '';
-      }
-    }
+function updateCanvasSize() {
+  const isPortrait = window.innerHeight > window.innerWidth;
+  const margin = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--canvas-margin'));
+
+  let displayWidth, displayHeight;
+  
+  if (isPortrait) {
+    displayWidth = window.innerWidth - (2 * margin);
+    displayHeight = window.innerHeight - (2 * margin);
+  } else {
+    // Landscape: gebruik clamped waardes
+    displayWidth = Math.min(Math.max(window.innerWidth * 0.7, 400), 800);
+    displayHeight = Math.min(Math.max(window.innerHeight * 0.5, 300), 600);
+  }
+
+  // Houd het canvas vierkant
+  const size = Math.min(displayWidth, displayHeight);
+
+  canvas.style.width = size + "px";
+  canvas.style.height = size + "px";
+  canvas.width = size;
+  canvas.height = size;
+
+  // Herbereken box size (grid moet zich aanpassen!)
+  box = Math.floor(size / cols);
+}
+
 
     // Canvas logische grootte (altijd hetzelfde voor game logic)
     const cols = 30, rows = 30;
@@ -502,7 +510,7 @@
 
     function resetGame() {
       clearInterval(gameInterval);
-      snake = [{ x: canvas.width - box, y: 0 }];
+      snake = [{ x: Math.floor(cols/2) * box, y: Math.floor(rows/2) * box }];
       obstacle = getRandomPosition(6);
       food = getRandomPosition(1, [{ x: obstacle.x, y: obstacle.y, width: box*6, height: box*6 }]);
       score = 0;
@@ -550,12 +558,11 @@
       
       // Bereken responsieve afbeelding groottes
       const imageSize = calculateImageSize();
-      const obstacleSize = imageSize * 6; // Uil is 6x groter
       
       // Teken afbeeldingen met responsieve grootte maar behoud game grid posities
-      ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, obstacleSize, obstacleSize);
-      snake.forEach(seg => ctx.drawImage(snakeImg, seg.x, seg.y, imageSize, imageSize));
-      ctx.drawImage(foodImg, food.x, food.y, imageSize, imageSize);
+      ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, box * 6, box * 6);
+      snake.forEach(seg => ctx.drawImage(snakeImg, seg.x, seg.y, box, box));
+      ctx.drawImage(foodImg, food.x, food.y, box, box);
 
       let snakeX = snake[0].x, snakeY = snake[0].y;
       if (d === "LEFT") snakeX -= box;
