@@ -62,11 +62,10 @@
             margin-top: var(--canvas-margin);
         }
 
-        /* Portrait mode - speelveld beslaat heel scherm minus marges */
+        /* Portrait mode - CANVAS BLIJFT VIERKANT */
         @media (orientation: portrait) {
             canvas {
-                width: calc(100vw - 2 * var(--canvas-margin));
-                height: calc(100vh - 2 * var(--canvas-margin));
+                /* Verwijder width/height - wordt via JavaScript ingesteld */
                 max-width: none;
                 max-height: none;
             }
@@ -75,11 +74,10 @@
             }
         }
 
-        /* Landscape mode - behoud originele grootte maar responsief */
+        /* Landscape mode - CANVAS BLIJFT VIERKANT */
         @media (orientation: landscape) {
             canvas {
-                width: clamp(400px, 70vw, 800px);
-                height: clamp(300px, 50vh, 600px);
+                /* Verwijder width/height - wordt via JavaScript ingesteld */
             }
             :root {
                 --title-x-shift: clamp(0vw, 1vw, 2vw);
