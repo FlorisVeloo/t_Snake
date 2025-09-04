@@ -26,10 +26,14 @@
             --canvas-margin-right: 4vw;
             --canvas-margin-bottom: 8vh;
             --canvas-margin-left: 4vw;
+    /* Victory content posities */
+            --victory-owl-x: clamp(10vw, 15vw, 19vw);
+            --victory-owl-y: clamp(-10vh, -8vh, -5vh);
+            --victory-cloud-x: clamp(10vw, 15vw, 19vw);
+            --victory-cloud-y: clamp(-10vh, -8vh, -5vh);
 
-            --victory-flex-direction: column;
-            --victory-gap: clamp(20px, 5vw, 50px);
-            --victory-margin-top: 10rem;
+            --victory-img-size: min(50vw, 450px);
+            
         }
 
         html {
@@ -349,17 +353,26 @@
         }
 
         /* Uil afbeelding */
-        #videoModal .victory-content img:not(.wolkje) {
-            max-width: var(--cloud-width);
-            height: auto;
-            border: none;
-            transition: transform 0.3s ease-in-out;
-        }
+/* Uil */
+#videoModal .victory-content img:not(.wolkje) {
+    max-width: var(--victory-img-size);
+    height: auto;
+    transform: translate(var(--victory-owl-x), var(--victory-owl-y));
+    transition: transform 0.3s ease-in-out;
+}
+/* Wolkje */
+#videoModal .wolkje {
+    max-width: var(--victory-img-size);
+    height: auto;
+    transform: translate(var(--victory-cloud-x), var(--victory-cloud-y));
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
 
         #videoModal .victory-content img:not(.wolkje):hover {
             transform: scale(1.05);
         }
-
+        
         /* ========== PORTRAIT MODE SPECIFIEKE AANPASSINGEN ========== */
         @media (orientation: portrait) and (max-width: 768px) {
             body {
