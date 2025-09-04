@@ -26,6 +26,10 @@
             --canvas-margin-right: 4vw;
             --canvas-margin-bottom: 8vh;
             --canvas-margin-left: 4vw;
+
+            --victory-flex-direction: row;
+            --victory-gap: clamp(20px, 5vw, 50px);
+            --victory-margin-top: 2rem;
         }
 
         html {
@@ -89,6 +93,11 @@
 
         /* ========== ORIENTATION: PORTRAIT ========== */
         @media (orientation: portrait) {
+            :root {
+                --victory-flex-direction: column;
+                --victory-gap: clamp(10px, 3vw, 20px);
+                --victory-margin-top: 1.5rem;
+    }
             #background {
                 background-position: 25% center;
             }
@@ -300,22 +309,27 @@
         }
 
         /* Video Modal - geen zwarte overlay, horizontale layout */
-        #videoModal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
-        }
-
-        #videoModal .victory-content {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: clamp(20px, 5vw, 50px);
-            text-decoration: none;
-            margin-bottom: 1rem;
-        }
+#videoModal {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* NIET meer centreren */
+    text-align: center;
+    margin-top: 10px;
+    z-index: 2;
+    position: relative; /* niet meer fixed */
+    max-width: 90vw;
+    width: 100%;
+}
+#videoModal .victory-content {
+    display: flex;
+    flex-direction: var(--victory-flex-direction);
+    justify-content: center;
+    align-items: center;
+    gap: var(--victory-gap);
+    margin-top: var(--victory-margin-top);
+    flex-wrap: wrap;
+}
 
         /* Wolkje styling met hover effect */
         .wolkje {
