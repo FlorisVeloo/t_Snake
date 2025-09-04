@@ -22,7 +22,7 @@
             --obstacle-image-size: clamp(96px, 27vw, 288px); /* 4x groter dan snake/food */
             
             /* Instelbare margins per schermformaat */
-            --canvas-margin-top: 20vh;
+            --canvas-margin-top: 32vh;
             --canvas-margin-right: 4vw;
             --canvas-margin-bottom: 8vh;
             --canvas-margin-left: 4vw;
@@ -130,6 +130,11 @@
             :root {
                 --title-x-shift: clamp(3vw, 5vw, 8vw);
                 --title-y-shift: clamp(-15vh, -12vh, -10vh);
+
+                --font-size: clamp(0.7rem, 1.2vw + 0.7rem, 1.5rem);
+                --button-padding: clamp(16px, 3vw, 24px);
+                --button-font: clamp(1.2rem, 2vw + 1rem, 2rem);
+                
                 --snake-image-size: clamp(8px, 2vw, 16px);
                 --food-image-size: clamp(8px, 2vw, 16px);
                 --obstacle-image-size: clamp(32px, 8vw, 64px);
@@ -141,6 +146,11 @@
             :root {
                 --title-x-shift: clamp(-7vw, -5vw, -2vw);
                 --title-y-shift: clamp(-20vh, -17vh, -15vh);
+            
+                --font-size: clamp(0.7rem, 1.2vw + 0.7rem, 1.5rem);
+                --button-padding: clamp(16px, 3vw, 24px);
+                --button-font: clamp(1.2rem, 2vw + 1rem, 2rem);
+                
                 --canvas-margin-top: clamp(20px, 5vh, 60px);
                 --canvas-margin-right: clamp(50px, 15vw, 200px);
                 --canvas-margin-bottom: clamp(20px, 5vh, 60px);
