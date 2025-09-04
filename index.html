@@ -577,15 +577,13 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Gebruik JUISTE canvas pixel conversie voor afbeelding groottes
-            const snakeSize = getCSSVariableInCanvasPixels('--snake-image-size');
-            const foodSize = getCSSVariableInCanvasPixels('--food-image-size');
-            const obstacleSize = getCSSVariableInCanvasPixels('--obstacle-image-size');
+            // Teken afbeeldingen op hun werkelijke collision sizes
+            // Uil: 6x6 LOGICAL_BOX_SIZE = 120px logische grootte
+            ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, LOGICAL_BOX_SIZE * 6, LOGICAL_BOX_SIZE * 6);
             
-            // Teken afbeeldingen op logische posities met correct geschaalde groottes
-            ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, obstacleSize, obstacleSize);
-            snake.forEach(seg => ctx.drawImage(snakeImg, seg.x, seg.y, snakeSize, snakeSize));
-            ctx.drawImage(foodImg, food.x, food.y, foodSize, foodSize);
+            // Snake en food: 1x1 LOGICAL_BOX_SIZE = 20px logische grootte  
+            snake.forEach(seg => ctx.drawImage(snakeImg, seg.x, seg.y, LOGICAL_BOX_SIZE, LOGICAL_BOX_SIZE));
+            ctx.drawImage(foodImg, food.x, food.y, LOGICAL_BOX_SIZE, LOGICAL_BOX_SIZE);
 
             let snakeX = snake[0].x, snakeY = snake[0].y;
             
