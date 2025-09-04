@@ -99,15 +99,21 @@
             :root {
                 --title-x-shift: clamp(0vw, 3vw, 6vw);
                 --title-y-shift: clamp(-10vh, -7vh, -5vh);
-                --button-font: clamp(0.8rem, 3vw, 1rem);
-                --button-padding: clamp(6px, 3vw, 12px);
-                --canvas-margin-top: 3px;
-                --canvas-margin-right: 3px;
-                --canvas-margin-bottom: 3px;
-                --canvas-margin-left: 3px;
-                --snake-image-size: clamp(8px, 3.5vw, 16px);
-                --food-image-size: clamp(8px, 3.5vw, 16px);
-                --obstacle-image-size: clamp(32px, 14vw, 64px);
+                --font-size: clamp(1.5rem, 2vw + 1rem, 2.5rem);
+                --button-padding: clamp(16px, 3vw, 24px);
+                --button-font: clamp(1.2rem, 2vw + 1rem, 2rem);
+            
+            /* NIEUWE: Responsieve afbeelding controle */
+                --snake-image-size: clamp(32px, 9vw, 96px);
+                --food-image-size: clamp(32px, 9vw, 96px);
+                --obstacle-image-size: clamp(96px, 27vw, 288px); /* 4x groter dan snake/food */
+            
+            /* Instelbare margins per schermformaat */
+                --canvas-margin-top: 32vh;
+                --canvas-margin-right: 4vw;
+                --canvas-margin-bottom: 8vh;
+                --canvas-margin-left: 4vw;
+                
             }
             .button-container {
                 gap: 8px;
@@ -134,10 +140,17 @@
                 --font-size: clamp(0.7rem, 1.2vw + 0.7rem, 1.5rem);
                 --button-padding: clamp(16px, 3vw, 24px);
                 --button-font: clamp(1.2rem, 2vw + 1rem, 2rem);
-                
-                --snake-image-size: clamp(8px, 2vw, 16px);
-                --food-image-size: clamp(8px, 2vw, 16px);
-                --obstacle-image-size: clamp(32px, 8vw, 64px);
+            
+            /* NIEUWE: Responsieve afbeelding controle */
+                --snake-image-size: clamp(32px, 9vw, 96px);
+                --food-image-size: clamp(32px, 9vw, 96px);
+                --obstacle-image-size: clamp(96px, 27vw, 288px); /* 4x groter dan snake/food */
+            
+            /* Instelbare margins per schermformaat */
+                --canvas-margin-top: 32vh;
+                --canvas-margin-right: 4vw;
+                --canvas-margin-bottom: 8vh;
+                --canvas-margin-left: 4vw;
             }
         }
 
@@ -150,11 +163,17 @@
                 --font-size: clamp(0.7rem, 1.2vw + 0.7rem, 1.5rem);
                 --button-padding: clamp(16px, 3vw, 24px);
                 --button-font: clamp(1.2rem, 2vw + 1rem, 2rem);
-                
-                --canvas-margin-top: clamp(20px, 5vh, 60px);
-                --canvas-margin-right: clamp(50px, 15vw, 200px);
-                --canvas-margin-bottom: clamp(20px, 5vh, 60px);
-                --canvas-margin-left: clamp(50px, 15vw, 200px);
+            
+            /* NIEUWE: Responsieve afbeelding controle */
+                --snake-image-size: clamp(32px, 9vw, 96px);
+                --food-image-size: clamp(32px, 9vw, 96px);
+                --obstacle-image-size: clamp(96px, 27vw, 288px); /* 4x groter dan snake/food */
+            
+            /* Instelbare margins per schermformaat */
+                --canvas-margin-top: 32vh;
+                --canvas-margin-right: 4vw;
+                --canvas-margin-bottom: 8vh;
+                --canvas-margin-left: 4vw;
             }
         }
 
@@ -164,10 +183,21 @@
                 --title-x-shift: clamp(0vw, 2vw, 5vw);
                 --title-y-shift: clamp(-10vh, -8vh, -5vh);
                 --cloud-width: clamp(300px, 15vw, 600px);
-                --canvas-margin-top: clamp(20px, 5vh, 60px);
-                --canvas-margin-right: clamp(50px, 15vw, 200px);
-                --canvas-margin-bottom: clamp(20px, 5vh, 60px);
-                --canvas-margin-left: clamp(50px, 15vw, 200px);
+
+                --font-size: clamp(0.7rem, 1.2vw + 0.7rem, 1.5rem);
+                --button-padding: clamp(16px, 3vw, 24px);
+                --button-font: clamp(1.2rem, 2vw + 1rem, 2rem);
+            
+            /* NIEUWE: Responsieve afbeelding controle */
+                --snake-image-size: clamp(32px, 9vw, 96px);
+                --food-image-size: clamp(32px, 9vw, 96px);
+                --obstacle-image-size: clamp(96px, 27vw, 288px); /* 4x groter dan snake/food */
+            
+            /* Instelbare margins per schermformaat */
+                --canvas-margin-top: 12vh;
+                --canvas-margin-right: 24vw;
+                --canvas-margin-bottom: 12vh;
+                --canvas-margin-left: 24vw;
             }
         }
 
@@ -177,6 +207,21 @@
                 --title-x-shift: clamp(0vw, 1vw, 2vw);
                 --title-y-shift: clamp(-5vh, -2vh, 0vh);
                 --cloud-width: clamp(300px, 12vw, 600px);
+
+                --font-size: clamp(0.7rem, 1.2vw + 0.7rem, 1.5rem);
+                --button-padding: clamp(16px, 3vw, 24px);
+                --button-font: clamp(1.2rem, 2vw + 1rem, 2rem);
+            
+            /* NIEUWE: Responsieve afbeelding controle */
+                --snake-image-size: min(32vw, 160px);
+                --food-image-size: min(32vw, 160px);
+                --obstacle-image-size: min(64vw, 1200px);
+            
+            /* Instelbare margins per schermformaat */
+                --canvas-margin-top: 12vh;
+                --canvas-margin-right: 24vw;
+                --canvas-margin-bottom: 12vh;
+                --canvas-margin-left: 24vw;
             }
         }
 
