@@ -221,7 +221,7 @@
         }
 
         /* Knoppen */
-        #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink {
+        #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryHome, #victoryRestart {
             margin: 0.25rem;
             padding: var(--button-padding);
             background-color: #000;
@@ -238,7 +238,7 @@
             max-width: 200px;
         }
 
-        #startButton:hover, #restartButton:hover, #twoPlayer:hover, #singlePlayer:hover, .buttonLink:hover {
+        #startButton:hover, #restartButton:hover, #twoPlayer:hover, #singlePlayer:hover, .buttonLink:hover, #victoryHome:hover, #victoryRestart:hover {
             background-color: #111;
             transform: scale(1.02);
             transition: all 0.2s ease;
@@ -263,12 +263,13 @@
             z-index: 10;
         }
 
-        #videoModal a {
+        #videoModal .victory-content {
             display: flex;
             flex-direction: row;
             align-items: center;
             gap: clamp(20px, 5vw, 50px);
             text-decoration: none;
+            margin-bottom: 1rem;
         }
 
         /* Wolkje styling met hover effect */
@@ -289,14 +290,14 @@
         }
 
         /* Uil afbeelding */
-        #videoModal a img:not(.wolkje) {
+        #videoModal .victory-content img:not(.wolkje) {
             max-width: var(--cloud-width);
             height: auto;
             border: none;
             transition: transform 0.3s ease-in-out;
         }
 
-        #videoModal a img:not(.wolkje):hover {
+        #videoModal .victory-content img:not(.wolkje):hover {
             transform: scale(1.05);
         }
 
@@ -322,11 +323,11 @@
                 width: calc(100% - 4 * var(--canvas-margin-left));
                 max-width: none;
             }
-            #videoModal a {
+            #videoModal .victory-content {
                 flex-direction: column;
                 gap: clamp(15px, 4vw, 30px);
             }
-            .wolkje, #videoModal a img:not(.wolkje) {
+            .wolkje, #videoModal .victory-content img:not(.wolkje) {
                 max-width: clamp(200px, 50vw, 300px);
             }
         }
@@ -356,10 +357,18 @@
         </div>
     </div>
     <div id="videoModal">
-        <a href="https://onderweg8.joopvanhetgroenewoud.nl" target="_blank">
+        <div id="introText">
+            <h2>Gefeliciteerd!</h2>
+            <p>Je hebt Joop gevonden!</p>
+        </div>
+        <a href="https://onderweg8.joopvanhetgroenewoud.nl" target="_blank" class="victory-content">
             <img src="Uil.png" alt="Klik hier om door te gaan">
             <img src="Wolkje_snake.png" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkje">
         </a>
+        <div class="button-container">
+            <button id="victoryHome">HOME</button>
+            <button id="victoryRestart">RESTART</button>
+        </div>
     </div>
     <script>
         const canvas = document.getElementById("gameCanvas");
@@ -373,20 +382,29 @@
         canvas.width = LOGICAL_BOX_SIZE * cols;
         canvas.height = LOGICAL_BOX_SIZE * rows;
 
-        // Functie om CSS variabelen te lezen en te converteren naar pixels
-        function getCSSVariable(variableName) {
+        // Functie om CSS variabelen te lezen en te converteren naar canvas pixels
+        function getCSSVariableInCanvasPixels(variableName) {
             const value = getComputedStyle(document.documentElement)
                 .getPropertyValue(variableName)
                 .trim();
             
-            // Als het eindigt op 'px', haal de px eraf en converteer naar nummer
+            // Parse de CSS waarde
+            let pixelValue;
             if (value.endsWith('px')) {
-                return parseFloat(value.slice(0, -2));
+                pixelValue = parseFloat(value.slice(0, -2));
+            } else {
+                pixelValue = parseFloat(value) || 16; // fallback
             }
             
-            // Als het een ander formaat is, probeer het direct te parsen
-            const parsed = parseFloat(value);
-            return isNaN(parsed) ? 16 : parsed; // fallback naar 16px als er iets fout gaat
+            // Converteer scherm pixels naar canvas pixels
+            const canvasRect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / canvasRect.width;
+            const scaleY = canvas.height / canvasRect.height;
+            
+            // Gebruik gemiddelde schaal voor vierkante afbeeldingen
+            const scale = (scaleX + scaleY) / 2;
+            
+            return Math.max(4, pixelValue * scale); // Minimum 4 pixels
         }
 
         // Afbeeldingen laden
@@ -416,6 +434,10 @@
         document.getElementById("singlePlayer").addEventListener("click", () => startGame(1));
         document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
         document.getElementById("restartButton").addEventListener("click", () => location.reload());
+        document.getElementById("victoryRestart").addEventListener("click", () => location.reload());
+        document.getElementById("victoryHome").addEventListener("click", () => {
+            window.open("https://joopvanhetgroenewoud.nl", "_blank");
+        });
 
         // Resize handlers met betere orientation handling
         let resizeTimeout;
@@ -555,12 +577,12 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Gebruik CSS variabelen voor afbeelding groottes
-            const snakeSize = getCSSVariable('--snake-image-size');
-            const foodSize = getCSSVariable('--food-image-size');
-            const obstacleSize = getCSSVariable('--obstacle-image-size');
+            // Gebruik JUISTE canvas pixel conversie voor afbeelding groottes
+            const snakeSize = getCSSVariableInCanvasPixels('--snake-image-size');
+            const foodSize = getCSSVariableInCanvasPixels('--food-image-size');
+            const obstacleSize = getCSSVariableInCanvasPixels('--obstacle-image-size');
             
-            // Teken afbeeldingen op logische posities met CSS-gecontroleerde groottes
+            // Teken afbeeldingen op logische posities met correct geschaalde groottes
             ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, obstacleSize, obstacleSize);
             snake.forEach(seg => ctx.drawImage(snakeImg, seg.x, seg.y, snakeSize, snakeSize));
             ctx.drawImage(foodImg, food.x, food.y, foodSize, foodSize);
