@@ -33,6 +33,9 @@
             --victory-cloud-y: clamp(15vh, 20vh, 25vh);
 
             --victory-img-size: min(50vw, 450px);
+
+            --intro-x-shift: clamp(-5vw, 0vw, 5vw); /* schuif meer naar midden */
+            --intro-y-shift: clamp(0vh, 5vh, 10vh);
             
         }
 
@@ -229,6 +232,9 @@
                 --victory-owl-y: clamp(35vh, 40vh, 45vh);
                 --victory-cloud-x: clamp(15vw, 20vw, 25vw);
                 --victory-cloud-y: clamp(15vh, 20vh, 25vh);
+
+                --intro-x-shift: clamp(-5vw, 0vw, 5vw); /* schuif meer naar midden */
+                --intro-y-shift: clamp(-5vw, 0vw, 5vw);
             }
         }
 
@@ -259,6 +265,9 @@
                 --victory-owl-y: clamp(35vh, 40vh, 45vh);
                 --victory-cloud-x: clamp(15vw, 20vw, 25vw);
                 --victory-cloud-y: clamp(15vh, 20vh, 25vh);
+
+                --intro-x-shift: clamp(-5vw, 0vw, 5vw); /* schuif meer naar midden */
+                --intro-y-shift: clamp(-5vw, 0vw, 5vw);
             }
         }
 
@@ -301,6 +310,13 @@
             width: 100%;
             max-width: 500px;
         }
+
+#introText,
+#menu .button-container {
+  position: relative;
+  left: var(--intro-x-shift);
+  top: var(--intro-y-shift);
+}
 
         /* Knoppen */
         #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryHome, #victoryRestart {
@@ -395,36 +411,6 @@
 
         #videoModal .victory-content img:not(.wolkje):hover {
             transform: scale(1.05);
-        }
-        
-        /* ========== PORTRAIT MODE SPECIFIEKE AANPASSINGEN ========== */
-        @media (orientation: portrait) and (max-width: 768px) {
-            body {
-                justify-content: flex-start;
-                padding-top: var(--canvas-margin-top);
-            }
-            canvas {
-                position: relative;
-                top: 0;
-            }
-            #menu, #gameOver, #videoModal {
-                position: absolute;
-                top: var(--canvas-margin-top);
-                left: 50%;
-                transform: translateX(-50%);
-                z-index: 10;
-                background-color: rgba(0,0,0,0.95);
-                padding: 1rem;
-                border-radius: 15px;
-                width: calc(100% - 4 * var(--canvas-margin-left));
-                max-width: none;
-            }
-            #videoModal .victory-content img:not(.wolkje) {
-                max-width: clamp(100px, 25vw, 150px);
-            }
-            #videoModal .wolkje {
-                max-width: clamp(100px, 25vw, 150px);
-            }
         }
     </style>
 </head>
