@@ -311,7 +311,7 @@
                 position: relative;
                 top: 0;
             }
-            #menu, #gameOver {
+            #menu, #gameOver, #videoModal {
                 position: absolute;
                 top: var(--canvas-margin-top);
                 left: 50%;
@@ -323,12 +323,11 @@
                 width: calc(100% - 4 * var(--canvas-margin-left));
                 max-width: none;
             }
-            #videoModal .victory-content {
-                flex-direction: column;
-                gap: clamp(15px, 4vw, 30px);
+            #videoModal .victory-content img:not(.wolkje) {
+                max-width: clamp(100px, 25vw, 150px);
             }
-            .wolkje, #videoModal .victory-content img:not(.wolkje) {
-                max-width: clamp(200px, 50vw, 300px);
+            #videoModal .wolkje {
+                max-width: clamp(100px, 25vw, 150px);
             }
         }
     </style>
