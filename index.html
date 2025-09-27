@@ -29,6 +29,8 @@
             --button-height: clamp(80px, 120px, 160px);
             --y-positie-knoppen: 50px; /*omhoog en omlaag verplaatsen van de knoppen*/
             --y-positie-tekstbox 10px;  
+            --tekstbox-width); 48vw;
+            --tekstbox-height) 30vh;
             
             /* NIEUWE: Responsieve afbeelding controle */
             --snake-image-size: min(10vw, 150px);
@@ -268,6 +270,8 @@
                 --button-height: clamp(80px, 120px, 160px);
                 --y-positie-tekstbox clamp(35vh, 40vh, 45vh);
                 --y-positie-knoppen: clamp(5vh, 10vh, 15vh); /*omhoog en omlaag verplaatsen van de knoppen*/
+                --tekstbox-width); 48vw;
+                --tekstbox-height) 30vh;
             
                 /* NIEUWE: Responsieve afbeelding controle */
                 --snake-image-size: min(32vw, 160px);
@@ -361,7 +365,8 @@
             color: #810000;
             box-shadow: 0 0 20px rgba(255,255,255,0.2);
             margin-bottom: 1.2rem;
-            max-width: 64vw;
+            max-width: var(--tekstbox-width);
+            max-height: var(--tekstbox-height);
             word-wrap: break-word;
             margin-top: var(--y-positie-tekstbox);
         }
