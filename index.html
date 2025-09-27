@@ -24,9 +24,9 @@
             --bg-size: cover;
             
             --font-size: clamp(1.4rem, 1.8vw + 0.9rem, 2.3rem);
-            --button-font: clamp(1.4rem, 2.6vw + 1.0rem, 2.8rem); /* was ±1.5x kleiner */
-            --button-width: clamp(32px, 64px;, 128px); 
-            --button-height: clamp(32px, 64px;, 128px); /*positie van de links en rechtsaf knoppen, alle knoppen eigenlijk*/
+            --button-font: clamp(1.4rem, 2.6vw + 1.0rem, 2.8rem);
+            --button-width: clamp(120px, 20vw, 200px); 
+            --button-height: clamp(40px, 8vh, 80px);
             
             /* NIEUWE: Responsieve afbeelding controle */
             --snake-image-size: min(10vw, 150px);
@@ -38,23 +38,23 @@
             --canvas-margin-right: 4vw;
             --canvas-margin-bottom: 8vh;
             --canvas-margin-left: 4vw;
-                /* Victory content posities - Links (twoPlayer) */
-            --victory-owl-left-x: clamp(-20vw, -15vw, -10vw);
-            --victory-owl-left-y: clamp(15vh, 20vh, 25vh);
-            --victory-cloud-left-x: clamp(-40vw, -35vw, -30vw);
-            --victory-cloud-left-y: clamp(15vh, 20vh, 25vh);
+            
+            /* Victory content posities - Links (twoPlayer) */
+            --victory-owl-left-x: -15vw;
+            --victory-owl-left-y: 20vh;
+            --victory-cloud-left-x: -35vw;
+            --victory-cloud-left-y: 20vh;
             
             /* Victory content posities - Rechts (singlePlayer) */
-            --victory-owl-right-x: clamp(10vw, 15vw, 20vw);
-            --victory-owl-right-y: clamp(25vh, 30vh, 35vh);
-            --victory-cloud-right-x: clamp(80vw, 85vw, 90vw);
-            --victory-cloud-right-y: clamp(15vh, 20vh, 25vh);
+            --victory-owl-right-x: 15vw;
+            --victory-owl-right-y: 20vh;
+            --victory-cloud-right-x: 35vw;
+            --victory-cloud-right-y: 20vh;
 
             --victory-img-size: min(50vw, 450px);
 
-            --intro-x-shift: clamp(-5vw, 0vw, 5vw); /* schuif meer naar midden */
+            --intro-x-shift: clamp(-5vw, 0vw, 5vw);
             --intro-y-shift: clamp(0vh, 5vh, 10vh);
-            
         }
 
         html {
@@ -122,7 +122,7 @@
                 --victory-flex-direction: column;
                 --victory-gap: clamp(10px, 3vw, 20px);
                 --victory-margin-top: 1.5rem;
-    }
+            }
             #background {
                 background-position: 25% center;
             }
@@ -134,20 +134,30 @@
                 --title-x-shift: clamp(0vw, 3vw, 6vw);
                 --title-y-shift: clamp(-10vh, -7vh, -5vh);
                 --font-size: clamp(1.5rem, 2vw + 1rem, 2.5rem);
-                --button-padding: clamp(16px, 3vw, 24px);
                 --button-font: clamp(1.2rem, 2vw + 1rem, 2rem);
+                --button-width: clamp(100px, 25vw, 150px);
+                --button-height: clamp(35px, 6vh, 60px);
             
-            /* NIEUWE: Responsieve afbeelding controle */
+                /* NIEUWE: Responsieve afbeelding controle */
                 --snake-image-size: clamp(32px, 9vw, 96px);
                 --food-image-size: clamp(32px, 9vw, 96px);
-                --obstacle-image-size: clamp(96px, 27vw, 288px); /* 4x groter dan snake/food */
+                --obstacle-image-size: clamp(96px, 27vw, 288px);
             
-            /* Instelbare margins per schermformaat */
+                /* Instelbare margins per schermformaat */
                 --canvas-margin-top: 32vh;
                 --canvas-margin-right: 4vw;
                 --canvas-margin-bottom: 8vh;
                 --canvas-margin-left: 4vw;
                 
+                /* Victory posities voor kleine schermen */
+                --victory-owl-left-x: -25vw;
+                --victory-owl-left-y: 15vh;
+                --victory-cloud-left-x: -45vw;
+                --victory-cloud-left-y: 15vh;
+                --victory-owl-right-x: 25vw;
+                --victory-owl-right-y: 15vh;
+                --victory-cloud-right-x: 45vw;
+                --victory-cloud-right-y: 15vh;
             }
             .button-container {
                 gap: 8px;
@@ -172,32 +182,33 @@
                 --title-y-shift: clamp(-15vh, -12vh, -10vh);
 
                 --font-size: clamp(0.8rem, 1.1vw + 0.6rem, 1.6rem);
-                --button-padding: clamp(12px, 2vw, 20px);
                 --button-font: clamp(1.2rem, 1.4vw + 0.7rem, 2.7rem);
+                --button-width: clamp(100px, 18vw, 180px);
+                --button-height: clamp(35px, 7vh, 70px);
             
-            /* NIEUWE: Responsieve afbeelding controle */
+                /* NIEUWE: Responsieve afbeelding controle */
                 --snake-image-size: min(32vw, 160px);
                 --food-image-size: min(32vw, 160px);
                 --obstacle-image-size: min(64vw, 1200px);
             
-            /* Instelbare margins per schermformaat */
+                /* Instelbare margins per schermformaat */
                 --canvas-margin-top: 0vh;
                 --canvas-margin-right: 16vw;
                 --canvas-margin-bottom: 16vh;
                 --canvas-margin-left: 16vw;
 
                 /* Victory content posities - Links (twoPlayer) */
-                --victory-owl-left-x: clamp(-20vw, -15vw, -10vw);
-                --victory-owl-left-y: clamp(35vh, 40vh, 45vh);
-                --victory-cloud-left-x: clamp(-40vw, -35vw, -30vw);
-                --victory-cloud-left-y: clamp(15vh, 20vh, 25vh);
+                --victory-owl-left-x: -20vw;
+                --victory-owl-left-y: 40vh;
+                --victory-cloud-left-x: -40vw;
+                --victory-cloud-left-y: 20vh;
                 
                 /* Victory content posities - Rechts (singlePlayer) */
-                --victory-owl-right-x: clamp(40vw, 45vw, 50vw);
-                --victory-owl-right-y: clamp(35vh, 40vh, 45vh);
-                --victory-cloud-right-x: clamp(20vw, 25vw, 30vw);
-                --victory-cloud-right-y: clamp(15vh, 20vh, 25vh);
-                }
+                --victory-owl-right-x: 45vw;
+                --victory-owl-right-y: 40vh;
+                --victory-cloud-right-x: 25vw;
+                --victory-cloud-right-y: 20vh;
+            }
         }
 
         /* ========== DESKTOP MEDIUM (min-width: 1025px, max-width: 1500px) ========== */
@@ -207,31 +218,32 @@
                 --title-y-shift: clamp(-20vh, -17vh, -15vh);
             
                 --font-size: clamp(0.8rem, 1.1vw + 0.6rem, 1.6rem);
-                --button-padding: clamp(12px, 2vw, 20px);
                 --button-font: clamp(1.2rem, 1.4vw + 0.7rem, 2.7rem);
+                --button-width: clamp(120px, 15vw, 180px);
+                --button-height: clamp(40px, 6vh, 70px);
             
-            /* NIEUWE: Responsieve afbeelding controle */
+                /* NIEUWE: Responsieve afbeelding controle */
                 --snake-image-size: min(32vw, 160px);
                 --food-image-size: min(32vw, 160px);
                 --obstacle-image-size: min(64vw, 1200px);
             
-            /* Instelbare margins per schermformaat */
+                /* Instelbare margins per schermformaat */
                 --canvas-margin-top: 0vh;
                 --canvas-margin-right: 16vw;
                 --canvas-margin-bottom: 16vh;
                 --canvas-margin-left: 16vw;
 
                 /* Victory content posities - Links (twoPlayer) */
-                --victory-owl-left-x: clamp(-20vw, -15vw, -10vw);
-                --victory-owl-left-y: clamp(35vh, 40vh, 45vh);
-                --victory-cloud-left-x: clamp(-40vw, -35vw, -30vw);
-                --victory-cloud-left-y: clamp(15vh, 20vh, 25vh);
+                --victory-owl-left-x: -20vw;
+                --victory-owl-left-y: 40vh;
+                --victory-cloud-left-x: -40vw;
+                --victory-cloud-left-y: 20vh;
                 
                 /* Victory content posities - Rechts (singlePlayer) */
-                --victory-owl-right-x: clamp(40vw, 45vw, 50vw);
-                --victory-owl-right-y: clamp(35vh, 40vh, 45vh);
-                --victory-cloud-right-x: clamp(20vw, 25vw, 30vw);
-                --victory-cloud-right-y: clamp(15vh, 20vh, 25vh);
+                --victory-owl-right-x: 45vw;
+                --victory-owl-right-y: 40vh;
+                --victory-cloud-right-x: 25vw;
+                --victory-cloud-right-y: 20vh;
             }
         }
 
@@ -243,34 +255,34 @@
                 --cloud-width: clamp(300px, 15vw, 600px);
 
                 --font-size: clamp(0.5rem, 1.0vw + 0.5rem, 1.2rem);
-                --button-padding: clamp(16px, 3vw, 24px);
                 --button-font: clamp(1.1rem, 1.8vw + 0.9rem, 1.8rem);
-                --button-height: clamp(5vh, 10vh, 15vh); /*positie van de links en rechtsaf knoppen, alle knoppen eigenlijk*/
+                --button-width: clamp(120px, 12vw, 200px);
+                --button-height: clamp(40px, 5vh, 80px);
             
-            /* NIEUWE: Responsieve afbeelding controle */
+                /* NIEUWE: Responsieve afbeelding controle */
                 --snake-image-size: min(32vw, 160px);
                 --food-image-size: min(32vw, 160px);
                 --obstacle-image-size: min(64vw, 1200px);
             
-            /* Instelbare margins per schermformaat */
+                /* Instelbare margins per schermformaat */
                 --canvas-margin-top: 8vh;
                 --canvas-margin-right: 16vw;
                 --canvas-margin-bottom: 8vh;
                 --canvas-margin-left: 16vw;
 
                 /* Victory content posities - Links (twoPlayer) */
-                --victory-owl-left-x: clamp(-20vw, -15vw, -10vw);
-                --victory-owl-left-y: clamp(35vh, 40vh, 45vh);
-                --victory-cloud-left-x: clamp(-40vw, -35vw, -30vw);
-                --victory-cloud-left-y: clamp(15vh, 20vh, 25vh);
+                --victory-owl-left-x: -20vw;
+                --victory-owl-left-y: 40vh;
+                --victory-cloud-left-x: -40vw;
+                --victory-cloud-left-y: 20vh;
                 
                 /* Victory content posities - Rechts (singlePlayer) */
-                --victory-owl-right-x: clamp(40vw, 45vw, 50vw);
-                --victory-owl-right-y: clamp(35vh, 40vh, 45vh);
-                --victory-cloud-right-x: clamp(20vw, 25vw, 30vw);
-                --victory-cloud-right-y: clamp(15vh, 20vh, 25vh);
+                --victory-owl-right-x: 45vw;
+                --victory-owl-right-y: 40vh;
+                --victory-cloud-right-x: 25vw;
+                --victory-cloud-right-y: 20vh;
 
-                --intro-x-shift: clamp(-5vw, 0vw, 5vw); /* schuif meer naar midden */
+                --intro-x-shift: clamp(-5vw, 0vw, 5vw);
                 --intro-y-shift: clamp(-5vw, 0vw, 5vw);
             }
         }
@@ -283,27 +295,32 @@
                 --cloud-width: clamp(300px, 12vw, 600px);
                 
                 --font-size: clamp(0.5rem, 1.0vw + 0.5rem, 1.2rem);
-                --button-padding: clamp(16px, 3vw, 24px);
                 --button-font: clamp(1.1rem, 1.8vw + 0.9rem, 1.8rem);
+                --button-width: clamp(120px, 10vw, 200px);
+                --button-height: clamp(40px, 4vh, 80px);
             
-            /* NIEUWE: Responsieve afbeelding controle */
+                /* NIEUWE: Responsieve afbeelding controle */
                 --snake-image-size: min(32vw, 160px);
                 --food-image-size: min(32vw, 160px);
                 --obstacle-image-size: min(64vw, 1200px);
             
-            /* Instelbare margins per schermformaat */
+                /* Instelbare margins per schermformaat */
                 --canvas-margin-top: 8vh;
                 --canvas-margin-right: 16vw;
                 --canvas-margin-bottom: 8vh;
                 --canvas-margin-left: 16vw;
 
-                /* Victory content posities */
-                --victory-owl-x: clamp(-5vw, 0vw, 5vw);
-                --victory-owl-y: clamp(35vh, 40vh, 45vh);
-                --victory-cloud-x: clamp(15vw, 20vw, 25vw);
-                --victory-cloud-y: clamp(15vh, 20vh, 25vh);
+                /* Victory posities voor ultra-wide */
+                --victory-owl-left-x: -15vw;
+                --victory-owl-left-y: 40vh;
+                --victory-cloud-left-x: -30vw;
+                --victory-cloud-left-y: 20vh;
+                --victory-owl-right-x: 30vw;
+                --victory-owl-right-y: 40vh;
+                --victory-cloud-right-x: 15vw;
+                --victory-cloud-right-y: 20vh;
 
-                --intro-x-shift: clamp(-5vw, 0vw, 5vw); /* schuif meer naar midden */
+                --intro-x-shift: clamp(-5vw, 0vw, 5vw);
                 --intro-y-shift: clamp(-5vw, 0vw, 5vw);
             }
         }
@@ -349,12 +366,12 @@
             margin-top: 150px;
         }
 
-#introText,
-#menu .button-container {
-  position: relative;
-  left: var(--intro-x-shift);
-  top: var(--intro-y-shift);
-}
+        #introText,
+        #menu .button-container {
+            position: relative;
+            left: var(--intro-x-shift);
+            top: var(--intro-y-shift);
+        }
 
         /* Knoppen */
         #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryHome, #victoryRestart {
@@ -371,6 +388,10 @@
             text-align: center;
             white-space: nowrap;
             flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
         }
 
         #startButton:hover, #restartButton:hover, #twoPlayer:hover, #singlePlayer:hover, .buttonLink:hover, #victoryHome:hover, #victoryRestart:hover {
@@ -381,7 +402,9 @@
 
         .buttonLink {
             text-decoration: none;
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Game Over en Video Modal layout */
@@ -390,27 +413,31 @@
         }
 
         /* Video Modal - geen zwarte overlay, horizontale layout */
-#videoModal {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start; /* NIET meer centreren */
-    text-align: center;
-    margin-top: 10px;
-    z-index: 2;
-    position: relative; /* niet meer fixed */
-    max-width: 90vw;
-    width: 100%;
-}
-#videoModal .victory-content {
-    display: flex;
-    flex-direction: var(--victory-flex-direction);
-    justify-content: center;
-    align-items: center;
-    gap: var(--victory-gap);
-    margin-top: var(--victory-margin-top);
-    flex-wrap: wrap;
-}
+        #videoModal {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: center;
+            margin-top: 10px;
+            z-index: 2;
+            position: relative;
+            max-width: 90vw;
+            width: 100%;
+        }
+
+        #videoModal .victory-content {
+            display: flex;
+            flex-direction: var(--victory-flex-direction, row);
+            justify-content: center;
+            align-items: center;
+            gap: var(--victory-gap, 20px);
+            margin-top: var(--victory-margin-top, 1rem);
+            flex-wrap: wrap;
+            position: relative;
+            width: 100%;
+            height: 60vh;
+        }
 
         /* Wolkje styling met hover effect */
         .wolkje {
@@ -429,40 +456,67 @@
             transform: scale(1.1) translateY(-7%) !important;
         }
 
-        /* Uil afbeelding met hover effect - AANGEPAST */
-        #videoModal .victory-content img:not(.wolkje) {
+        /* Victory afbeeldingen positionering */
+        #videoModal .victory-content {
+            position: relative;
+        }
+
+        /* Voor singlePlayer (rechts) */
+        .victory-content[data-mode="single"] img:not(.wolkje) {
+            position: absolute;
             max-width: var(--victory-img-size);
             height: auto;
-            transform: translate(var(--victory-owl-x), var(--victory-owl-y));
+            right: var(--victory-owl-right-x);
+            bottom: var(--victory-owl-right-y);
+            transform-origin: bottom right;
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
         }
 
-        /* Victory wolkje styling - AANGEPAST */
-        #videoModal .wolkje {
+        .victory-content[data-mode="single"] .wolkje {
+            position: absolute;
             max-width: var(--victory-img-size);
             height: auto;
-            transform: translate(var(--victory-cloud-x), var(--victory-cloud-y));
+            right: var(--victory-cloud-right-x);
+            bottom: var(--victory-cloud-right-y);
+            transform-origin: bottom right;
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
         }
 
-        /* Hover effecten voor beide victory afbeeldingen - TOEGEVOEGD */
-        #videoModal .victory-content img:not(.wolkje):hover {
-            transform: translate(var(--victory-owl-x), var(--victory-owl-y)) scale(1.1) translateY(-7%);
+        /* Voor twoPlayer (links) */
+        .victory-content[data-mode="two"] img:not(.wolkje) {
+            position: absolute;
+            max-width: var(--victory-img-size);
+            height: auto;
+            left: var(--victory-owl-left-x);
+            bottom: var(--victory-owl-left-y);
+            transform-origin: bottom left;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
         }
 
-        #videoModal .wolkje:hover {
-            transform: translate(var(--victory-cloud-x), var(--victory-cloud-y)) scale(1.1) translateY(-7%);
+        .victory-content[data-mode="two"] .wolkje {
+            position: absolute;
+            max-width: var(--victory-img-size);
+            height: auto;
+            left: var(--victory-cloud-left-x);
+            bottom: var(--victory-cloud-left-y);
+            transform-origin: bottom left;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
         }
 
-        /* Touch effecten voor beide victory afbeeldingen - TOEGEVOEGD */
-        #videoModal .victory-content img:not(.wolkje).touched {
-            transform: translate(var(--victory-owl-x), var(--victory-owl-y)) scale(1.1) translateY(-7%) !important;
+        /* Hover effecten voor victory afbeeldingen */
+        .victory-content img:not(.wolkje):hover,
+        .victory-content .wolkje:hover {
+            transform: scale(1.1) translateY(-7%);
         }
 
-        #videoModal .wolkje.touched {
-            transform: translate(var(--victory-cloud-x), var(--victory-cloud-y)) scale(1.1) translateY(-7%) !important;
+        /* Touch effecten voor victory afbeeldingen */
+        .victory-content img:not(.wolkje).touched,
+        .victory-content .wolkje.touched {
+            transform: scale(1.1) translateY(-7%) !important;
         }
     </style>
 </head>
@@ -498,7 +552,7 @@
             <button id="victoryHome">HOME</button>
             <button id="victoryRestart">RESTART</button>
         </div>
-        <a href="https://onderweg8.joopvanhetgroenewoud.nl" target="_blank" class="victory-content">
+        <a href="https://onderweg8.joopvanhetgroenewoud.nl" target="_blank" class="victory-content" id="victoryContent">
             <img src="Wolkje_snake.png" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkje">
             <img src="Uil.png" alt="Klik hier om door te gaan" id="victoryOwl">
         </a>
@@ -550,7 +604,7 @@
 
         let snake, food, score, d, playerCount, gameInterval, obstacle;
 
-        // Touch support voor victory afbeeldingen - TOEGEVOEGD
+        // Touch support voor victory afbeeldingen
         function addTouchSupport(element) {
             if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
                 element.addEventListener("touchstart", () => {
@@ -570,7 +624,7 @@
             addTouchSupport(victoryCloud);
         }
 
-        // Victory uil touch support - TOEGEVOEGD
+        // Victory uil touch support
         const victoryOwl = document.getElementById("victoryOwl");
         if (victoryOwl) {
             addTouchSupport(victoryOwl);
@@ -779,6 +833,13 @@
 
         function showVideo() {
             clearInterval(gameInterval);
+            const victoryContent = document.getElementById("victoryContent");
+            // Set data attribute based on player choice
+            if (playerCount === 1) {
+                victoryContent.setAttribute("data-mode", "single");
+            } else {
+                victoryContent.setAttribute("data-mode", "two");
+            }
             document.getElementById("videoModal").classList.add("active");
         }
 
