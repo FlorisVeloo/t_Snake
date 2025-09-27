@@ -25,8 +25,10 @@
             
             --font-size: clamp(1.4rem, 1.8vw + 0.9rem, 2.3rem);
             --button-font: clamp(1.4rem, 2.6vw + 1.0rem, 2.8rem);
-            --button-width: clamp(160px, 240px, 320px); 
+            --button-width: clamp(240px, 360px, 480px); 
             --button-height: clamp(80px, 120px, 160px);
+            --y-positie-knoppen: 50px; /*omhoog en omlaag verplaatsen van de knoppen*/
+            --y-positie-tekstbox 10px;  
             
             /* NIEUWE: Responsieve afbeelding controle */
             --snake-image-size: min(10vw, 150px);
@@ -351,7 +353,7 @@
             margin-bottom: 1.2rem;
             max-width: 90vw;
             word-wrap: break-word;
-            margin-top: 10px;
+            margin-top: var(--y-positie-tekstbox);
         }
 
         /* Button container voor horizontale layout */
@@ -364,7 +366,7 @@
             flex-wrap: wrap;
             width: 100%;
             max-width: 500px;
-            margin-top: 100px; /*omhoog en omlaag verplaatsen van de knoppen*/
+            margin-top: var(--y-positie-knoppen);
         }
 
         #introText,
