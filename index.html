@@ -405,25 +405,40 @@
             transform: scale(1.1) translateY(-7%) !important;
         }
 
-        /* Uil afbeelding */
-/* Uil */
-#videoModal .victory-content img:not(.wolkje) {
-    max-width: var(--victory-img-size);
-    height: auto;
-    transform: translate(var(--victory-owl-x), var(--victory-owl-y));
-    transition: transform 0.3s ease-in-out;
-}
-/* Wolkje */
-#videoModal .wolkje {
-    max-width: var(--victory-img-size);
-    height: auto;
-    transform: translate(var(--victory-cloud-x), var(--victory-cloud-y));
-    transition: transform 0.3s ease-in-out;
-    cursor: pointer;
-}
+        /* Uil afbeelding met hover effect - AANGEPAST */
+        #videoModal .victory-content img:not(.wolkje) {
+            max-width: var(--victory-img-size);
+            height: auto;
+            transform: translate(var(--victory-owl-x), var(--victory-owl-y));
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
 
+        /* Victory wolkje styling - AANGEPAST */
+        #videoModal .wolkje {
+            max-width: var(--victory-img-size);
+            height: auto;
+            transform: translate(var(--victory-cloud-x), var(--victory-cloud-y));
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        /* Hover effecten voor beide victory afbeeldingen - TOEGEVOEGD */
         #videoModal .victory-content img:not(.wolkje):hover {
-            transform: scale(1.05);
+            transform: translate(var(--victory-owl-x), var(--victory-owl-y)) scale(1.1) translateY(-7%);
+        }
+
+        #videoModal .wolkje:hover {
+            transform: translate(var(--victory-cloud-x), var(--victory-cloud-y)) scale(1.1) translateY(-7%);
+        }
+
+        /* Touch effecten voor beide victory afbeeldingen - TOEGEVOEGD */
+        #videoModal .victory-content img:not(.wolkje).touched {
+            transform: translate(var(--victory-owl-x), var(--victory-owl-y)) scale(1.1) translateY(-7%) !important;
+        }
+
+        #videoModal .wolkje.touched {
+            transform: translate(var(--victory-cloud-x), var(--victory-cloud-y)) scale(1.1) translateY(-7%) !important;
         }
     </style>
 </head>
@@ -461,7 +476,7 @@
         </div>
         <a href="https://onderweg8.joopvanhetgroenewoud.nl" target="_blank" class="victory-content">
             <img src="Wolkje_snake.png" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkje">
-            <img src="Uil.png" alt="Klik hier om door te gaan">
+            <img src="Uil.png" alt="Klik hier om door te gaan" id="victoryOwl">
         </a>
     </div>
     <script>
@@ -511,17 +526,30 @@
 
         let snake, food, score, d, playerCount, gameInterval, obstacle;
 
-        // Wolkje touch support
-        const cloud = document.getElementById("wolkje");
-        if (cloud && ("ontouchstart" in window || navigator.maxTouchPoints > 0)) {
-            cloud.addEventListener("touchstart", () => {
-                cloud.classList.add("touched");
-            });
-            cloud.addEventListener("touchend", () => {
-                setTimeout(() => {
-                    cloud.classList.remove("touched");
-                }, 300);
-            });
+        // Touch support voor victory afbeeldingen - TOEGEVOEGD
+        function addTouchSupport(element) {
+            if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
+                element.addEventListener("touchstart", () => {
+                    element.classList.add("touched");
+                });
+                element.addEventListener("touchend", () => {
+                    setTimeout(() => {
+                        element.classList.remove("touched");
+                    }, 300);
+                });
+            }
+        }
+
+        // Victory wolkje touch support
+        const victoryCloud = document.getElementById("wolkje");
+        if (victoryCloud) {
+            addTouchSupport(victoryCloud);
+        }
+
+        // Victory uil touch support - TOEGEVOEGD
+        const victoryOwl = document.getElementById("victoryOwl");
+        if (victoryOwl) {
+            addTouchSupport(victoryOwl);
         }
 
         // Event listeners
