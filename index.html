@@ -24,8 +24,9 @@
             --bg-size: cover;
             
             --font-size: clamp(1.4rem, 1.8vw + 0.9rem, 2.3rem);
-            --button-padding: clamp(16px, 4vw, 240px); /* was 8 → nu 12px, max ook 1.5x groter */
             --button-font: clamp(1.4rem, 2.6vw + 1.0rem, 2.8rem); /* was ±1.5x kleiner */
+            --button-width: clamp(30px, 20vw, 90px);
+            --button-height: clamp(30px, 20vh, 90px);
             
             /* NIEUWE: Responsieve afbeelding controle */
             --snake-image-size: min(10vw, 150px);
@@ -340,11 +341,11 @@
             font-family: Arial, sans-serif;
             font-size: var(--button-font);
             border-radius: 8px;
-            min-width: clamp(100px, 20vw, 150px);
+            width: var(--button-width);
+            height: var(--button-height);
             text-align: center;
             white-space: nowrap;
             flex: 1;
-            max-width: 200px;
         }
 
         #startButton:hover, #restartButton:hover, #twoPlayer:hover, #singlePlayer:hover, .buttonLink:hover, #victoryHome:hover, #victoryRestart:hover {
