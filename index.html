@@ -9,8 +9,6 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
     <link rel="shortcut icon" href="/favicon/favicon.ico" type="image/x-icon">
-<!-- Manifest -->
-    <link rel="manifest" href="/favicon/site.webmanifest">
 <!-- Theme colors (voor browsers die statusbalk aanpassen) -->
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -28,9 +26,9 @@
             --button-width: clamp(240px, 360px, 480px); 
             --button-height: clamp(80px, 120px, 160px);
             --y-positie-knoppen: 50px; /*omhoog en omlaag verplaatsen van de knoppen*/
-            --y-positie-tekstbox: 10px;  
-            --tekstbox-width: 48vw;
-            --tekstbox-height: 30vh;
+            --y-positie-tekstbox: 5px;
+            --tekstbox-width: clamp(56vw, 64vw, 72vw);
+            --tekstbox-height: clamp(16vw, 24vw, 32vw);
             
             /* NIEUWE: Responsieve afbeelding controle */
             --snake-image-size: min(10vw, 150px);
@@ -377,7 +375,7 @@
             flex-direction: row;
             justify-content: center;
             align-items: center;
-            gap: clamp(20px, 6vw, 50px);
+            gap: 5px;
             flex-wrap: wrap;
             width: 100%;
             max-width: 500px;
