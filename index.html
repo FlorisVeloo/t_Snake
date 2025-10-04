@@ -37,9 +37,9 @@
             
             /* Instelbare margins per schermformaat */
             --canvas-margin-top: 32vh;
-            --canvas-margin-right: 4vw;
-            --canvas-margin-bottom: 8vh;
-            --canvas-margin-left: 4vw;
+            --canvas-margin-right: 4px;
+            --canvas-margin-bottom: 4px;
+            --canvas-margin-left: 4px;
             
             /* Victory content posities - Links (twoPlayer) */
             --victory-owl-left-x: clamp(15vw, 20vw, 25vw);
@@ -133,35 +133,47 @@
         /* ========== SMALL DEVICES (max 320px) ========== */
         @media (max-width: 320px) {
             :root {
-                --title-x-shift: clamp(0vw, 3vw, 6vw);
-                --font-size: clamp(1.5rem, 2vw + 1rem, 2.5rem);
-                --button-font: clamp(1.2rem, 2vw + 1rem, 2rem);
-                --button-width: clamp(100px, 25vw, 150px);
-                --button-height: clamp(35px, 6vh, 60px);
+                --title-x-shift: clamp(10vw, 15vw, 19vw);
+                --cloud-width: min(50vw, 450px);
+                --bg-size: cover;
+                
+                --font-size: clamp(1.4rem, 1.8vw + 0.9rem, 2.2rem);
+                --button-font: clamp(1.4rem, 2.6vw + 1.0rem, 2.8rem);
+                --button-width: clamp(240px, 360px, 480px); 
+                --button-height: clamp(80px, 120px, 160px);
                 --button-gap: 32px;
-                --y-positie-tekstbox: clamp(35vh, 40vh, 45vh);
-                --y-positie-knoppen: clamp(55vh, 60vh, 65vh); /*omhoog en omlaag verplaatsen van de knoppen*/
-            
+                --y-positie-knoppen: 32px; /*omhoog en omlaag verplaatsen van de knoppen*/
+                --y-positie-tekstbox: 8px;
+                --tekstbox-width: clamp(56vw, 64vw, 72vw);
+                --tekstbox-height: clamp(28vw, 32vw, 36vw);
+                
                 /* NIEUWE: Responsieve afbeelding controle */
-                --snake-image-size: clamp(32px, 9vw, 96px);
-                --food-image-size: clamp(32px, 9vw, 96px);
-                --obstacle-image-size: clamp(96px, 27vw, 288px);
-            
+                --snake-image-size: min(10vw, 150px);
+                --food-image-size: min(10vw, 150px);
+                --obstacle-image-size: min(40vw, 500px);
+                
                 /* Instelbare margins per schermformaat */
                 --canvas-margin-top: 32vh;
                 --canvas-margin-right: 4vw;
                 --canvas-margin-bottom: 8vh;
                 --canvas-margin-left: 4vw;
                 
-                /* Victory posities voor kleine schermen */
-                --victory-owl-left-x: -25vw;
-                --victory-owl-left-y: 15vh;
-                --victory-cloud-left-x: -45vw;
-                --victory-cloud-left-y: 15vh;
-                --victory-owl-right-x: 25vw;
-                --victory-owl-right-y: 15vh;
-                --victory-cloud-right-x: 45vw;
-                --victory-cloud-right-y: 15vh;
+                /* Victory content posities - Links (twoPlayer) */
+                --victory-owl-left-x: clamp(15vw, 20vw, 25vw);
+                --victory-owl-left-y: clamp(30vh, 35vh, 40vh);
+                --victory-cloud-left-x: clamp(5vw, 10vw, 15vw);
+                --victory-cloud-left-y: clamp(15vh, 20vh, 25vh);
+                
+                /* Victory content posities - Rechts (singlePlayer) */
+                --victory-owl-right-x: clamp(15vw, 20vw, 25vw);
+                --victory-owl-right-y: clamp(30vh, 35vh, 40vh);
+                --victory-cloud-right-x: clamp(5vw, 10vw, 15vw);
+                --victory-cloud-right-y: clamp(15vh, 20vh, 25vh);
+    
+                --victory-img-size: min(50vw, 450px);
+    
+                --intro-x-shift: clamp(-5vw, 0vw, 5vw);
+                --intro-y-shift: clamp(0vh, 5vh, 10vh);
             }
             .button-container {
                 gap: 8px;
@@ -302,16 +314,18 @@
         /* ========== ULTRA-WIDE SCREENS (min-width: 1921px) ========== */
         @media (min-width: 1921px) {
             :root {
-                --title-x-shift: clamp(0vw, 1vw, 2vw);
-                --cloud-width: clamp(300px, 12vw, 600px);
+                --title-x-shift: clamp(0vw, 2vw, 5vw);
+                --cloud-width: min(50vw, 650px);
                 
-                --font-size: clamp(0.5rem, 1.0vw + 0.5rem, 1.2rem);
+                --font-size: clamp(0.4rem, 0.8vw + 0.4rem, 1.2rem);
                 --button-font: clamp(1.1rem, 1.8vw + 0.9rem, 1.8rem);
-                --button-width: clamp(120px, 10vw, 200px);
-                --button-height: clamp(40px, 4vh, 80px);
+                --button-width: clamp(240px, 360px, 480px);
+                --button-height: clamp(80px, 120px, 160px);
                 --button-gap: 64px;
-                --y-positie-tekstbox: clamp(35vh, 40vh, 45vh);
-                --y-positie-knoppen: clamp(55vh, 60vh, 65vh); /*omhoog en omlaag verplaatsen van de knoppen*/
+                --y-positie-tekstbox: clamp(12vh, 16vh, 20vh);
+                --y-positie-knoppen: clamp(4vh, 8vh, 12vh); /*omhoog en omlaag verplaatsen van de knoppen*/
+                --tekstbox-width: 48vw;
+                --tekstbox-height: clamp(28vw, 32vw, 36vw);
             
                 /* NIEUWE: Responsieve afbeelding controle */
                 --snake-image-size: min(32vw, 160px);
@@ -335,7 +349,7 @@
                 --victory-cloud-right-y: 20vh;
 
                 --intro-x-shift: clamp(-5vw, 0vw, 5vw);
-                --intro-y-shift: clamp(45vh, 50vh, 55vh);
+                --intro-y-shift: clamp(15vh, 20vh, 25vh);
             }
         }
 
@@ -390,7 +404,7 @@
         }
 
         /* Knoppen */
-        #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryHome, #victoryRestart {
+        #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
             margin: 0.25rem;
             background-color: #000;
             color: #b40000;
@@ -410,7 +424,7 @@
             text-decoration: none;
         }
 
-        #startButton:hover, #restartButton:hover, #twoPlayer:hover, #singlePlayer:hover, .buttonLink:hover, #victoryHome:hover, #victoryRestart:hover {
+        #startButton:hover, #restartButton:hover, #twoPlayer:hover, #singlePlayer:hover, .buttonLink:hover, #victoryRestart:hover {
             background-color: #111;
             transform: scale(1.02);
             transition: all 0.2s ease;
@@ -646,22 +660,11 @@
         document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
         document.getElementById("restartButton").addEventListener("click", () => location.reload());
         document.getElementById("victoryRestart").addEventListener("click", () => location.reload());
-        document.getElementById("victoryHome").addEventListener("click", () => {
-            window.open("https://joopvanhetgroenewoud.nl", "_blank");
-        });
 
         // Resize handlers met betere orientation handling
         let resizeTimeout;
         let orientationTimeout;
         let currentOrientation = window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
-        
-        function handleResize() {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                // Canvas grootte wordt door CSS geregeld, wij doen niets
-                console.log('Resize handled');
-            }, 100);
-        }
         
         function handleOrientationChange() {
             clearTimeout(orientationTimeout);
@@ -862,4 +865,12 @@
         }
     </script>
 </body>
-</html>
+</html>Resize() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                // Canvas grootte wordt door CSS geregeld, wij doen niets
+                console.log('Resize handled');
+            }, 100);
+        }
+        
+        function handle
