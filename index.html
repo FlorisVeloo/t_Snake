@@ -17,7 +17,6 @@
         :root {
             /* Basis variabelen uit tweede HTML */
             --title-x-shift: clamp(10vw, 15vw, 19vw);
-            --title-y-shift: clamp(-10vh, -8vh, -5vh);
             --cloud-width: min(60vw, 550px);
             --bg-size: cover;
             
@@ -134,12 +133,11 @@
         @media (max-width: 320px) {
             :root {
                 --title-x-shift: clamp(0vw, 3vw, 6vw);
-                --title-y-shift: clamp(-10vh, -7vh, -5vh);
                 --font-size: clamp(1.5rem, 2vw + 1rem, 2.5rem);
                 --button-font: clamp(1.2rem, 2vw + 1rem, 2rem);
                 --button-width: clamp(100px, 25vw, 150px);
                 --button-height: clamp(35px, 6vh, 60px);
-                --y-positie-tekstbox clamp(35vh, 40vh, 45vh);
+                --y-positie-tekstbox: clamp(35vh, 40vh, 45vh);
                 --y-positie-knoppen: clamp(55vh, 60vh, 65vh); /*omhoog en omlaag verplaatsen van de knoppen*/
             
                 /* NIEUWE: Responsieve afbeelding controle */
@@ -183,13 +181,12 @@
         @media (max-width: 1024px) and (min-height: 350px) and (orientation: landscape) {
             :root {
                 --title-x-shift: clamp(3vw, 5vw, 8vw);
-                --title-y-shift: clamp(-15vh, -12vh, -10vh);
 
                 --font-size: clamp(0.8rem, 1.1vw + 0.6rem, 1.6rem);
                 --button-font: clamp(1.2rem, 1.4vw + 0.7rem, 2.7rem);
                 --button-width: clamp(100px, 18vw, 180px);
                 --button-height: clamp(35px, 7vh, 70px);
-                --y-positie-tekstbox clamp(35vh, 40vh, 45vh);
+                --y-positie-tekstbox: clamp(35vh, 40vh, 45vh);
                 --y-positie-knoppen: clamp(55vh, 60vh, 65vh); /*omhoog en omlaag verplaatsen van de knoppen*/
             
                 /* NIEUWE: Responsieve afbeelding controle */
@@ -221,13 +218,12 @@
         @media (min-width: 1025px) and (max-width: 1500px) and (max-height: 750px) and (orientation: landscape) {
             :root {
                 --title-x-shift: clamp(-7vw, -5vw, -2vw);
-                --title-y-shift: clamp(-20vh, -17vh, -15vh);
             
                 --font-size: clamp(0.8rem, 1.1vw + 0.6rem, 1.6rem);
                 --button-font: clamp(1.2rem, 1.4vw + 0.7rem, 2.7rem);
                 --button-width: clamp(120px, 15vw, 180px);
                 --button-height: clamp(40px, 6vh, 70px);
-                --y-positie-tekstbox clamp(35vh, 40vh, 45vh);
+                --y-positie-tekstbox: clamp(35vh, 40vh, 45vh);
                 --y-positie-knoppen: clamp(55vh, 60vh, 65vh); /*omhoog en omlaag verplaatsen van de knoppen*/
             
                 /* NIEUWE: Responsieve afbeelding controle */
@@ -259,7 +255,6 @@
         @media (min-width: 1025px) {
             :root {
                 --title-x-shift: clamp(0vw, 2vw, 5vw);
-                --title-y-shift: clamp(0vh, 5vh, 10vh);
                 --cloud-width: min(50vw, 550px;)
 
                 --font-size: clamp(0.4rem, 0.8vw + 0.4rem, 1.2rem);
@@ -303,14 +298,13 @@
         @media (min-width: 1921px) {
             :root {
                 --title-x-shift: clamp(0vw, 1vw, 2vw);
-                --title-y-shift: clamp(-5vh, -2vh, 0vh);
                 --cloud-width: clamp(300px, 12vw, 600px);
                 
                 --font-size: clamp(0.5rem, 1.0vw + 0.5rem, 1.2rem);
                 --button-font: clamp(1.1rem, 1.8vw + 0.9rem, 1.8rem);
                 --button-width: clamp(120px, 10vw, 200px);
                 --button-height: clamp(40px, 4vh, 80px);
-                --y-positie-tekstbox clamp(35vh, 40vh, 45vh);
+                --y-positie-tekstbox: clamp(35vh, 40vh, 45vh);
                 --y-positie-knoppen: clamp(55vh, 60vh, 65vh); /*omhoog en omlaag verplaatsen van de knoppen*/
             
                 /* NIEUWE: Responsieve afbeelding controle */
@@ -387,7 +381,6 @@
         #menu .button-container {
             position: relative;
             left: var(--intro-x-shift);
-            top: var(--intro-y-shift);
         }
 
         /* Knoppen */
