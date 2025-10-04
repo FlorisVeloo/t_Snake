@@ -17,15 +17,15 @@
         :root {
             /* Basis variabelen uit tweede HTML */
             --title-x-shift: clamp(10vw, 15vw, 19vw);
-            --cloud-width: min(60vw, 550px);
+            --cloud-width: min(50vw, 450px);
             --bg-size: cover;
             
-            --font-size: clamp(1.4rem, 1.8vw + 0.9rem, 2.3rem);
+            --font-size: clamp(1.6rem, 2.4vw + 1.2rem, 2.8rem);
             --button-font: clamp(1.4rem, 2.6vw + 1.0rem, 2.8rem);
             --button-width: clamp(240px, 360px, 480px); 
             --button-height: clamp(80px, 120px, 160px);
             --y-positie-knoppen: 32px; /*omhoog en omlaag verplaatsen van de knoppen*/
-            --y-positie-tekstbox: 4px;
+            --y-positie-tekstbox: 8px;
             --tekstbox-width: clamp(56vw, 64vw, 72vw);
             --tekstbox-height: clamp(28vw, 32vw, 36vw);
             
@@ -41,16 +41,16 @@
             --canvas-margin-left: 4vw;
             
             /* Victory content posities - Links (twoPlayer) */
-            --victory-owl-left-x: -15vw;
-            --victory-owl-left-y: 20vh;
-            --victory-cloud-left-x: -35vw;
-            --victory-cloud-left-y: 20vh;
+            --victory-owl-left-x: clamp(15vw, 20vw, 25vw);
+            --victory-owl-left-y: clamp(30vh, 35vh, 40vh);
+            --victory-cloud-left-x: clamp(5vw, 10vw, 15vw);
+            --victory-cloud-left-y: clamp(15vh, 20vh, 25vh);
             
             /* Victory content posities - Rechts (singlePlayer) */
-            --victory-owl-right-x: 15vw;
-            --victory-owl-right-y: 20vh;
-            --victory-cloud-right-x: 35vw;
-            --victory-cloud-right-y: 20vh;
+            --victory-owl-right-x: clamp(15vw, 20vw, 25vw);
+            --victory-owl-right-y: clamp(30vh, 35vh, 40vh);
+            --victory-cloud-right-x: clamp(5vw, 10vw, 15vw);
+            --victory-cloud-right-y: clamp(15vh, 20vh, 25vh);
 
             --victory-img-size: min(50vw, 450px);
 
@@ -370,7 +370,7 @@
             flex-direction: row;
             justify-content: center;
             align-items: center;
-            gap: 16px;
+            gap: 64px;
             flex-wrap: wrap;
             width: 100%;
             max-width: 500px;
