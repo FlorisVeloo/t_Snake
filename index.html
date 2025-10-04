@@ -24,6 +24,7 @@
             --button-font: clamp(1.4rem, 2.6vw + 1.0rem, 2.8rem);
             --button-width: clamp(240px, 360px, 480px); 
             --button-height: clamp(80px, 120px, 160px);
+            --button-gap: 32px;
             --y-positie-knoppen: 32px; /*omhoog en omlaag verplaatsen van de knoppen*/
             --y-positie-tekstbox: 8px;
             --tekstbox-width: clamp(56vw, 64vw, 72vw);
@@ -137,6 +138,7 @@
                 --button-font: clamp(1.2rem, 2vw + 1rem, 2rem);
                 --button-width: clamp(100px, 25vw, 150px);
                 --button-height: clamp(35px, 6vh, 60px);
+                --button-gap: 32px;
                 --y-positie-tekstbox: clamp(35vh, 40vh, 45vh);
                 --y-positie-knoppen: clamp(55vh, 60vh, 65vh); /*omhoog en omlaag verplaatsen van de knoppen*/
             
@@ -186,6 +188,7 @@
                 --button-font: clamp(1.2rem, 1.4vw + 0.7rem, 2.7rem);
                 --button-width: clamp(100px, 18vw, 180px);
                 --button-height: clamp(35px, 7vh, 70px);
+                --button-gap: 32px;
                 --y-positie-tekstbox: clamp(35vh, 40vh, 45vh);
                 --y-positie-knoppen: clamp(55vh, 60vh, 65vh); /*omhoog en omlaag verplaatsen van de knoppen*/
             
@@ -223,6 +226,7 @@
                 --button-font: clamp(1.2rem, 1.4vw + 0.7rem, 2.7rem);
                 --button-width: clamp(120px, 15vw, 180px);
                 --button-height: clamp(40px, 6vh, 70px);
+                --button-gap: 32px;
                 --y-positie-tekstbox: clamp(35vh, 40vh, 45vh);
                 --y-positie-knoppen: clamp(55vh, 60vh, 65vh); /*omhoog en omlaag verplaatsen van de knoppen*/
             
@@ -261,6 +265,7 @@
                 --button-font: clamp(1.1rem, 1.8vw + 0.9rem, 1.8rem);
                 --button-width: clamp(240px, 360px, 480px);
                 --button-height: clamp(80px, 120px, 160px);
+                --button-gap: 64px;
                 --y-positie-tekstbox: clamp(12vh, 16vh, 20vh);
                 --y-positie-knoppen: clamp(4vh, 8vh, 12vh); /*omhoog en omlaag verplaatsen van de knoppen*/
                 --tekstbox-width: 48vw;
@@ -304,6 +309,7 @@
                 --button-font: clamp(1.1rem, 1.8vw + 0.9rem, 1.8rem);
                 --button-width: clamp(120px, 10vw, 200px);
                 --button-height: clamp(40px, 4vh, 80px);
+                --button-gap: 64px;
                 --y-positie-tekstbox: clamp(35vh, 40vh, 45vh);
                 --y-positie-knoppen: clamp(55vh, 60vh, 65vh); /*omhoog en omlaag verplaatsen van de knoppen*/
             
@@ -370,7 +376,7 @@
             flex-direction: row;
             justify-content: center;
             align-items: center;
-            gap: 64px;
+            gap: var(--button-gap);
             flex-wrap: wrap;
             width: 100%;
             max-width: 500px;
