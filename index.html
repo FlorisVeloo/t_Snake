@@ -141,8 +141,8 @@
                 --button-width: clamp(240px, 360px, 480px); 
                 --button-height: clamp(80px, 120px, 160px);
                 --button-gap: 32px;
-                --y-positie-knoppen: 32px;
-                --y-positie-tekstbox: 8px;
+                --y-positie-tekstbox: clamp(5vh, 10vh, 15vh);
+                --y-positie-knoppen: clamp(35vh, 40vh, 45vh);
                 --tekstbox-width: clamp(56vw, 64vw, 72vw);
                 --tekstbox-height: clamp(28vw, 32vw, 36vw);
                 
@@ -194,19 +194,22 @@
                 --button-width: clamp(100px, 18vw, 180px);
                 --button-height: clamp(35px, 7vh, 70px);
                 --button-gap: 32px;
-                --y-positie-tekstbox: clamp(35vh, 40vh, 45vh);
-                --y-positie-knoppen: clamp(55vh, 60vh, 65vh);
+                --y-positie-tekstbox: clamp(5vh, 10vh, 15vh);
+                --y-positie-knoppen: clamp(35vh, 40vh, 45vh);
                 --snake-image-size: min(32vw, 160px);
                 --food-image-size: min(32vw, 160px);
                 --obstacle-image-size: min(64vw, 1200px);
+                
                 --canvas-margin-top: 0vh;
                 --canvas-margin-right: 16vw;
                 --canvas-margin-bottom: 16vh;
                 --canvas-margin-left: 16vw;
+                
                 --victory-owl-left-x: -20vw;
                 --victory-owl-left-y: 40vh;
                 --victory-cloud-left-x: -40vw;
                 --victory-cloud-left-y: 20vh;
+                
                 --victory-owl-right-x: 45vw;
                 --victory-owl-right-y: 40vh;
                 --victory-cloud-right-x: 25vw;
