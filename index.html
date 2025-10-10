@@ -116,6 +116,10 @@
         }
 
         @media (orientation: landscape) {
+            :root {
+                --cloud-left-src: url('wolkje_snakeR.png');
+                --cloud-right-src: url('Wolkje_snake.png');
+            }
             #background {
                 background-size: auto 100%;
                 background-position: center top;
@@ -133,6 +137,8 @@
                 --title-x-shift: clamp(10vw, 15vw, 19vw);
                 --cloud-width: min(50vw, 450px);
                 --bg-size: cover;
+                --cloud-left-src: url('wolkje_snakeR.png');
+                --cloud-right-src: url('Wolkje_snake.png');
                 
                 --font-size: clamp(1.4rem, 1.8vw + 0.9rem, 2.2rem);
                 --button-font: clamp(1.4rem, 2.6vw + 1.0rem, 2.8rem);
@@ -289,9 +295,6 @@
                 
                 --intro-x-shift: clamp(-5vw, 0vw, 5vw);
                 --intro-y-shift: clamp(15vh, 20vh, 25vh);
-
-                --cloud-left-src: url('wolkje_snakeR.png');
-                --cloud-right-src: url('Wolkje_snake.png');
             }
         }
 
