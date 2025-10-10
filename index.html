@@ -33,7 +33,9 @@
             --button-width: clamp(320px, 24vw, 560px); 
             --button-height: clamp(120px, 160px, 200px);
             --button-gap: 48px;
-            --y-positie-knoppen: 80px;
+            --y-positie-knoppen: 96px;  /* Voor linksaf/rechtsaf knoppen */
+            --y-positie-gameover-knoppen: 72px;  /* Voor game over knoppen */
+            --y-positie-victory-knoppen: 72px;  /* Voor overwinning knoppen */
             --y-positie-tekstbox: 16px;
             --tekstbox-width: clamp(72vw, 80vw, 88vw);
             --tekstbox-height: clamp(64vw, 72vw, 80vw);
@@ -431,6 +433,20 @@
             width: 100%;
             max-width: 2000px;
             margin-top: var(--y-positie-knoppen);
+        }
+
+        
+        /* Specifieke positioning voor verschillende schermen */
+        #menu .button-container {
+            margin-top: var(--y-positie-knoppen);
+        }
+        
+        #gameOver .button-container {
+            margin-top: var(--y-positie-gameover-knoppen);
+        }
+        
+        #videoModal .button-container {
+            margin-top: var(--y-positie-victory-knoppen);
         }
 
         #introText,
