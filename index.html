@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
@@ -24,65 +24,86 @@
             box-sizing: border-box;
         }
         :root {
-            --title-x-shift: clamp(10vw, 15vw, 19vw);
-            --cloud-width: min(70vw, 650px);
+            /* Fallback waardes eerst */
+            --title-x-shift: 15vw;
+            --cloud-width: 450px;
             --bg-size: cover;
             
-            --font-size: clamp(2.2rem, 3.0vw + 1.4rem, 3.2rem);
-            --button-font: clamp(1.6rem, 3.0vw + 1.4rem, 3.2rem);
-            --button-width: clamp(320px, 24vw, 560px); 
-            --button-height: clamp(120px, 160px, 200px);
+            --font-size: 2.6rem;
+            --button-font: 2.6rem;
+            --button-width: 380px;
+            --button-height: 150px;
             --button-gap: 48px;
             --y-positie-knoppen: 96px;
             --y-positie-gameover-knoppen: 72px;
             --y-positie-victory-knoppen: 72px;
             --y-positie-tekstbox: 16px;
-            --tekstbox-width: clamp(72vw, 80vw, 88vw);
-            --tekstbox-height: clamp(64vw, 72vw, 80vw);
+            --tekstbox-width: 80vw;
+            --tekstbox-height: 72vw;
             --tekstbox-padding: 1.6rem;
             
-            --snake-image-size: min(10vw, 150px);
-            --food-image-size: min(10vw, 150px);
-            --obstacle-image-size: min(40vw, 500px);
+            --snake-image-size: 120px;
+            --food-image-size: 120px;
+            --obstacle-image-size: 400px;
             
             --canvas-margin-top: 32vh;
             --canvas-margin-right: 8px;
             --canvas-margin-bottom: 8vh;
             --canvas-margin-left: 8px;
             
-            --victory-owl-left-x: clamp(-5vw, 0vw, 5vw);
-            --victory-owl-left-y: clamp(-5vh, -10vh, -15vh);
-            --victory-cloud-left-x: clamp(25vw, 30vw, 35vw);
-            --victory-cloud-left-y: clamp(24vh, 30vh, 34vh);
+            --victory-owl-left-x: 0vw;
+            --victory-owl-left-y: -10vh;
+            --victory-cloud-left-x: 30vw;
+            --victory-cloud-left-y: 30vh;
             
-            --victory-owl-right-x: clamp(-5vw, 0vw, 5vw);
-            --victory-owl-right-y: clamp(-5vh, -10vh, -15vh);
-            --victory-cloud-right-x: clamp(25vw, 30vw, 35vw);
-            --victory-cloud-right-y: clamp(24vh, 30vh, 34vh);
+            --victory-owl-right-x: 0vw;
+            --victory-owl-right-y: -10vh;
+            --victory-cloud-right-x: 30vw;
+            --victory-cloud-right-y: 30vh;
 
-            --victory-img-size: min(70vw, 650px);
+            --victory-img-size: 450px;
 
-            --intro-x-shift: clamp(-5vw, 0vw, 5vw);
-            --intro-y-shift: clamp(0vh, 5vh, 10vh);
+            --intro-x-shift: 0vw;
+            --intro-y-shift: 5vh;
 
             --cloud-left-src: url('Wolkje_snake.png');
             --cloud-right-src: url('wolkje_snakeR.png');
             --cloud-transform-origin: bottom left;
             --cloud-transform-origin-right: bottom right;
             
-            /* Nieuwe variabelen voor consistente viewport */
-            --safe-area-top: env(safe-area-inset-top, 0px);
-            --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+            /* Dan de clamp/min waardes */
+            --title-x-shift: clamp(10vw, 15vw, 19vw);
+            --cloud-width: min(70vw, 650px);
+            
+            --font-size: clamp(2.2rem, 3.0vw + 1.4rem, 3.2rem);
+            --button-font: clamp(1.6rem, 3.0vw + 1.4rem, 3.2rem);
+            --button-width: clamp(320px, 24vw, 560px); 
+            --button-height: clamp(120px, 160px, 200px);
+            --snake-image-size: min(10vw, 150px);
+            --food-image-size: min(10vw, 150px);
+            --obstacle-image-size: min(40vw, 500px);
+            --tekstbox-width: clamp(72vw, 80vw, 88vw);
+            --tekstbox-height: clamp(64vw, 72vw, 80vw);
+            --victory-img-size: min(70vw, 650px);
+            --victory-owl-left-x: clamp(-5vw, 0vw, 5vw);
+            --victory-owl-left-y: clamp(-5vh, -10vh, -15vh);
+            --victory-cloud-left-x: clamp(25vw, 30vw, 35vw);
+            --victory-cloud-left-y: clamp(24vh, 30vh, 34vh);
+            --victory-owl-right-x: clamp(-5vw, 0vw, 5vw);
+            --victory-owl-right-y: clamp(-5vh, -10vh, -15vh);
+            --victory-cloud-right-x: clamp(25vw, 30vw, 35vw);
+            --victory-cloud-right-y: clamp(24vh, 30vh, 34vh);
+            --intro-x-shift: clamp(-5vw, 0vw, 5vw);
+            --intro-y-shift: clamp(0vh, 5vh, 10vh);
         }
 
         html {
             height: 100%;
-            width: 100%;
             margin: 0;
-            padding: 0;
-            overflow: hidden;
-            position: fixed;
-            -webkit-text-size-adjust: 100%;
+            overflow-y: auto;
+            overscroll-behavior: auto;
+            position: static;
+            width: 100%;
         }
 
         body {
@@ -92,23 +113,31 @@
             justify-content: flex-start;
             margin: 0;
             padding: 0;
-            width: 100vw;
             height: 100vh;
-            min-height: -webkit-fill-available;
+            max-height: 100vh;
             overflow: hidden;
             font-family: Arial, sans-serif;
+            font-size: 2.6rem;
             font-size: var(--font-size);
             background-color: black;
             color: #810000;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            position: relative;
+        }
+
+        @supports (height: 100dvh) {
+            body {
+                height: 100dvh;
+                max-height: 100dvh;
+            }
         }
         
         body * {
             box-sizing: border-box;
+        }
+        
+        body::before,
+        body::after {
+            display: none !important;
         }
 
         #background {
@@ -127,7 +156,13 @@
             background-color: #000;
             touch-action: none;
             z-index: 1;
-            position: fixed;
+            position: absolute;
+            top: 32vh;
+            right: 8px;
+            bottom: 8vh;
+            left: 8px;
+            width: calc(100vw - 16px);
+            height: calc(100vh - 40vh);
             top: var(--canvas-margin-top);
             right: var(--canvas-margin-right);
             bottom: var(--canvas-margin-bottom);
@@ -162,44 +197,58 @@
 
         @media (max-width: 320px) {
             :root {
-                --title-x-shift: clamp(10vw, 15vw, 19vw);
-                --cloud-width: min(50vw, 450px);
-                --bg-size: cover;
-                
-                --font-size: clamp(1.2rem, 1.4vw + 0.6rem, 1.8rem);
-                --button-font: clamp(0.8rem, 1.6vw + 0.6rem, 1.8rem);
-                --button-width: clamp(120px, 20vw, 240px); 
-                --button-height: clamp(40px, 80px, 120px);
+                /* Fallbacks eerst */
+                --title-x-shift: 15vw;
+                --cloud-width: 300px;
+                --font-size: 1.4rem;
+                --button-font: 1.2rem;
+                --button-width: 180px;
+                --button-height: 70px;
                 --button-gap: 4px;
                 --y-positie-knoppen: 32px;
                 --y-positie-tekstbox: 8px;
-                --tekstbox-width: clamp(76vw, 80vw, 84vw);
-                --tekstbox-height: clamp(36vw, 40vw, 44vw);
-                
-                --snake-image-size: min(10vw, 150px);
-                --food-image-size: min(10vw, 150px);
-                --obstacle-image-size: min(40vw, 500px);
-                
+                --tekstbox-width: 80vw;
+                --tekstbox-height: 40vw;
                 --canvas-margin-top: 32vh;
                 --canvas-margin-right: 8px;
                 --canvas-margin-bottom: 16vh;
                 --canvas-margin-left: 8px;
+                --victory-owl-left-x: 2vw;
+                --victory-owl-left-y: 20vh;
+                --victory-cloud-left-x: 20vw;
+                --victory-cloud-left-y: 45vh;
+                --victory-owl-right-x: 2vw;
+                --victory-owl-right-y: 20vh;
+                --victory-cloud-right-x: 20vw;
+                --victory-cloud-right-y: 45vh;
+                --victory-img-size: 300px;
+                --intro-x-shift: 0vw;
+                --intro-y-shift: 5vh;
                 
+                /* Dan clamp/min */
+                --title-x-shift: clamp(10vw, 15vw, 19vw);
+                --cloud-width: min(50vw, 450px);
+                --font-size: clamp(1.2rem, 1.4vw + 0.6rem, 1.8rem);
+                --button-font: clamp(0.8rem, 1.6vw + 0.6rem, 1.8rem);
+                --button-width: clamp(120px, 20vw, 240px); 
+                --button-height: clamp(40px, 80px, 120px);
+                --snake-image-size: min(10vw, 150px);
+                --food-image-size: min(10vw, 150px);
+                --obstacle-image-size: min(40vw, 500px);
+                --tekstbox-width: clamp(76vw, 80vw, 84vw);
+                --tekstbox-height: clamp(36vw, 40vw, 44vw);
+                --victory-img-size: min(50vw, 450px);
                 --victory-owl-left-x: clamp(0vw, 2vw, 5vw);
                 --victory-owl-left-y: clamp(15vh, 20vh, 25vh);
                 --victory-cloud-left-x: clamp(15vw, 20vw, 25vw);
                 --victory-cloud-left-y: clamp(40vh, 45vh, 50vh);
-                
                 --victory-owl-right-x: clamp(0vw, 2vw, 5vw);
                 --victory-owl-right-y: clamp(15vh, 20vh, 25vh);
                 --victory-cloud-right-x: clamp(15vw, 20vw, 25vw);
                 --victory-cloud-right-y: clamp(40vh, 45vh, 50vh);
-    
-                --victory-img-size: min(50vw, 450px);
-    
                 --intro-x-shift: clamp(-5vw, 0vw, 5vw);
                 --intro-y-shift: clamp(0vh, 5vh, 10vh);
-    
+
                 --cloud-left-src: url('Wolkje_snake.png');
                 --cloud-right-src: url('wolkje_snakeR.png');
                 --cloud-transform-origin: bottom right;
@@ -223,37 +272,54 @@
 
         @media (max-width: 1024px) and (min-height: 350px) and (orientation: landscape) {
             :root {
-                --title-x-shift: clamp(3vw, 5vw, 8vw);
-                --cloud-width: min(30vw, 250px);
-                
-                --font-size: clamp(0.8rem, 1.1vw + 0.6rem, 1.6rem);
-                --button-font: clamp(1.2rem, 1.4vw + 0.7rem, 2.7rem);
-                --button-width: clamp(120px, 160px, 180px);
-                --button-height: clamp(64px, 96px, 128px);
+                /* Fallbacks */
+                --title-x-shift: 5vw;
+                --cloud-width: 200px;
+                --font-size: 1.2rem;
+                --button-font: 1.8rem;
+                --button-width: 150px;
+                --button-height: 90px;
                 --button-gap: 32px;
-                --y-positie-tekstbox: clamp(4vh, 8vh, 16vh);
-                --y-positie-knoppen: clamp(2vh, 4vh, 8vh);
-                
-                --snake-image-size: min(32vw, 160px);
-                --food-image-size: min(32vw, 160px);
-                --obstacle-image-size: min(64vw, 1200px);
-                
+                --y-positie-tekstbox: 10vh;
+                --y-positie-knoppen: 4vh;
+                --snake-image-size: 120px;
+                --food-image-size: 120px;
+                --obstacle-image-size: 800px;
                 --canvas-margin-top: 0vh;
                 --canvas-margin-right: 16vw;
                 --canvas-margin-bottom: 16vh;
                 --canvas-margin-left: 16vw;
+                --victory-owl-left-x: 0vw;
+                --victory-owl-left-y: 20vh;
+                --victory-cloud-left-x: 10vw;
+                --victory-cloud-left-y: 80vh;
+                --victory-owl-right-x: 0vw;
+                --victory-owl-right-y: 20vh;
+                --victory-cloud-right-x: 10vw;
+                --victory-cloud-right-y: 80vh;
+                --victory-img-size: 250px;
                 
+                /* Clamp/min */
+                --title-x-shift: clamp(3vw, 5vw, 8vw);
+                --cloud-width: min(30vw, 250px);
+                --font-size: clamp(0.8rem, 1.1vw + 0.6rem, 1.6rem);
+                --button-font: clamp(1.2rem, 1.4vw + 0.7rem, 2.7rem);
+                --button-width: clamp(120px, 160px, 180px);
+                --button-height: clamp(64px, 96px, 128px);
+                --y-positie-tekstbox: clamp(4vh, 8vh, 16vh);
+                --y-positie-knoppen: clamp(2vh, 4vh, 8vh);
+                --snake-image-size: min(32vw, 160px);
+                --food-image-size: min(32vw, 160px);
+                --obstacle-image-size: min(64vw, 1200px);
+                --victory-img-size: min(30vw, 350px);
                 --victory-owl-left-x: clamp(-3vw, 0vw, 3vw);
                 --victory-owl-left-y: clamp(25vh, 20vh, 25vh);
                 --victory-cloud-left-x: clamp(5vw, 10vw, 15vw);
                 --victory-cloud-left-y: clamp(75vh, 80vh, 85vh);
-                
                 --victory-owl-right-x: clamp(-3vw, 0vw, 3vw);
                 --victory-owl-right-y: clamp(25vh, 20vh, 25vh);
                 --victory-cloud-right-x: clamp(5vw, 10vw, 15vw);
                 --victory-cloud-right-y: clamp(75vh, 80vh, 85vh);
-
-                --victory-img-size: min(30vw, 350px);
 
                 --cloud-left-src: url('Wolkje_snake.png');
                 --cloud-right-src: url('wolkje_snakeR.png');
@@ -262,37 +328,54 @@
 
         @media (min-width: 1025px) and (max-width: 1500px) and (max-height: 750px) and (orientation: landscape) {
             :root {
-                --title-x-shift: clamp(-7vw, -5vw, -2vw);
-                --cloud-width: min(30vw, 250px);
-                
-                --font-size: clamp(0.8rem, 1.1vw + 0.6rem, 1.6rem);
-                --button-font: clamp(1.2rem, 1.4vw + 0.7rem, 2.7rem);
-                --button-width: clamp(120px, 160px, 180px);
-                --button-height: clamp(64px, 96px, 128px);
+                /* Fallbacks */
+                --title-x-shift: -5vw;
+                --cloud-width: 200px;
+                --font-size: 1.2rem;
+                --button-font: 1.8rem;
+                --button-width: 150px;
+                --button-height: 90px;
                 --button-gap: 32px;
-                --y-positie-tekstbox: clamp(4vh, 8vh, 16vh);
-                --y-positie-knoppen: clamp(2vh, 4vh, 8vh);
-                
-                --snake-image-size: min(32vw, 160px);
-                --food-image-size: min(32vw, 160px);
-                --obstacle-image-size: min(64vw, 1200px);
-                
+                --y-positie-tekstbox: 10vh;
+                --y-positie-knoppen: 4vh;
+                --snake-image-size: 120px;
+                --food-image-size: 120px;
+                --obstacle-image-size: 800px;
                 --canvas-margin-top: 0vh;
                 --canvas-margin-right: 16vw;
                 --canvas-margin-bottom: 16vh;
                 --canvas-margin-left: 16vw;
+                --victory-owl-left-x: 0vw;
+                --victory-owl-left-y: 20vh;
+                --victory-cloud-left-x: 10vw;
+                --victory-cloud-left-y: 80vh;
+                --victory-owl-right-x: 0vw;
+                --victory-owl-right-y: 20vh;
+                --victory-cloud-right-x: 10vw;
+                --victory-cloud-right-y: 80vh;
+                --victory-img-size: 250px;
                 
+                /* Clamp/min */
+                --title-x-shift: clamp(-7vw, -5vw, -2vw);
+                --cloud-width: min(30vw, 250px);
+                --font-size: clamp(0.8rem, 1.1vw + 0.6rem, 1.6rem);
+                --button-font: clamp(1.2rem, 1.4vw + 0.7rem, 2.7rem);
+                --button-width: clamp(120px, 160px, 180px);
+                --button-height: clamp(64px, 96px, 128px);
+                --y-positie-tekstbox: clamp(4vh, 8vh, 16vh);
+                --y-positie-knoppen: clamp(2vh, 4vh, 8vh);
+                --snake-image-size: min(32vw, 160px);
+                --food-image-size: min(32vw, 160px);
+                --obstacle-image-size: min(64vw, 1200px);
+                --victory-img-size: min(30vw, 350px);
                 --victory-owl-left-x: clamp(-3vw, 0vw, 3vw);
                 --victory-owl-left-y: clamp(25vh, 20vh, 25vh);
                 --victory-cloud-left-x: clamp(5vw, 10vw, 15vw);
                 --victory-cloud-left-y: clamp(75vh, 80vh, 85vh);
-                
                 --victory-owl-right-x: clamp(-3vw, 0vw, 3vw);
                 --victory-owl-right-y: clamp(25vh, 20vh, 25vh);
                 --victory-cloud-right-x: clamp(5vw, 10vw, 15vw);
                 --victory-cloud-right-y: clamp(75vh, 80vh, 85vh);
-
-                --victory-img-size: min(30vw, 350px);
 
                 --cloud-left-src: url('Wolkje_snake.png');
                 --cloud-right-src: url('wolkje_snakeR.png');
@@ -301,39 +384,59 @@
 
         @media (min-width: 1025px) and (orientation: landscape) {
             :root {
+                /* Fallbacks */
+                --title-x-shift: 2vw;
+                --cloud-width: 350px;
+                --font-size: 1.8rem;
+                --button-font: 1.5rem;
+                --button-width: 350px;
+                --button-height: 120px;
+                --button-gap: 64px;
+                --y-positie-tekstbox: 16vh;
+                --y-positie-knoppen: 4vh;
+                --tekstbox-width: 48vw;
+                --tekstbox-height: 32vw;
+                --snake-image-size: 120px;
+                --food-image-size: 120px;
+                --obstacle-image-size: 800px;
+                --canvas-margin-top: 8vh;
+                --canvas-margin-right: 16vw;
+                --canvas-margin-bottom: 8vh;
+                --canvas-margin-left: 16vw;
+                --victory-owl-left-x: 10vw;
+                --victory-owl-left-y: 10vh;
+                --victory-cloud-left-x: 0vw;
+                --victory-cloud-left-y: 45vh;
+                --victory-owl-right-x: 10vw;
+                --victory-owl-right-y: 10vh;
+                --victory-cloud-right-x: 0vw;
+                --victory-cloud-right-y: 45vh;
+                --victory-img-size: 300px;
+                --intro-x-shift: 0vw;
+                --intro-y-shift: 20vh;
+                
+                /* Clamp/min */
                 --title-x-shift: clamp(0vw, 2vw, 5vw);
                 --cloud-width: min(40vw, 400px);
                 --font-size: clamp(0.8rem, 1.6vw + 0.8rem, 2.4rem);
                 --button-font: clamp(1.1rem, 1.8vw + 0.9rem, 1.8rem);
                 --button-width: clamp(240px, 12vw, 480px);
                 --button-height: clamp(80px, 4vw, 160px);
-                --button-gap: 64px;
                 --y-positie-tekstbox: clamp(12vh, 16vh, 20vh);
                 --y-positie-knoppen: clamp(2vh, 4vh, 8vh);
-                --tekstbox-width: 48vw;
                 --tekstbox-height: clamp(28vw, 32vw, 36vw);
-                
                 --snake-image-size: min(32vw, 160px);
                 --food-image-size: min(32vw, 160px);
                 --obstacle-image-size: min(64vw, 1200px);
-                
-                --canvas-margin-top: 8vh;
-                --canvas-margin-right: 16vw;
-                --canvas-margin-bottom: 8vh;
-                --canvas-margin-left: 16vw;
-                
+                --victory-img-size: min(40vw, 350px);
                 --victory-owl-left-x: clamp(5vw, 10vw, 15vw);
                 --victory-owl-left-y: clamp(5vh, 10vh, 15vh);
                 --victory-cloud-left-x: clamp(-3vw, 0vw, 3vw);
                 --victory-cloud-left-y: clamp(40vh, 45vh, 50vh);
-                
                 --victory-owl-right-x: clamp(5vw, 10vw, 15vw);
                 --victory-owl-right-y: clamp(5vh, 10vh, 15vh);
                 --victory-cloud-right-x: clamp(-3vw, 0vw, 3vw);
                 --victory-cloud-right-y: clamp(40vh, 45vh, 50vh);
-
-                --victory-img-size: min(40vw, 350px);
-                
                 --intro-x-shift: clamp(-5vw, 0vw, 5vw);
                 --intro-y-shift: clamp(15vh, 20vh, 25vh);
 
@@ -344,39 +447,59 @@
 
         @media (min-width: 1921px) and (orientation: landscape) {
             :root {
+                /* Fallbacks */
+                --title-x-shift: 2vw;
+                --cloud-width: 600px;
+                --font-size: 4.0rem;
+                --button-font: 2.7rem;
+                --button-width: 450px;
+                --button-height: 200px;
+                --button-gap: 64px;
+                --y-positie-tekstbox: 16vh;
+                --y-positie-knoppen: 4vh;
+                --tekstbox-width: 48vw;
+                --tekstbox-height: 32vw;
+                --snake-image-size: 120px;
+                --food-image-size: 120px;
+                --obstacle-image-size: 800px;
+                --canvas-margin-top: 8vh;
+                --canvas-margin-right: 16vw;
+                --canvas-margin-bottom: 8vh;
+                --canvas-margin-left: 16vw;
+                --victory-owl-left-x: 10vw;
+                --victory-owl-left-y: 10vh;
+                --victory-cloud-left-x: 0vw;
+                --victory-cloud-left-y: 50vh;
+                --victory-owl-right-x: 10vw;
+                --victory-owl-right-y: 10vh;
+                --victory-cloud-right-x: 0vw;
+                --victory-cloud-right-y: 50vh;
+                --victory-img-size: 550px;
+                --intro-x-shift: 0vw;
+                --intro-y-shift: 20vh;
+                
+                /* Clamp/min */
                 --title-x-shift: clamp(0vw, 2vw, 5vw);
                 --cloud-width: min(50vw, 850px);
                 --font-size: clamp(1.6rem, 4.2vw + 1.6rem, 6.4rem);
                 --button-font: clamp(2.6rem, 3.6vw + 1.6rem, 2.8rem);
                 --button-width: clamp(300px, 16vw, 600px);
                 --button-height: clamp(130px, 4vw, 300px);
-                --button-gap: 64px;
                 --y-positie-tekstbox: clamp(12vh, 16vh, 20vh);
                 --y-positie-knoppen: clamp(0vh, 4vh, 8vh);
-                --tekstbox-width: 48vw;
                 --tekstbox-height: clamp(28vw, 32vw, 36vw);
-                
                 --snake-image-size: min(32vw, 160px);
                 --food-image-size: min(32vw, 160px);
                 --obstacle-image-size: min(64vw, 1200px);
-                
-                --canvas-margin-top: 8vh;
-                --canvas-margin-right: 16vw;
-                --canvas-margin-bottom: 8vh;
-                --canvas-margin-left: 16vw;
-                
+                --victory-img-size: min(50vw, 750px);
                 --victory-owl-left-x: clamp(5vw, 10vw, 15vw);
                 --victory-owl-left-y: clamp(5vh, 10vh, 15vh);
                 --victory-cloud-left-x: clamp(-3vw, 0vw, 3vw);
                 --victory-cloud-left-y: clamp(45vh, 50vh, 55vh);
-                
                 --victory-owl-right-x: clamp(5vw, 10vw, 15vw);
                 --victory-owl-right-y: clamp(5vh, 10vh, 15vh);
                 --victory-cloud-right-x: clamp(-3vw, 0vw, 3vw);
                 --victory-cloud-right-y: clamp(45vh, 50vh, 55vh);
-
-                --victory-img-size: min(50vw, 750px);
-                
                 --intro-x-shift: clamp(-5vw, 0vw, 5vw);
                 --intro-y-shift: clamp(15vh, 20vh, 25vh);
 
@@ -395,35 +518,34 @@
             align-items: center;
             justify-content: center;
             text-align: center;
+            margin-top: 10px;
             z-index: 2;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            position: relative;
+            max-width: 90vw;
             width: 100%;
-            height: 100%;
-            pointer-events: none;
         }
 
         #menu.active, #gameOver.active, #videoModal.active {
             display: flex;
-            pointer-events: all;
         }
 
         #introText {
             background-color: rgba(0,0,0,0.8);
+            padding: 1.6rem;
             padding: var(--tekstbox-padding);
             border-radius: 12px;
             color: #810000;
             box-shadow: 0 0 20px rgba(255,255,255,0.2);
             margin-bottom: 1.2rem;
+            max-width: 80vw;
+            max-height: 72vw;
             max-width: var(--tekstbox-width);
             max-height: var(--tekstbox-height);
             word-wrap: break-word;
+            margin-top: 16px;
             margin-top: var(--y-positie-tekstbox);
+            font-size: 2.6rem;
             font-size: var(--font-size);
-            overflow-y: auto;
         }
 
         .button-container {
@@ -431,30 +553,36 @@
             flex-direction: row;
             justify-content: center;
             align-items: center;
+            gap: 48px;
             gap: var(--button-gap);
             flex-wrap: wrap;
             width: 100%;
             max-width: 2000px;
+            margin-top: 96px;
             margin-top: var(--y-positie-knoppen);
         }
 
         
         /* Specifieke positioning voor verschillende schermen */
         #menu .button-container {
+            margin-top: 96px;
             margin-top: var(--y-positie-knoppen);
         }
         
         #gameOver .button-container {
+            margin-top: 72px;
             margin-top: var(--y-positie-gameover-knoppen);
         }
         
         #videoModal .button-container {
+            margin-top: 72px;
             margin-top: var(--y-positie-victory-knoppen);
         }
 
         #introText,
         #menu .button-container {
             position: relative;
+            left: 0vw;
             left: var(--intro-x-shift);
         }
 
@@ -470,8 +598,12 @@
             border: 2px solid #810000;
             cursor: pointer;
             font-family: Arial, sans-serif;
+            font-size: 2.6rem;
             font-size: var(--button-font);
             border-radius: 8px;
+            flex: 0 0 380px;
+            width: 380px;
+            height: 150px;
             flex: 0 0 var(--button-width);
             width: var(--button-width);
             height: var(--button-height);
@@ -485,6 +617,9 @@
 
         #startButton:hover, #restartButton:hover, #twoPlayer:hover, #singlePlayer:hover, .buttonLink:hover, #victoryRestart:hover {
             background-color: #111;
+            -webkit-transform: scale(1.02);
+            -moz-transform: scale(1.02);
+            -ms-transform: scale(1.02);
             transform: scale(1.02);
             transition: all 0.2s ease;
         }
@@ -502,14 +637,11 @@
             align-items: center;
             justify-content: flex-start;
             text-align: center;
+            margin-top: 10px;
             z-index: 2;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            position: relative;
+            max-width: 90vw;
             width: 100%;
-            height: 100%;
         }
 
         #videoModal .victory-content {
@@ -526,6 +658,7 @@
         }
 
         .wolkje {
+            max-width: 450px;
             max-width: var(--cloud-width);
             height: auto;
             border: none;
@@ -534,14 +667,20 @@
         }
 
         .wolkje:hover {
+            -webkit-transform: scale(1.1) translateY(-7%);
+            -moz-transform: scale(1.1) translateY(-7%);
+            -ms-transform: scale(1.1) translateY(-7%);
             transform: scale(1.1) translateY(-7%);
         }
 
         .wolkje.touched {
+            -webkit-transform: scale(1.1) translateY(-7%) !important;
+            -moz-transform: scale(1.1) translateY(-7%) !important;
+            -ms-transform: scale(1.1) translateY(-7%) !important;
             transform: scale(1.1) translateY(-7%) !important;
         }
 
-        .victory-content {
+        #videoModal .victory-content {
             position: relative;
         }
 
@@ -561,10 +700,14 @@
         
         .victory-content[data-mode="single"] img:not(.wolkje) {
             position: absolute;
+            max-width: 450px;
             max-width: var(--victory-img-size);
             height: auto;
+            right: 0vw;
+            bottom: -10vh;
             right: var(--victory-owl-right-x);
             bottom: var(--victory-owl-right-y);
+            transform-origin: bottom left;
             transform-origin: var(--cloud-transform-origin);
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
@@ -573,10 +716,14 @@
 
         .victory-content[data-mode="single"] .wolkje {
             position: absolute;
+            max-width: 450px;
             max-width: var(--victory-img-size);
             height: auto;
+            right: 30vw;
+            bottom: 30vh;
             right: var(--victory-cloud-right-x);
             bottom: var(--victory-cloud-right-y);
+            transform-origin: bottom left;
             transform-origin: var(--cloud-transform-origin);
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
@@ -585,10 +732,14 @@
 
         .victory-content[data-mode="two"] img:not(.wolkje) {
             position: absolute;
+            max-width: 450px;
             max-width: var(--victory-img-size);
             height: auto;
+            left: 0vw;
+            bottom: -10vh;
             left: var(--victory-owl-left-x);
             bottom: var(--victory-owl-left-y);
+            transform-origin: bottom left;
             transform-origin: var(--cloud-transform-origin);
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
@@ -597,10 +748,14 @@
 
         .victory-content[data-mode="two"] .wolkje {
             position: absolute;
+            max-width: 450px;
             max-width: var(--victory-img-size);
             height: auto;
+            left: 30vw;
+            bottom: 30vh;
             left: var(--victory-cloud-left-x);
             bottom: var(--victory-cloud-left-y);
+            transform-origin: bottom left;
             transform-origin: var(--cloud-transform-origin);
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
@@ -610,10 +765,14 @@
         /* Rechtsaf (single player) - gebruikt RIGHT positionering */
         .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje) {
             position: absolute;
+            max-width: 450px;
             max-width: var(--victory-img-size);
             height: auto;
+            right: 0vw;
+            bottom: -10vh;
             right: var(--victory-owl-right-x);
             bottom: var(--victory-owl-right-y);
+            transform-origin: bottom right;
             transform-origin: var(--cloud-transform-origin-right);
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
@@ -622,10 +781,14 @@
         
         .victory-content[data-mode="single"] .victory-link-right .wolkje {
             position: absolute;
+            max-width: 450px;
             max-width: var(--victory-img-size);
             height: auto;
+            right: 30vw;
+            bottom: 30vh;
             right: var(--victory-cloud-right-x);
             bottom: var(--victory-cloud-right-y);
+            transform-origin: bottom right;
             transform-origin: var(--cloud-transform-origin-right);
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
@@ -635,10 +798,14 @@
         /* Linksaf (two player) - gebruikt LEFT positionering */
         .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
             position: absolute;
+            max-width: 450px;
             max-width: var(--victory-img-size);
             height: auto;
+            left: 0vw;
+            bottom: -10vh;
             left: var(--victory-owl-left-x);
             bottom: var(--victory-owl-left-y);
+            transform-origin: bottom left;
             transform-origin: var(--cloud-transform-origin);
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
@@ -647,10 +814,14 @@
         
         .victory-content[data-mode="two"] .victory-link-left .wolkje {
             position: absolute;
+            max-width: 450px;
             max-width: var(--victory-img-size);
             height: auto;
+            left: 30vw;
+            bottom: 30vh;
             left: var(--victory-cloud-left-x);
             bottom: var(--victory-cloud-left-y);
+            transform-origin: bottom left;
             transform-origin: var(--cloud-transform-origin);
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
@@ -659,21 +830,33 @@
 
         .victory-content .victory-link-right img:hover,
         .victory-content .victory-link-right .wolkje:hover {
+            -webkit-transform: scale(1.1) translateY(-7%);
+            -moz-transform: scale(1.1) translateY(-7%);
+            -ms-transform: scale(1.1) translateY(-7%);
             transform: scale(1.1) translateY(-7%);
         }
         
         .victory-content .victory-link-right img.touched,
         .victory-content .victory-link-right .wolkje.touched {
+            -webkit-transform: scale(1.1) translateY(-7%) !important;
+            -moz-transform: scale(1.1) translateY(-7%) !important;
+            -ms-transform: scale(1.1) translateY(-7%) !important;
             transform: scale(1.1) translateY(-7%) !important;
         }
         
         .victory-content .victory-link-left img:hover,
         .victory-content .victory-link-left .wolkje:hover {
+            -webkit-transform: scale(1.1) translateY(-7%);
+            -moz-transform: scale(1.1) translateY(-7%);
+            -ms-transform: scale(1.1) translateY(-7%);
             transform: scale(1.1) translateY(-7%);
         }
         
         .victory-content .victory-link-left img.touched,
         .victory-content .victory-link-left .wolkje.touched {
+            -webkit-transform: scale(1.1) translateY(-7%) !important;
+            -moz-transform: scale(1.1) translateY(-7%) !important;
+            -ms-transform: scale(1.1) translateY(-7%) !important;
             transform: scale(1.1) translateY(-7%) !important;
         }
     </style>
@@ -722,32 +905,15 @@
         </div>
     </div>
     <script>
-        // Voorkom dubbele viewport height fixes
-        let viewportHeightSet = false;
-        
+        // Fix voor Safari viewport height - PLAATS DIT ALS EERSTE
         function setViewportHeight() {
-            if (viewportHeightSet) return;
-            
-            const vh = window.innerHeight * 0.01;
+            let vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
-            viewportHeightSet = true;
-            
-            setTimeout(() => {
-                viewportHeightSet = false;
-            }, 100);
         }
     
         setViewportHeight();
-        
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(setViewportHeight, 100);
-        });
-        
-        window.addEventListener('orientationchange', () => {
-            setTimeout(setViewportHeight, 300);
-        });
+        window.addEventListener('resize', setViewportHeight);
+        window.addEventListener('orientationchange', setViewportHeight);
 
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
@@ -773,8 +939,7 @@
 
         function addTouchSupport(element) {
             if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
-                element.addEventListener("touchstart", (e) => {
-                    e.preventDefault();
+                element.addEventListener("touchstart", () => {
                     element.classList.add("touched");
                 });
                 element.addEventListener("touchend", () => {
@@ -806,9 +971,7 @@
         
         function handleResize() {
             clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                setViewportHeight();
-            }, 100);
+            resizeTimeout = setTimeout(() => {}, 100);
         }
         
         function handleOrientationChange() {
@@ -817,13 +980,26 @@
                 const newOrientation = window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
                 if (newOrientation !== currentOrientation) {
                     currentOrientation = newOrientation;
-                    setViewportHeight();
+                    document.body.style.display = 'none';
+                    document.body.offsetHeight;
+                    document.body.style.display = 'flex';
                 }
             }, 300);
         }
 
         window.addEventListener('resize', handleResize);
         window.addEventListener('orientationchange', handleOrientationChange);
+        
+        let lastWidth = window.innerWidth;
+        let lastHeight = window.innerHeight;
+        
+        setInterval(() => {
+            if (window.innerWidth !== lastWidth || window.innerHeight !== lastHeight) {
+                lastWidth = window.innerWidth;
+                lastHeight = window.innerHeight;
+                handleOrientationChange();
+            }
+        }, 500);
 
         function getRandomPosition(sizeInBoxes = 1, avoid = []) {
             let position, isValid = false;
@@ -889,14 +1065,12 @@
 
         let touchStartX = 0, touchStartY = 0;
         canvas.addEventListener("touchstart", (e) => {
-            e.preventDefault();
             const t = e.touches[0];
             touchStartX = t.clientX;
             touchStartY = t.clientY;
-        }, { passive: false });
+        });
 
         canvas.addEventListener("touchmove", (e) => {
-            e.preventDefault();
             if (!touchStartX || !touchStartY) return;
             const t = e.touches[0];
             const dx = t.clientX - touchStartX, dy = t.clientY - touchStartY;
@@ -910,7 +1084,7 @@
             }
             touchStartX = 0;
             touchStartY = 0;
-        }, { passive: false });
+        });
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -972,11 +1146,13 @@
             const rootStyles = getComputedStyle(document.documentElement);
             
             if (playerCount === 1) {
+                // Rechtsaf - single player
                 victoryContent.setAttribute("data-mode", "single");
                 const rightSrc = rootStyles.getPropertyValue('--cloud-right-src').trim().replace(/url\(['"]?|['"]?\)/g, '');
                 wolkjeRight.src = rightSrc;
                 victoryOwlRight.src = 'Uil.png';
             } else {
+                // Linksaf - two player
                 victoryContent.setAttribute("data-mode", "two");
                 const leftSrc = rootStyles.getPropertyValue('--cloud-left-src').trim().replace(/url\(['"]?|['"]?\)/g, '');
                 wolkjeLeft.src = leftSrc;
