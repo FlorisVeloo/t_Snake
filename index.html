@@ -432,6 +432,11 @@
             left: var(--intro-x-shift);
         }
 
+        #introText h2 {
+              margin-bottom: 5em; /* of 1em = 20px, afhankelijk van voorkeur */
+        }
+
+
         #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
             margin: 0.25rem;
             background-color: #000;
@@ -680,7 +685,7 @@
     <canvas id="gameCanvas"></canvas>
     <div id="gameOver">
         <div id="introText">
-            <h2 style="margin-bottom: 1em;">Game over<</h2>
+            <h2>Game over<</h2>
             <p>Je bent een pannenkoek!</p>
         </div>
         <div class="button-container">
@@ -690,7 +695,7 @@
     </div>
     <div id="videoModal">
         <div id="introText">
-            <h2 style="margin-bottom: 1em;">Gefeliciteerd!</h2>
+            <h2>Gefeliciteerd!</h2>
             <p>Je hebt Joop gevonden!</p>
         </div>
         <div class="button-container">
