@@ -525,24 +525,73 @@
             display: block;
         }
 
-        /* Verberg de elementen die niet zichtbaar moeten zijn */
-        .victory-content[data-mode="single"] .victory-link-left {
-            display: none !important;
-            pointer-events: none;
+        /* Rechtsaf (single player) - gebruikt RIGHT positionering */
+        .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje) {
+            position: absolute;
+            max-width: var(--victory-img-size);
+            height: auto;
+            right: var(--victory-owl-right-x);
+            bottom: var(--victory-owl-right-y);
+            transform-origin: var(--cloud-transform-origin);
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+            display: block;
+        }
+        
+        .victory-content[data-mode="single"] .victory-link-right .wolkje {
+            position: absolute;
+            max-width: var(--victory-img-size);
+            height: auto;
+            right: var(--victory-cloud-right-x);
+            bottom: var(--victory-cloud-right-y);
+            transform-origin: var(--cloud-transform-origin);
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+            display: block;
+        }
+        
+        /* Linksaf (two player) - gebruikt LEFT positionering */
+        .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
+            position: absolute;
+            max-width: var(--victory-img-size);
+            height: auto;
+            left: var(--victory-owl-left-x);
+            bottom: var(--victory-owl-left-y);
+            transform-origin: var(--cloud-transform-origin);
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+            display: block;
+        }
+        
+        .victory-content[data-mode="two"] .victory-link-left .wolkje {
+            position: absolute;
+            max-width: var(--victory-img-size);
+            height: auto;
+            left: var(--victory-cloud-left-x);
+            bottom: var(--victory-cloud-left-y);
+            transform-origin: var(--cloud-transform-origin);
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+            display: block;
         }
 
-        .victory-content[data-mode="two"] .victory-link-right {
-            display: none !important;
-            pointer-events: none;
-        }
-
-        .victory-content img:not(.wolkje):hover,
-        .victory-content .wolkje:hover {
+        .victory-content .victory-link-right img:hover,
+        .victory-content .victory-link-right .wolkje:hover {
             transform: scale(1.1) translateY(-7%);
         }
-
-        .victory-content img:not(.wolkje).touched,
-        .victory-content .wolkje.touched {
+        
+        .victory-content .victory-link-right img.touched,
+        .victory-content .victory-link-right .wolkje.touched {
+            transform: scale(1.1) translateY(-7%) !important;
+        }
+        
+        .victory-content .victory-link-left img:hover,
+        .victory-content .victory-link-left .wolkje:hover {
+            transform: scale(1.1) translateY(-7%);
+        }
+        
+        .victory-content .victory-link-left img.touched,
+        .victory-content .victory-link-left .wolkje.touched {
             transform: scale(1.1) translateY(-7%) !important;
         }
     </style>
