@@ -49,6 +49,9 @@
 
             --intro-x-shift: clamp(-5vw, 0vw, 5vw);
             --intro-y-shift: clamp(0vh, 5vh, 10vh);
+
+            --cloud-left-src: url('wolkje_snakeR.png');
+            --cloud-right-src: url('Wolkje_snake.png');
         }
 
         html {
@@ -277,15 +280,18 @@
                 --victory-cloud-left-x: clamp(55vw, 60vw, 65vw);
                 --victory-cloud-left-y: clamp(45vh, 50vh, 55vh);
                 
-                --victory-owl-right-x: clamp(-3vw, 0vw, 3vw);
+                --victory-owl-right-x: clamp(5vw, 10vw, 15vw);
                 --victory-owl-right-y: clamp(5vh, 10vh, 15vh);
-                --victory-cloud-right-x: clamp(5vw, 10vw, 15vw);
+                --victory-cloud-right-x: clamp(-3vw, 0vw, 3vw);
                 --victory-cloud-right-y: clamp(45vh, 50vh, 55vh);
 
                 --victory-img-size: min(40vw, 350px);
                 
                 --intro-x-shift: clamp(-5vw, 0vw, 5vw);
                 --intro-y-shift: clamp(15vh, 20vh, 25vh);
+
+                --cloud-left-src: url('wolkje_snakeR.png');
+                --cloud-right-src: url('Wolkje_snake.png');
             }
         }
 
@@ -778,18 +784,22 @@
             clearInterval(gameInterval);
             document.getElementById("gameOver").classList.add("active");
         }
-
+        
         function showVideo() {
             clearInterval(gameInterval);
             const victoryContent = document.getElementById("victoryContent");
             const wolkje = document.getElementById("wolkje");
             
+            const rootStyles = getComputedStyle(document.documentElement);
+            
             if (playerCount === 1) {
                 victoryContent.setAttribute("data-mode", "single");
-                wolkje.src = 'wolkje_snakeR.png';
+                const rightSrc = rootStyles.getPropertyValue('--cloud-right-src').trim().replace(/url\(['"]?|['"]?\)/g, '');
+                wolkje.src = rightSrc;
             } else {
                 victoryContent.setAttribute("data-mode", "two");
-                wolkje.src = 'Wolkje_snake.png';
+                const leftSrc = rootStyles.getPropertyValue('--cloud-left-src').trim().replace(/url\(['"]?|['"]?\)/g, '');
+                wolkje.src = leftSrc;
             }
             document.getElementById("videoModal").classList.add("active");
         }
