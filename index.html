@@ -25,7 +25,7 @@
         }
         :root {
             --title-x-shift: clamp(10vw, 15vw, 19vw);
-            --cloud-width: min(50vw, 450px);
+            --cloud-width: min(70vw, 650px);
             --bg-size: cover;
             
             --font-size: clamp(1.6rem, 2.0vw + 1.0rem, 2.4rem);
@@ -57,15 +57,15 @@
             --victory-cloud-right-x: clamp(15vw, 20vw, 25vw);
             --victory-cloud-right-y: clamp(22vh, 27vh, 30vh);
 
-            --victory-img-size: min(50vw, 450px);
+            --victory-img-size: min(70vw, 650px);
 
             --intro-x-shift: clamp(-5vw, 0vw, 5vw);
             --intro-y-shift: clamp(0vh, 5vh, 10vh);
 
             --cloud-left-src: url('Wolkje_snake.png');
             --cloud-right-src: url('wolkje_snakeR.png');
-            --cloud-transform-origin: bottom right;
-            --cloud-transform-origin-right: bottom left;
+            --cloud-transform-origin: bottom left;
+            --cloud-transform-origin-right: bottom right;
         }
 
         html {
@@ -145,6 +145,8 @@
             :root {
                 --cloud-left-src: url('wolkje_snakeR.png');
                 --cloud-right-src: url('Wolkje_snake.png');
+                --cloud-transform-origin: bottom left;
+                --cloud-transform-origin-right: bottom right;
             }
             #background {
                 background-size: auto 100%;
