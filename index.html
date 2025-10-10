@@ -477,6 +477,20 @@
             position: relative;
         }
 
+        /* Verberg wolkjes en uilen standaard */
+        .victory-content a {
+            display: none;
+        }
+        
+        /* Toon alleen de juiste link op basis van de mode */
+        .victory-content[data-mode="single"] .victory-link-right {
+            display: block;
+        }
+        
+        .victory-content[data-mode="two"] .victory-link-left {
+            display: block;
+        }
+        
         .victory-content[data-mode="single"] img:not(.wolkje) {
             position: absolute;
             max-width: var(--victory-img-size);
@@ -630,9 +644,11 @@
         </div>
         <div class="victory-content" id="victoryContent">
             <a href="https://onderweg8.joopvanhetgroenewoud.nl" class="victory-link-left">
+                <img src="" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkjeLeft">
                 <img src="" alt="Klik hier om door te gaan" id="victoryOwlLeft">
             </a>
             <a href="https://onderweg8.joopvanhetgroenewoud.nl" class="victory-link-right">
+                <img src="" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkjeRight">
                 <img src="" alt="Klik hier om door te gaan" id="victoryOwlRight">
             </a>
         </div>
