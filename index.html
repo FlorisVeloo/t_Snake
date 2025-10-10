@@ -53,6 +53,7 @@
             --cloud-left-src: url('Wolkje_snake.png');
             --cloud-right-src: url('wolkje_snakeR.png');
             --cloud-transform-origin: bottom left;
+            --cloud-transform-origin-right: bottom right;
         }
 
         html {
@@ -120,7 +121,6 @@
             :root {
                 --cloud-left-src: url('wolkje_snakeR.png');
                 --cloud-right-src: url('Wolkje_snake.png');
-                --cloud-transform-origin: top right;
             }
             #background {
                 background-size: auto 100%;
@@ -532,7 +532,7 @@
             height: auto;
             right: var(--victory-owl-right-x);
             bottom: var(--victory-owl-right-y);
-            transform-origin: var(--cloud-transform-origin);
+            transform-origin: var(--cloud-transform-origin-right);
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
             display: block;
@@ -544,7 +544,7 @@
             height: auto;
             right: var(--victory-cloud-right-x);
             bottom: var(--victory-cloud-right-y);
-            transform-origin: var(--cloud-transform-origin);
+            transform-origin: var(--cloud-transform-origin-right);
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
             display: block;
