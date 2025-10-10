@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
@@ -33,9 +33,9 @@
             --button-width: clamp(320px, 24vw, 560px); 
             --button-height: clamp(120px, 160px, 200px);
             --button-gap: 48px;
-            --y-positie-knoppen: 96px;  /* Voor linksaf/rechtsaf knoppen */
-            --y-positie-gameover-knoppen: 72px;  /* Voor game over knoppen */
-            --y-positie-victory-knoppen: 72px;  /* Voor overwinning knoppen */
+            --y-positie-knoppen: 96px;
+            --y-positie-gameover-knoppen: 72px;
+            --y-positie-victory-knoppen: 72px;
             --y-positie-tekstbox: 16px;
             --tekstbox-width: clamp(72vw, 80vw, 88vw);
             --tekstbox-height: clamp(64vw, 72vw, 80vw);
@@ -69,15 +69,20 @@
             --cloud-right-src: url('wolkje_snakeR.png');
             --cloud-transform-origin: bottom left;
             --cloud-transform-origin-right: bottom right;
+            
+            /* Nieuwe variabelen voor consistente viewport */
+            --safe-area-top: env(safe-area-inset-top, 0px);
+            --safe-area-bottom: env(safe-area-inset-bottom, 0px);
         }
 
         html {
             height: 100%;
-            margin: 0;
-            overflow-y: auto;
-            overscroll-behavior: auto;
-            position: static;
             width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            position: fixed;
+            -webkit-text-size-adjust: 100%;
         }
 
         body {
@@ -87,31 +92,23 @@
             justify-content: flex-start;
             margin: 0;
             padding: 0;
-            height: 100vh; /* Fallback voor oude browsers */
-            height: calc(var(--vh, 1vh) * 100); /* Safari-vriendelijke versie */
-            max-height: 100vh;
-            max-height: calc(var(--vh, 1vh) * 100);
+            width: 100vw;
+            height: 100vh;
+            min-height: -webkit-fill-available;
             overflow: hidden;
             font-family: Arial, sans-serif;
             font-size: var(--font-size);
             background-color: black;
             color: #810000;
-            position: relative;
-        }
-
-        @supports (height: 100dvh) {
-            body {
-                height: 100dvh;
-            }
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
         }
         
         body * {
             box-sizing: border-box;
-        }
-        
-        body::before,
-        body::after {
-            display: none !important;
         }
 
         #background {
@@ -130,7 +127,7 @@
             background-color: #000;
             touch-action: none;
             z-index: 1;
-            position: absolute;
+            position: fixed;
             top: var(--canvas-margin-top);
             right: var(--canvas-margin-right);
             bottom: var(--canvas-margin-bottom);
@@ -398,15 +395,20 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            margin-top: 10px;
             z-index: 2;
-            position: relative;
-            max-width: 90vw;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             width: 100%;
+            height: 100%;
+            pointer-events: none;
         }
 
         #menu.active, #gameOver.active, #videoModal.active {
             display: flex;
+            pointer-events: all;
         }
 
         #introText {
@@ -421,6 +423,7 @@
             word-wrap: break-word;
             margin-top: var(--y-positie-tekstbox);
             font-size: var(--font-size);
+            overflow-y: auto;
         }
 
         .button-container {
@@ -456,7 +459,7 @@
         }
 
         #introText p {
-              margin-top: 2em; /* of 1em = 20px, afhankelijk van voorkeur */
+              margin-top: 2em;
         }
 
 
@@ -482,9 +485,6 @@
 
         #startButton:hover, #restartButton:hover, #twoPlayer:hover, #singlePlayer:hover, .buttonLink:hover, #victoryRestart:hover {
             background-color: #111;
-            -webkit-transform: scale(1.02);
-            -moz-transform: scale(1.02);
-            -ms-transform: scale(1.02);
             transform: scale(1.02);
             transition: all 0.2s ease;
         }
@@ -502,11 +502,14 @@
             align-items: center;
             justify-content: flex-start;
             text-align: center;
-            margin-top: 10px;
             z-index: 2;
-            position: relative;
-            max-width: 90vw;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             width: 100%;
+            height: 100%;
         }
 
         #videoModal .victory-content {
@@ -531,20 +534,14 @@
         }
 
         .wolkje:hover {
-            -webkit-transform: scale(1.1) translateY(-7%);
-            -moz-transform: scale(1.1) translateY(-7%);
-            -ms-transform: scale(1.1) translateY(-7%);
             transform: scale(1.1) translateY(-7%);
         }
 
         .wolkje.touched {
-            -webkit-transform: scale(1.1) translateY(-7%) !important;
-            -moz-transform: scale(1.1) translateY(-7%) !important;
-            -ms-transform: scale(1.1) translateY(-7%) !important;
             transform: scale(1.1) translateY(-7%) !important;
         }
 
-        #videoModal .victory-content {
+        .victory-content {
             position: relative;
         }
 
@@ -662,33 +659,21 @@
 
         .victory-content .victory-link-right img:hover,
         .victory-content .victory-link-right .wolkje:hover {
-            -webkit-transform: scale(1.1) translateY(-7%);
-            -moz-transform: scale(1.1) translateY(-7%);
-            -ms-transform: scale(1.1) translateY(-7%);
             transform: scale(1.1) translateY(-7%);
         }
         
         .victory-content .victory-link-right img.touched,
         .victory-content .victory-link-right .wolkje.touched {
-            -webkit-transform: scale(1.1) translateY(-7%) !important;
-            -moz-transform: scale(1.1) translateY(-7%) !important;
-            -ms-transform: scale(1.1) translateY(-7%) !important;
             transform: scale(1.1) translateY(-7%) !important;
         }
         
         .victory-content .victory-link-left img:hover,
         .victory-content .victory-link-left .wolkje:hover {
-            -webkit-transform: scale(1.1) translateY(-7%);
-            -moz-transform: scale(1.1) translateY(-7%);
-            -ms-transform: scale(1.1) translateY(-7%);
             transform: scale(1.1) translateY(-7%);
         }
         
         .victory-content .victory-link-left img.touched,
         .victory-content .victory-link-left .wolkje.touched {
-            -webkit-transform: scale(1.1) translateY(-7%) !important;
-            -moz-transform: scale(1.1) translateY(-7%) !important;
-            -ms-transform: scale(1.1) translateY(-7%) !important;
             transform: scale(1.1) translateY(-7%) !important;
         }
     </style>
@@ -737,15 +722,32 @@
         </div>
     </div>
     <script>
-        // Fix voor Safari viewport height - PLAATS DIT ALS EERSTE
+        // Voorkom dubbele viewport height fixes
+        let viewportHeightSet = false;
+        
         function setViewportHeight() {
-            let vh = window.innerHeight * 0.01;
+            if (viewportHeightSet) return;
+            
+            const vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
+            viewportHeightSet = true;
+            
+            setTimeout(() => {
+                viewportHeightSet = false;
+            }, 100);
         }
     
         setViewportHeight();
-        window.addEventListener('resize', setViewportHeight);
-        window.addEventListener('orientationchange', setViewportHeight);
+        
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(setViewportHeight, 100);
+        });
+        
+        window.addEventListener('orientationchange', () => {
+            setTimeout(setViewportHeight, 300);
+        });
 
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
@@ -771,7 +773,8 @@
 
         function addTouchSupport(element) {
             if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
-                element.addEventListener("touchstart", () => {
+                element.addEventListener("touchstart", (e) => {
+                    e.preventDefault();
                     element.classList.add("touched");
                 });
                 element.addEventListener("touchend", () => {
@@ -803,7 +806,9 @@
         
         function handleResize() {
             clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {}, 100);
+            resizeTimeout = setTimeout(() => {
+                setViewportHeight();
+            }, 100);
         }
         
         function handleOrientationChange() {
@@ -812,26 +817,13 @@
                 const newOrientation = window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
                 if (newOrientation !== currentOrientation) {
                     currentOrientation = newOrientation;
-                    document.body.style.display = 'none';
-                    document.body.offsetHeight;
-                    document.body.style.display = 'flex';
+                    setViewportHeight();
                 }
             }, 300);
         }
 
         window.addEventListener('resize', handleResize);
         window.addEventListener('orientationchange', handleOrientationChange);
-        
-        let lastWidth = window.innerWidth;
-        let lastHeight = window.innerHeight;
-        
-        setInterval(() => {
-            if (window.innerWidth !== lastWidth || window.innerHeight !== lastHeight) {
-                lastWidth = window.innerWidth;
-                lastHeight = window.innerHeight;
-                handleOrientationChange();
-            }
-        }, 500);
 
         function getRandomPosition(sizeInBoxes = 1, avoid = []) {
             let position, isValid = false;
@@ -897,12 +889,14 @@
 
         let touchStartX = 0, touchStartY = 0;
         canvas.addEventListener("touchstart", (e) => {
+            e.preventDefault();
             const t = e.touches[0];
             touchStartX = t.clientX;
             touchStartY = t.clientY;
-        });
+        }, { passive: false });
 
         canvas.addEventListener("touchmove", (e) => {
+            e.preventDefault();
             if (!touchStartX || !touchStartY) return;
             const t = e.touches[0];
             const dx = t.clientX - touchStartX, dy = t.clientY - touchStartY;
@@ -916,7 +910,7 @@
             }
             touchStartX = 0;
             touchStartY = 0;
-        });
+        }, { passive: false });
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -978,13 +972,11 @@
             const rootStyles = getComputedStyle(document.documentElement);
             
             if (playerCount === 1) {
-                // Rechtsaf - single player
                 victoryContent.setAttribute("data-mode", "single");
                 const rightSrc = rootStyles.getPropertyValue('--cloud-right-src').trim().replace(/url\(['"]?|['"]?\)/g, '');
                 wolkjeRight.src = rightSrc;
                 victoryOwlRight.src = 'Uil.png';
             } else {
-                // Linksaf - two player
                 victoryContent.setAttribute("data-mode", "two");
                 const leftSrc = rootStyles.getPropertyValue('--cloud-left-src').trim().replace(/url\(['"]?|['"]?\)/g, '');
                 wolkjeLeft.src = leftSrc;
