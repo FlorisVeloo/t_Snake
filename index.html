@@ -548,7 +548,7 @@
             <button id="victoryRestart">RESTART</button>
         </div>
         <a href="https://onderweg8.joopvanhetgroenewoud.nl" class="victory-content" id="victoryContent">
-            <img src="Wolkje_snake.png" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkje">
+            <img src="" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkje">
             <img src="Uil.png" alt="Klik hier om door te gaan" id="victoryOwl">
         </a>
     </div>
@@ -561,13 +561,17 @@
         
         canvas.width = LOGICAL_BOX_SIZE * cols;
         canvas.height = LOGICAL_BOX_SIZE * rows;
-
+        
         const snakeImg = new Image();
         snakeImg.src = 'Monster.png';
         const foodImg = new Image();
         foodImg.src = 'Koek.png';
         const obstacleImg = new Image();
         obstacleImg.src = 'Uil.png';
+        const cloudImgLeft = new Image();
+        cloudImgLeft.src = 'Wolkje_links.png';  // Voor linksaf (twee spelers)
+        const cloudImgRight = new Image();
+        cloudImgRight.src = 'Wolkje_rechts.png';  // Voor rechtsaf (single player)
 
         let snake, food, score, d, playerCount, gameInterval, obstacle;
 
@@ -776,10 +780,14 @@
         function showVideo() {
             clearInterval(gameInterval);
             const victoryContent = document.getElementById("victoryContent");
+            const wolkje = document.getElementById("wolkje");
+            
             if (playerCount === 1) {
                 victoryContent.setAttribute("data-mode", "single");
+                wolkje.src = 'Wolkje_rechts.png';
             } else {
                 victoryContent.setAttribute("data-mode", "two");
+                wolkje.src = 'Wolkje_links.png';
             }
             document.getElementById("videoModal").classList.add("active");
         }
