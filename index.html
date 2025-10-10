@@ -630,12 +630,12 @@
         </div>
         <div class="victory-content" id="victoryContent">
             <a href="https://onderweg8.joopvanhetgroenewoud.nl" class="victory-link-left">
-                <img src="Wolkje_snake.png" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkjeLeft">
-                <img src="Uil.png" alt="Klik hier om door te gaan" id="victoryOwlLeft">
+                <img src="" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkjeLeft">
+                <img src="" alt="Klik hier om door te gaan" id="victoryOwlLeft">
             </a>
             <a href="https://onderweg8.joopvanhetgroenewoud.nl" class="victory-link-right">
-                <img src="wolkje_snakeR.png" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkjeRight">
-                <img src="Uil.png" alt="Klik hier om door te gaan" id="victoryOwlRight">
+                <img src="" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkjeRight">
+                <img src="" alt="Klik hier om door te gaan" id="victoryOwlRight">
             </a>
         </div>
     </div>
@@ -875,11 +875,13 @@
                 victoryContent.setAttribute("data-mode", "single");
                 const rightSrc = rootStyles.getPropertyValue('--cloud-right-src').trim().replace(/url\(['"]?|['"]?\)/g, '');
                 wolkjeRight.src = rightSrc;
+                victoryOwlRight.src = 'Uil.png';  // Voeg dit toe
             } else {
                 // Linksaf - two player
                 victoryContent.setAttribute("data-mode", "two");
                 const leftSrc = rootStyles.getPropertyValue('--cloud-left-src').trim().replace(/url\(['"]?|['"]?\)/g, '');
                 wolkjeLeft.src = leftSrc;
+                victoryOwlLeft.src = 'Uil.png';  // Voeg dit toe
             }
             document.getElementById("videoModal").classList.add("active");
         }
