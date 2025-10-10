@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
@@ -10,7 +11,18 @@
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
     <title>Snake Game</title>
-    <style>
+    <style>       
+        /* CSS Reset voor cross-browser consistency */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
         :root {
             --title-x-shift: clamp(10vw, 15vw, 19vw);
             --cloud-width: min(50vw, 450px);
@@ -72,15 +84,22 @@
             justify-content: flex-start;
             margin: 0;
             padding: 0;
-            height: 100vh;
-            height: 100dvh;
+            height: 100vh; /* Fallback voor oude browsers */
+            height: calc(var(--vh, 1vh) * 100); /* Safari-vriendelijke versie */
             max-height: 100vh;
+            max-height: calc(var(--vh, 1vh) * 100);
             overflow: hidden;
             font-family: Arial, sans-serif;
             font-size: var(--font-size);
             background-color: black;
             color: #810000;
             position: relative;
+        }
+
+        @supports (height: 100dvh) {
+            body {
+                height: 100dvh;
+            }
         }
         
         body * {
@@ -115,6 +134,11 @@
             left: var(--canvas-margin-left);
             width: calc(100vw - var(--canvas-margin-left) - var(--canvas-margin-right));
             height: calc(100vh - var(--canvas-margin-top) - var(--canvas-margin-bottom));
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         @media (orientation: landscape) {
@@ -416,7 +440,6 @@
             font-size: var(--button-font);
             border-radius: 8px;
             flex: 0 0 var(--button-width);
-            /*flex: 1;*/
             width: var(--button-width);
             height: var(--button-height);
             text-align: center;
@@ -429,6 +452,9 @@
 
         #startButton:hover, #restartButton:hover, #twoPlayer:hover, #singlePlayer:hover, .buttonLink:hover, #victoryRestart:hover {
             background-color: #111;
+            -webkit-transform: scale(1.02);
+            -moz-transform: scale(1.02);
+            -ms-transform: scale(1.02);
             transform: scale(1.02);
             transition: all 0.2s ease;
         }
@@ -475,10 +501,16 @@
         }
 
         .wolkje:hover {
+            -webkit-transform: scale(1.1) translateY(-7%);
+            -moz-transform: scale(1.1) translateY(-7%);
+            -ms-transform: scale(1.1) translateY(-7%);
             transform: scale(1.1) translateY(-7%);
         }
 
         .wolkje.touched {
+            -webkit-transform: scale(1.1) translateY(-7%) !important;
+            -moz-transform: scale(1.1) translateY(-7%) !important;
+            -ms-transform: scale(1.1) translateY(-7%) !important;
             transform: scale(1.1) translateY(-7%) !important;
         }
 
@@ -600,21 +632,33 @@
 
         .victory-content .victory-link-right img:hover,
         .victory-content .victory-link-right .wolkje:hover {
+            -webkit-transform: scale(1.1) translateY(-7%);
+            -moz-transform: scale(1.1) translateY(-7%);
+            -ms-transform: scale(1.1) translateY(-7%);
             transform: scale(1.1) translateY(-7%);
         }
         
         .victory-content .victory-link-right img.touched,
         .victory-content .victory-link-right .wolkje.touched {
+            -webkit-transform: scale(1.1) translateY(-7%) !important;
+            -moz-transform: scale(1.1) translateY(-7%) !important;
+            -ms-transform: scale(1.1) translateY(-7%) !important;
             transform: scale(1.1) translateY(-7%) !important;
         }
         
         .victory-content .victory-link-left img:hover,
         .victory-content .victory-link-left .wolkje:hover {
+            -webkit-transform: scale(1.1) translateY(-7%);
+            -moz-transform: scale(1.1) translateY(-7%);
+            -ms-transform: scale(1.1) translateY(-7%);
             transform: scale(1.1) translateY(-7%);
         }
         
         .victory-content .victory-link-left img.touched,
         .victory-content .victory-link-left .wolkje.touched {
+            -webkit-transform: scale(1.1) translateY(-7%) !important;
+            -moz-transform: scale(1.1) translateY(-7%) !important;
+            -ms-transform: scale(1.1) translateY(-7%) !important;
             transform: scale(1.1) translateY(-7%) !important;
         }
     </style>
@@ -663,6 +707,16 @@
         </div>
     </div>
     <script>
+        // Fix voor Safari viewport height - PLAATS DIT ALS EERSTE
+        function setViewportHeight() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+    
+        setViewportHeight();
+        window.addEventListener('resize', setViewportHeight);
+        window.addEventListener('orientationchange', setViewportHeight);
+
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
@@ -898,13 +952,13 @@
                 victoryContent.setAttribute("data-mode", "single");
                 const rightSrc = rootStyles.getPropertyValue('--cloud-right-src').trim().replace(/url\(['"]?|['"]?\)/g, '');
                 wolkjeRight.src = rightSrc;
-                victoryOwlRight.src = 'Uil.png';  // Voeg dit toe
+                victoryOwlRight.src = 'Uil.png';
             } else {
                 // Linksaf - two player
                 victoryContent.setAttribute("data-mode", "two");
                 const leftSrc = rootStyles.getPropertyValue('--cloud-left-src').trim().replace(/url\(['"]?|['"]?\)/g, '');
                 wolkjeLeft.src = leftSrc;
-                victoryOwlLeft.src = 'Uil.png';  // Voeg dit toe
+                victoryOwlLeft.src = 'Uil.png';
             }
             document.getElementById("videoModal").classList.add("active");
         }
