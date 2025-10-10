@@ -37,6 +37,7 @@
             --y-positie-tekstbox: 16px;
             --tekstbox-width: clamp(72vw, 80vw, 88vw);
             --tekstbox-height: clamp(64vw, 72vw, 80vw);
+            --tekstbox-padding: 1.6rem;
             
             --snake-image-size: min(10vw, 150px);
             --food-image-size: min(10vw, 150px);
@@ -408,7 +409,7 @@
 
         #introText {
             background-color: rgba(0,0,0,0.8);
-            padding: clamp(0.8rem, 2vw, 1.5rem);
+            padding: var(--tekstbox-padding);
             border-radius: 12px;
             color: #810000;
             box-shadow: 0 0 20px rgba(255,255,255,0.2);
