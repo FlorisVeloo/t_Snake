@@ -214,14 +214,14 @@
                 --canvas-margin-bottom: 16vh;
                 --canvas-margin-left: 16vw;
                 
-                --victory-owl-left-x: clamp(65vw, 70vw, 75vw);
+                --victory-owl-left-x: clamp(5vw, 10vw, 15vw);
                 --victory-owl-left-y: clamp(5vh, 10vh, 15vh);
-                --victory-cloud-left-x: clamp(55vw, 60vw, 65vw);
+                --victory-cloud-left-x: clamp(-3vw, 0vw, 3vw);
                 --victory-cloud-left-y: clamp(45vh, 50vh, 55vh);
                 
-                --victory-owl-right-x: clamp(-3vw, 0vw, 3vw);
+                --victory-owl-right-x: clamp(65vw, 70vw, 75vw);
                 --victory-owl-right-y: clamp(5vh, 10vh, 15vh);
-                --victory-cloud-right-x: clamp(5vw, 10vw, 15vw);
+                --victory-cloud-right-x: clamp(55vw, 60vw, 65vw);
                 --victory-cloud-right-y: clamp(45vh, 50vh, 55vh);
 
                 --victory-img-size: min(30vw, 350px);
@@ -250,14 +250,14 @@
                 --canvas-margin-bottom: 16vh;
                 --canvas-margin-left: 16vw;
                 
-                --victory-owl-left-x: clamp(65vw, 70vw, 75vw);
+                --victory-owl-left-x: clamp(5vw, 10vw, 15vw);
                 --victory-owl-left-y: clamp(5vh, 10vh, 15vh);
-                --victory-cloud-left-x: clamp(55vw, 60vw, 65vw);
+                --victory-cloud-left-x: clamp(-3vw, 0vw, 3vw);
                 --victory-cloud-left-y: clamp(45vh, 50vh, 55vh);
                 
-                --victory-owl-right-x: clamp(-3vw, 0vw, 3vw);
+                --victory-owl-right-x: clamp(65vw, 70vw, 75vw);
                 --victory-owl-right-y: clamp(5vh, 10vh, 15vh);
-                --victory-cloud-right-x: clamp(5vw, 10vw, 15vw);
+                --victory-cloud-right-x: clamp(55vw, 60vw, 65vw);
                 --victory-cloud-right-y: clamp(45vh, 50vh, 55vh);
 
                 --victory-img-size: min(30vw, 350px);
@@ -292,9 +292,9 @@
                 --victory-cloud-left-x: clamp(-3vw, 0vw, 3vw);
                 --victory-cloud-left-y: clamp(45vh, 50vh, 55vh);
                 
-                --victory-owl-right-x: clamp(5vw, 10vw, 15vw);
+                --victory-owl-right-x: clamp(65vw, 70vw, 75vw);
                 --victory-owl-right-y: clamp(5vh, 10vh, 15vh);
-                --victory-cloud-right-x: clamp(-3vw, 0vw, 3vw);
+                --victory-cloud-right-x: clamp(55vw, 60vw, 65vw);
                 --victory-cloud-right-y: clamp(45vh, 50vh, 55vh);
 
                 --victory-img-size: min(40vw, 350px);
@@ -332,9 +332,9 @@
                 --victory-cloud-left-x: clamp(15vw, 20vw, 25vw);
                 --victory-cloud-left-y: clamp(45vh, 50vh, 55vh);
                 
-                --victory-owl-right-x: clamp(5vw, 10vw, 15vw);
+                --victory-owl-right-x: clamp(65vw, 70vw, 75vw);
                 --victory-owl-right-y: clamp(5vh, 10vh, 15vh);
-                --victory-cloud-right-x: clamp(15vw, 20vw, 25vw);
+                --victory-cloud-right-x: clamp(55vw, 60vw, 65vw);
                 --victory-cloud-right-y: clamp(45vh, 50vh, 55vh);
 
                 --victory-img-size: min(50vw, 750px);
@@ -486,6 +486,7 @@
             transform-origin: var(--cloud-transform-origin);
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
+            display: block;
         }
 
         .victory-content[data-mode="single"] .wolkje {
@@ -497,6 +498,7 @@
             transform-origin: var(--cloud-transform-origin);
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
+            display: block;
         }
 
         .victory-content[data-mode="two"] img:not(.wolkje) {
@@ -508,6 +510,7 @@
             transform-origin: var(--cloud-transform-origin);
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
+            display: block;
         }
 
         .victory-content[data-mode="two"] .wolkje {
@@ -519,6 +522,18 @@
             transform-origin: var(--cloud-transform-origin);
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
+            display: block;
+        }
+
+        /* Verberg de elementen die niet zichtbaar moeten zijn */
+        .victory-content[data-mode="single"] .victory-link-left {
+            display: none !important;
+            pointer-events: none;
+        }
+
+        .victory-content[data-mode="two"] .victory-link-right {
+            display: none !important;
+            pointer-events: none;
         }
 
         .victory-content img:not(.wolkje):hover,
@@ -564,10 +579,16 @@
             <a href="https://joopvanhetgroenewoud.nl" class="buttonLink">HOME</a>
             <button id="victoryRestart">RESTART</button>
         </div>
-        <a href="https://onderweg8.joopvanhetgroenewoud.nl" class="victory-content" id="victoryContent">
-            <img src="" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkje">
-            <img src="Uil.png" alt="Klik hier om door te gaan" id="victoryOwl">
-        </a>
+        <div class="victory-content" id="victoryContent">
+            <a href="https://onderweg8.joopvanhetgroenewoud.nl" class="victory-link-left">
+                <img src="" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkjeLeft">
+                <img src="Uil.png" alt="Klik hier om door te gaan" id="victoryOwlLeft">
+            </a>
+            <a href="https://onderweg8.joopvanhetgroenewoud.nl" class="victory-link-right">
+                <img src="" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkjeRight">
+                <img src="Uil.png" alt="Klik hier om door te gaan" id="victoryOwlRight">
+            </a>
+        </div>
     </div>
     <script>
         const canvas = document.getElementById("gameCanvas");
@@ -586,9 +607,9 @@
         const obstacleImg = new Image();
         obstacleImg.src = 'Uil.png';
         const cloudImgLeft = new Image();
-        cloudImgLeft.src = 'Wolkje_snake.png';  // Voor linksaf (twee spelers)
+        cloudImgLeft.src = 'Wolkje_snake.png';
         const cloudImgRight = new Image();
-        cloudImgRight.src = 'wolkje_snakeR.png';  // Voor rechtsaf (single player)
+        cloudImgRight.src = 'wolkje_snakeR.png';
 
         let snake, food, score, d, playerCount, gameInterval, obstacle;
 
@@ -605,15 +626,15 @@
             }
         }
 
-        const victoryCloud = document.getElementById("wolkje");
-        if (victoryCloud) {
-            addTouchSupport(victoryCloud);
-        }
-
-        const victoryOwl = document.getElementById("victoryOwl");
-        if (victoryOwl) {
-            addTouchSupport(victoryOwl);
-        }
+        const wolkjeLeft = document.getElementById("wolkjeLeft");
+        const wolkjeRight = document.getElementById("wolkjeRight");
+        const victoryOwlLeft = document.getElementById("victoryOwlLeft");
+        const victoryOwlRight = document.getElementById("victoryOwlRight");
+        
+        if (wolkjeLeft) addTouchSupport(wolkjeLeft);
+        if (wolkjeRight) addTouchSupport(wolkjeRight);
+        if (victoryOwlLeft) addTouchSupport(victoryOwlLeft);
+        if (victoryOwlRight) addTouchSupport(victoryOwlRight);
 
         document.getElementById("singlePlayer").addEventListener("click", () => startGame(1));
         document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
@@ -797,18 +818,19 @@
         function showVideo() {
             clearInterval(gameInterval);
             const victoryContent = document.getElementById("victoryContent");
-            const wolkje = document.getElementById("wolkje");
             
             const rootStyles = getComputedStyle(document.documentElement);
             
             if (playerCount === 1) {
+                // Rechtsaf - single player
                 victoryContent.setAttribute("data-mode", "single");
                 const rightSrc = rootStyles.getPropertyValue('--cloud-right-src').trim().replace(/url\(['"]?|['"]?\)/g, '');
-                wolkje.src = rightSrc;
+                wolkjeRight.src = rightSrc;
             } else {
+                // Linksaf - two player
                 victoryContent.setAttribute("data-mode", "two");
                 const leftSrc = rootStyles.getPropertyValue('--cloud-left-src').trim().replace(/url\(['"]?|['"]?\)/g, '');
-                wolkje.src = leftSrc;
+                wolkjeLeft.src = leftSrc;
             }
             document.getElementById("videoModal").classList.add("active");
         }
