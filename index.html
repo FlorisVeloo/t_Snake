@@ -1,884 +1,807 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
-    <link rel="shortcut icon" href="/favicon/favicon.ico" type="image/x-icon">
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-    <title>Snake Game</title>
-    <style>       
-        /* CSS Reset voor cross-browser consistency */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!-- Apple -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="shortcut icon" href="/favicon/favicon.ico" type="image/x-icon">
+<!-- Theme colors (voor browsers die statusbalk aanpassen) -->
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <title>Joop van het Groenewoud - Steen Papier Schaar</title>
+  <style>
+    /* CSS Reset voor cross-browser consistency */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Fallback waarden eerst */
+      --title-x-shift: 25vw;
+      --title-y-shift: -36vh;
+      --title-x-shift2: 25vw;
+      --title-y-shift2: -36vh;
+      --cloud-width: 550px;
+      --cloud-width2: 540px;
+      --bg-size: cover;
+      --font-size: 1.8rem;
+      --boxwidth: 30vw;
+      --boxheight: 30vw;
+      
+      /* Moderne waarden met clamp/min (overschrijven indien ondersteund) */
+      --title-x-shift: clamp(20vw, 25vw, 30vw);
+      --title-y-shift: clamp(-35vh, -36vh, -40vh);
+      --title-x-shift2: clamp(20vw, 25vw, 30vw);
+      --title-y-shift2: clamp(-35vh, -36vh, -40vh);
+      --cloud-width: min(60vw, 550px);
+      --cloud-width2: min(55vw, 540px);
+      --font-size: clamp(1.2rem, 1.5vw + 0.8rem, 2.5rem);
+      --boxwidth: clamp(28vw, 30vw, 32vw);
+      --boxheight: clamp(28vw, 30vw, 32vw);
+    }
+    
+    html {
+      height: 100%;
+      margin: 0;
+      overflow-y: auto;
+      overscroll-behavior: auto;
+      position: static;
+      width: 100%;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      height: calc(var(--vh, 1vh) * 100);
+      max-height: 100vh;
+      max-height: calc(var(--vh, 1vh) * 100);
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      font-size: 1.8rem; /* Fallback */
+      font-size: var(--font-size);
+      background-color: black;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 100px;
+    }
+
+    @supports (height: 100dvh) {
+      body {
+        height: 100dvh;
+      }
+    }
+    
+    #background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.9;
+      background-size: cover; /* Fallback */
+      background-size: var(--bg-size);
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .choices {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    .choice {
+      width: 30vw; /* Fallback */
+      height: 30vw; /* Fallback */
+      width: var(--boxwidth);
+      height: var(--boxheight);
+      cursor: pointer;
+      border: 2px solid white;
+      border-radius: 10px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    .result, .score {
+      color: white;
+      font-size: 56px;
+      margin: 5px;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .overlay-image {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+      -webkit-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+      -moz-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+      -ms-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+      width: 550px; /* Fallback */
+      width: var(--cloud-width);
+      max-width: 60vw;
+      text-align: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      cursor: pointer;
+    }
+
+    .overlay-static {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+      -webkit-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+      -moz-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+      -ms-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+      width: 540px; /* Fallback */
+      width: var(--cloud-width2);
+      max-width: 55vw;
+      height: auto;
+      z-index: 10;
+      pointer-events: none;
+      cursor: pointer;
+    }
+
+    #wolkje_versla {
+      pointer-events: none;
+      cursor: default;
+    }
+
+    @keyframes fadeInOut {
+      0% { opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    @-webkit-keyframes fadeInOut {
+      0% { opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    .fade-in-out {
+      display: block !important;
+      animation: fadeInOut 4.5s ease-in-out;
+      -webkit-animation: fadeInOut 4.5s ease-in-out;
+    }
+
+    #winRedirect,
+    #lossRedirect {
+      display: none;
+      opacity: 0;
+      pointer-events: auto;
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out, opacity 0.5s ease;
+      -webkit-transition: -webkit-transform 0.3s ease-in-out, opacity 0.5s ease;
+      -moz-transition: -moz-transform 0.3s ease-in-out, opacity 0.5s ease;
+    }
+
+    #winRedirect:hover,
+    #lossRedirect:hover {
+      transform: translate(calc(-50% + 25vw), calc(-50% - 36vh)) scale(1.1) translateY(-7%);
+      -webkit-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh)) scale(1.1) translateY(-7%);
+      -moz-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh)) scale(1.1) translateY(-7%);
+      -ms-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh)) scale(1.1) translateY(-7%);
+    }
+
+    #winRedirect.touched,
+    #lossRedirect.touched {
+      transform: translate(calc(-50% + 25vw), calc(-50% - 36vh)) scale(1.1) translateY(-7%) !important;
+      -webkit-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh)) scale(1.1) translateY(-7%) !important;
+      -moz-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh)) scale(1.1) translateY(-7%) !important;
+      -ms-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh)) scale(1.1) translateY(-7%) !important;
+    }
+
+    /* Responsive achtergrond */
+    @media (orientation: landscape) {
+      :root {
+        /* Fallback waarden */
+        --title-x-shift: 25vw;
+        --title-y-shift: -36vh;
+        --title-x-shift2: 25vw;
+        --title-y-shift2: -36vh;
+        --cloud-width: 450px;
+        --cloud-width2: 450px;
         
-        *::before,
-        *::after {
-            box-sizing: border-box;
-        }
+        /* Moderne waarden */
+        --title-x-shift: clamp(20vw, 25vw, 30vw);
+        --title-y-shift: clamp(-35vh, -36vh, -40vh);
+        --title-x-shift2: clamp(20vw, 25vw, 30vw);
+        --title-y-shift2: clamp(-35vh, -36vh, -40vh);
+        --cloud-width: min(30vw, 450px);
+        --cloud-width2: min(25vw, 450px);
+      }
+      
+      .overlay-image,
+      .overlay-static {
+        transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+        -webkit-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+        -moz-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+        -ms-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+      }
+      
+      .overlay-image {
+        max-width: 30vw;
+      }
+      
+      .overlay-static {
+        max-width: 25vw;
+      }
+      
+      body {
+        justify-content: center;
+        padding-bottom: 5px;
+      }
 
-        html {
-            height: 100%;
-            margin: 0;
-            overflow-y: auto;
-            overscroll-behavior: auto;
-            position: static;
-            width: 100%;
-        }
+      .choice {
+        width: 23vh; /* Fallback */
+        height: 23vh; /* Fallback */
+        width: clamp(20vh, 25vh, 30vh);
+        height: clamp(20vh, 25vh, 30vh);
+      }
 
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            max-height: 100vh;
-            overflow: hidden;
-            font-family: Arial, sans-serif;
-            background-color: black;
-            color: #810000;
-            position: relative;
-        }
+      .choices {
+        margin-top: 10px;
+      }
 
-        @supports (height: 100dvh) {
-            body {
-                height: 100dvh;
-                max-height: 100dvh;
-            }
-        }
+      .result,
+      .score {
+        font-size: 26px; /* Fallback */
+        font-size: clamp(16px, 26px, 48px);
+        margin-bottom: 10px;
+      }
+
+      #background {
+        background-size: cover;
+        background-position: center center;
+      }
+    }
+
+    @media (orientation: portrait) {
+      #background {
+        background-size: cover;
+        background-position: 57% center;
+      }
+    }
+
+    /* ========== SMALL DEVICES (max 320px) ========== */
+    @media (max-width: 320px) {
+      :root {
+        /* Fallback waarden */
+        --title-x-shift: 25vw;
+        --title-y-shift: -36vh;
+        --title-x-shift2: 25vw;
+        --title-y-shift2: -36vh;
+        --cloud-width: 450px;
+        --cloud-width2: 450px;
         
-        body * {
-            box-sizing: border-box;
-        }
+        /* Moderne waarden */
+        --title-x-shift: clamp(20vw, 25vw, 30vw);
+        --title-y-shift: clamp(-35vh, -36vh, -40vh);
+        --title-x-shift2: clamp(20vw, 25vw, 30vw);
+        --title-y-shift2: clamp(-35vh, -36vh, -40vh);
+        --cloud-width: min(30vw, 450px);
+        --cloud-width2: min(25vw, 450px);
+      }
+      
+      body {
+        justify-content: flex-end;
+        padding-bottom: 40px;
+      }
+
+      .choices {
+        margin-bottom: 40px;
+      }
+
+      .choice {
+        width: 60px;
+        height: 60px;
+      }
+
+      .result,
+      .score {
+        margin-top: 20px;
+        font-size: 8px;
+      }
+    }
+
+    @media (max-width: 1024px) and (min-height: 350px) and (orientation: landscape) {
+      :root {
+        /* Fallback waarden */
+        --title-x-shift: 25vw;
+        --title-y-shift: -36vh;
+        --title-x-shift2: 25vw;
+        --title-y-shift2: -36vh;
+        --cloud-width: 450px;
+        --cloud-width2: 450px;
         
-        body::before,
-        body::after {
-            display: none !important;
-        }
+        /* Moderne waarden */
+        --title-x-shift: clamp(20vw, 25vw, 30vw);
+        --title-y-shift: clamp(-35vh, -36vh, -40vh);
+        --title-x-shift2: clamp(20vw, 25vw, 30vw);
+        --title-y-shift2: clamp(-35vh, -36vh, -40vh);
+        --cloud-width: min(30vw, 450px);
+        --cloud-width2: min(25vw, 450px);
+      }
+      
+      body {
+        justify-content: flex-end;
+        padding-bottom: 0px;
+      }
 
-        #background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.5;
-            object-fit: cover;
-        }
+      .choices {
+        gap: 16px;
+        margin-bottom: 8px;
+      }
 
-        canvas {
-            border: 6px solid #810000;
-            background-color: #000;
-            touch-action: none;
-            z-index: 1;
-            position: absolute;
-            top: 32vh;
-            right: 8px;
-            bottom: 8vh;
-            left: 8px;
-            width: calc(100vw - 16px);
-            height: calc(100vh - 40vh);
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
+      .choice {
+        width: 30vh; /* Fallback */
+        height: 30vh; /* Fallback */
+        width: clamp(25vh, 30vh, 35vh);
+        height: clamp(25vh, 30vh, 35vh);
+      }
 
-        @media (orientation: landscape) {
-            #background {
-                background-size: auto 100%;
-                background-position: center top;
-            }
-        }
+      .result,
+      .score {
+        font-size: 32px;
+        margin-bottom: 2px;
+      }
+    }
 
-        @media (orientation: portrait) {
-            #background {
-                background-position: 25% center;
-            }
-        }
-
-        /* DEFAULT PORTRAIT MOBILE */
-        #menu, #gameOver, #videoModal {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            margin-top: 10px;
-            z-index: 2;
-            position: relative;
-            max-width: 90vw;
-            width: 100%;
-        }
-
-        #menu.active, #gameOver.active, #videoModal.active {
-            display: flex;
-        }
-
-        #introText {
-            background-color: rgba(0,0,0,0.8);
-            padding: 10px;
-            border-radius: 12px;
-            color: #810000;
-            box-shadow: 0 0 20px rgba(255,255,255,0.2);
-            margin-bottom: 8px;
-            max-width: 85vw;
-            max-height: 150px;
-            overflow-y: auto;
-            word-wrap: break-word;
-            margin-top: 8px;
-            font-size: 13px;
-        }
-
-        #introText h1,
-        #introText h2 {
-            font-size: 16px;
-            margin-bottom: 6px;
-            line-height: 1.2;
-        }
-
-        #introText p {
-            margin-top: 8px;
-            font-size: 12px;
-            line-height: 1.3;
-        }
-
-        .button-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            width: 100%;
-            max-width: 2000px;
-            margin-top: 10px;
-        }
-
-        #menu .button-container {
-            margin-top: 12px;
-        }
+    @media (min-width: 1025px) and (max-width: 1500px) and (max-height: 750px) and (orientation: landscape) {
+      :root {
+        /* Fallback waarden */
+        --title-x-shift: 25vw;
+        --title-y-shift: -36vh;
+        --title-x-shift2: 25vw;
+        --title-y-shift2: -36vh;
+        --cloud-width: 450px;
+        --cloud-width2: 450px;
         
-        #gameOver .button-container {
-            margin-top: 12px;
-        }
+        /* Moderne waarden */
+        --title-x-shift: clamp(20vw, 25vw, 30vw);
+        --title-y-shift: clamp(-35vh, -36vh, -40vh);
+        --title-x-shift2: clamp(20vw, 25vw, 30vw);
+        --title-y-shift2: clamp(-35vh, -36vh, -40vh);
+        --cloud-width: min(30vw, 450px);
+        --cloud-width2: min(25vw, 450px);
+      }
+      
+      body {
+        justify-content: flex-end;
+        padding-bottom: 0px;
+      }
+
+      .choices {
+        gap: 16px;
+        margin-bottom: 8px;
+      }
+
+      .choice {
+        width: 30vh; /* Fallback */
+        height: 30vh; /* Fallback */
+        width: clamp(25vh, 30vh, 35vh);
+        height: clamp(25vh, 30vh, 35vh);
+      }
+
+      .result,
+      .score {
+        font-size: 32px;
+        margin-bottom: 2px;
+      }
+    }
+    
+    /* ========== DESKTOP LAYOUT TWEAKS ========== */
+    /* ========== DESKTOP (min-width: 1025px) ========== */
+    @media (min-width: 1025px) {
+      :root {
+        /* Fallback waarden */
+        --title-x-shift: 25vw;
+        --title-y-shift: -33vh;
+        --title-x-shift2: 25vw;
+        --title-y-shift2: -36vh;
+        --cloud-width: 450px;
+        --cloud-width2: 450px;
         
-        #videoModal .button-container {
-            margin-top: 12px;
-        }
+        /* Moderne waarden */
+        --title-x-shift: clamp(20vw, 25vw, 30vw);
+        --title-y-shift: clamp(-32vh, -33vh, -38vh);
+        --title-x-shift2: clamp(20vw, 25vw, 30vw);
+        --title-y-shift2: clamp(-35vh, -36vh, -40vh);
+        --cloud-width: min(60vw, 450px);
+        --cloud-width2: min(55vw, 450px);
+      }
+      
+      .overlay-image {
+        transform: translate(calc(-50% + 25vw), calc(-50% - 33vh));
+        -webkit-transform: translate(calc(-50% + 25vw), calc(-50% - 33vh));
+        -moz-transform: translate(calc(-50% + 25vw), calc(-50% - 33vh));
+        -ms-transform: translate(calc(-50% + 25vw), calc(-50% - 33vh));
+        max-width: 60vw;
+      }
+      
+      .overlay-static {
+        transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+        -webkit-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+        -moz-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+        -ms-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+        max-width: 55vw;
+      }
+      
+      #winRedirect:hover,
+      #lossRedirect:hover {
+        transform: translate(calc(-50% + 25vw), calc(-50% - 33vh)) scale(1.1) translateY(-7%);
+        -webkit-transform: translate(calc(-50% + 25vw), calc(-50% - 33vh)) scale(1.1) translateY(-7%);
+        -moz-transform: translate(calc(-50% + 25vw), calc(-50% - 33vh)) scale(1.1) translateY(-7%);
+        -ms-transform: translate(calc(-50% + 25vw), calc(-50% - 33vh)) scale(1.1) translateY(-7%);
+      }
+      
+      body {
+        justify-content: flex-end;
+        padding-bottom: 30px;
+      }
 
-        #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
-            margin: 4px;
-            background-color: #000;
-            color: #b40000;
-            border: 2px solid #810000;
-            cursor: pointer;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            border-radius: 8px;
-            flex: 0 0 140px;
-            width: 140px;
-            height: 50px;
-            text-align: center;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            padding: 5px;
-        }
+      .choice {
+        width: 23vh; /* Fallback */
+        height: 23vh; /* Fallback */
+        width: clamp(20vh, 23vh, 28vh);
+        height: clamp(20vh, 23vh, 28vh);
+      }
 
-        #startButton:hover, #restartButton:hover, #twoPlayer:hover, #singlePlayer:hover, .buttonLink:hover, #victoryRestart:hover {
-            background-color: #111;
-            transform: scale(1.02);
-            transition: all 0.2s ease;
-        }
+      .result,
+      .score {
+        font-size: 52px;
+      }
+    }
 
-        .buttonLink {
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #videoModal {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            text-align: center;
-            margin-top: 10px;
-            z-index: 2;
-            position: relative;
-            max-width: 90vw;
-            width: 100%;
-        }
-
-        #videoModal .victory-content {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-            position: relative;
-            width: 100%;
-            height: 60vh;
-        }
-
-        .wolkje {
-            max-width: 400px;
-            width: 60vw;
-            height: auto;
-            border: none;
-            transition: transform 0.3s ease-in-out;
-            cursor: pointer;
-        }
-
-        .wolkje:hover {
-            transform: scale(1.1) translateY(-7%);
-        }
-
-        .wolkje.touched {
-            transform: scale(1.1) translateY(-7%) !important;
-        }
-
-        #videoModal .victory-content {
-            position: relative;
-        }
-
-        /* Verberg wolkjes en uilen standaard */
-        .victory-content a {
-            display: none;
-        }
+    /* ========== ULTRA-WIDE SCREENS (min-width: 1921px) ========== */
+    @media (min-width: 1921px) {
+      :root {
+        /* Fallback waarden */
+        --title-x-shift: 25vw;
+        --title-y-shift: -36vh;
+        --title-x-shift2: 25vw;
+        --title-y-shift2: -36vh;
+        --cloud-width: 960px;
+        --cloud-width2: 960px;
         
-        /* Toon alleen de juiste link op basis van de mode */
-        .victory-content[data-mode="single"] .victory-link-right {
-            display: block;
-        }
-        
-        .victory-content[data-mode="two"] .victory-link-left {
-            display: block;
-        }
-        
-        /* RIGHT positioning voor single player */
-        .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje) {
-            position: absolute;
-            max-width: 400px;
-            width: 60vw;
-            height: auto;
-            right: 5vw;
-            bottom: 0vh;
-            transform-origin: bottom right;
-            transition: transform 0.3s ease-in-out;
-            cursor: pointer;
-            display: block;
-        }
-        
-        .victory-content[data-mode="single"] .victory-link-right .wolkje {
-            position: absolute;
-            max-width: 400px;
-            width: 60vw;
-            height: auto;
-            right: 20vw;
-            bottom: 25vh;
-            transform-origin: bottom right;
-            transition: transform 0.3s ease-in-out;
-            cursor: pointer;
-            display: block;
-        }
-        
-        /* LEFT positioning voor two player */
-        .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
-            position: absolute;
-            max-width: 400px;
-            width: 60vw;
-            height: auto;
-            left: 5vw;
-            bottom: 0vh;
-            transform-origin: bottom left;
-            transition: transform 0.3s ease-in-out;
-            cursor: pointer;
-            display: block;
-        }
-        
-        .victory-content[data-mode="two"] .victory-link-left .wolkje {
-            position: absolute;
-            max-width: 400px;
-            width: 60vw;
-            height: auto;
-            left: 20vw;
-            bottom: 25vh;
-            transform-origin: bottom left;
-            transition: transform 0.3s ease-in-out;
-            cursor: pointer;
-            display: block;
-        }
+        /* Moderne waarden */
+        --title-x-shift: clamp(20vw, 25vw, 30vw);
+        --title-y-shift: clamp(-35vh, -36vh, -40vh);
+        --title-x-shift2: clamp(20vw, 25vw, 30vw);
+        --title-y-shift2: clamp(-35vh, -36vh, -40vh);
+        --cloud-width: min(60vw, 960px);
+        --cloud-width2: min(55vw, 960px);
+      }
+      
+      .overlay-image,
+      .overlay-static {
+        transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+        -webkit-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+        -moz-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+        -ms-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh));
+      }
+      
+      .overlay-image {
+        max-width: 60vw;
+      }
+      
+      .overlay-static {
+        max-width: 55vw;
+      }
+      
+      #winRedirect:hover,
+      #lossRedirect:hover {
+        transform: translate(calc(-50% + 25vw), calc(-50% - 36vh)) scale(1.1) translateY(-7%);
+        -webkit-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh)) scale(1.1) translateY(-7%);
+        -moz-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh)) scale(1.1) translateY(-7%);
+        -ms-transform: translate(calc(-50% + 25vw), calc(-50% - 36vh)) scale(1.1) translateY(-7%);
+      }
+      
+      body {
+        justify-content: flex-end;
+        padding-bottom: 20px;
+      }
+      
+      .choice {
+        width: 25vh; /* Fallback */
+        height: 25vh; /* Fallback */
+        width: clamp(20vh, 25vh, 30vh);
+        height: clamp(20vh, 25vh, 30vh);
+      }
 
-        .victory-content .victory-link-right img:hover,
-        .victory-content .victory-link-right .wolkje:hover,
-        .victory-content .victory-link-left img:hover,
-        .victory-content .victory-link-left .wolkje:hover {
-            transform: scale(1.1) translateY(-7%);
-        }
-        
-        .victory-content .victory-link-right img.touched,
-        .victory-content .victory-link-right .wolkje.touched,
-        .victory-content .victory-link-left img.touched,
-        .victory-content .victory-link-left .wolkje.touched {
-            transform: scale(1.1) translateY(-7%) !important;
-        }
+      .result,
+      .score {
+        font-size: 96px;
+      }
+    }
+    
+    /* basisstijl */
+    .url-preview {
+      position: fixed;
+      bottom: 0px;
+      left: 0px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      z-index: 10001;
+      pointer-events: none;
+      font-family: Arial, sans-serif;
+      white-space: nowrap;
+    }
 
-        /* LANDSCAPE MOBILE/TABLET */
-        @media (max-width: 1024px) and (min-height: 350px) and (orientation: landscape) {
-            canvas {
-                top: 5vh;
-                right: 16vw;
-                bottom: 10vh;
-                left: 16vw;
-                width: calc(100vw - 32vw);
-                height: calc(100vh - 15vh);
-            }
+    /* light modus */
+    @media (prefers-color-scheme: light) {
+      .url-preview {
+        background: #f5f5f5;
+        color: #111;
+        border: 1px solid rgba(0,0,0,0.2);
+      }
+    }
 
-            #introText {
-                font-size: 11px;
-                padding: 8px;
-                max-width: 60vw;
-                max-height: 120px;
-                margin-top: 8px;
-            }
-
-            #introText h1,
-            #introText h2 {
-                font-size: 14px;
-            }
-
-            #introText p {
-                font-size: 10px;
-            }
-
-            #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
-                font-size: 13px;
-                width: 120px;
-                height: 45px;
-            }
-
-            .button-container {
-                gap: 15px;
-                margin-top: 10px;
-            }
-
-            #menu .button-container,
-            #gameOver .button-container,
-            #videoModal .button-container {
-                margin-top: 10px;
-            }
-
-            .wolkje {
-                max-width: 250px;
-                width: 30vw;
-            }
-
-            .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje) {
-                max-width: 250px;
-                width: 30vw;
-                right: 5vw;
-                bottom: 15vh;
-            }
-            
-            .victory-content[data-mode="single"] .victory-link-right .wolkje {
-                max-width: 250px;
-                width: 30vw;
-                right: 10vw;
-                bottom: 50vh;
-            }
-            
-            .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
-                max-width: 250px;
-                width: 30vw;
-                left: 5vw;
-                bottom: 15vh;
-            }
-            
-            .victory-content[data-mode="two"] .victory-link-left .wolkje {
-                max-width: 250px;
-                width: 30vw;
-                left: 10vw;
-                bottom: 50vh;
-            }
-        }
-
-        /* DESKTOP LANDSCAPE */
-        @media (min-width: 1025px) and (orientation: landscape) {
-            canvas {
-                top: 8vh;
-                right: 16vw;
-                bottom: 8vh;
-                left: 16vw;
-                width: calc(100vw - 32vw);
-                height: calc(100vh - 16vh);
-            }
-
-            #introText {
-                font-size: 18px;
-                padding: 16px;
-                max-width: 48vw;
-                max-height: 300px;
-                margin-top: 30px;
-            }
-
-            #introText h1,
-            #introText h2 {
-                font-size: 22px;
-            }
-
-            #introText p {
-                font-size: 16px;
-            }
-
-            #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
-                font-size: 16px;
-                width: 250px;
-                height: 90px;
-            }
-
-            .button-container {
-                gap: 40px;
-                margin-top: 25px;
-            }
-
-            #menu .button-container {
-                margin-top: 40px;
-            }
-
-            .wolkje {
-                max-width: 350px;
-                width: 35vw;
-            }
-
-            .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje) {
-                max-width: 350px;
-                width: 35vw;
-                right: 10vw;
-                bottom: 10vh;
-            }
-            
-            .victory-content[data-mode="single"] .victory-link-right .wolkje {
-                max-width: 350px;
-                width: 35vw;
-                right: 5vw;
-                bottom: 45vh;
-            }
-            
-            .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
-                max-width: 350px;
-                width: 35vw;
-                left: 10vw;
-                bottom: 10vh;
-            }
-            
-            .victory-content[data-mode="two"] .victory-link-left .wolkje {
-                max-width: 350px;
-                width: 35vw;
-                left: 5vw;
-                bottom: 45vh;
-            }
-        }
-
-        /* EXTRA LARGE DESKTOP */
-        @media (min-width: 1921px) and (orientation: landscape) {
-            #introText {
-                font-size: 28px;
-                padding: 20px;
-            }
-
-            #introText h1,
-            #introText h2 {
-                font-size: 35px;
-            }
-
-            #introText p {
-                font-size: 26px;
-            }
-
-            #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
-                font-size: 25px;
-                width: 400px;
-                height: 150px;
-            }
-
-            .button-container {
-                gap: 50px;
-            }
-
-            .wolkje {
-                max-width: 600px;
-                width: 40vw;
-            }
-
-            .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje),
-            .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
-                max-width: 600px;
-                width: 40vw;
-            }
-            
-            .victory-content[data-mode="single"] .victory-link-right .wolkje,
-            .victory-content[data-mode="two"] .victory-link-left .wolkje {
-                max-width: 600px;
-                width: 40vw;
-            }
-        }
-
-        /* VERY SMALL SCREENS */
-        @media (max-width: 320px) {
-            #introText {
-                font-size: 11px;
-                padding: 6px;
-                max-width: 85vw;
-                margin-top: 6px;
-            }
-
-            #introText h1,
-            #introText h2 {
-                font-size: 13px;
-            }
-
-            #introText p {
-                font-size: 10px;
-            }
-
-            #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
-                font-size: 11px;
-                width: 110px;
-                height: 45px;
-            }
-
-            .button-container {
-                gap: 6px;
-                margin-top: 10px;
-            }
-
-            .wolkje {
-                max-width: 200px;
-                width: 55vw;
-            }
-        }
-    </style>
+    /* dark modus */
+    @media (prefers-color-scheme: dark) {
+      .url-preview {
+        background: #2d2d2d;
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.2);
+      }
+    }
+  </style>
 </head>
 <body>
-    <img id="background" src="pad_hel.png" alt="pad met hel">
-    <div id="menu" class="active">
-        <div id="introText">
-            <h1>Welkom in Joopies kelder!</h1>
-            <p>Vind Joop, maar pas op voor de Uil! Volg het spoor van koekjes.</p>
-        </div>
-        <div class="button-container">
-            <button id="twoPlayer">Ga linksaf</button>
-            <button id="singlePlayer">Ga rechtsaf</button>
-        </div>
-    </div>
-    <canvas id="gameCanvas"></canvas>
-    <div id="gameOver">
-        <div id="introText">
-            <h2>Game over</h2>
-            <p>Je bent een pannenkoek!</p>
-        </div>
-        <div class="button-container">
-            <a href="https://joopvanhetgroenewoud.nl" class="buttonLink">HOME</a>
-            <button id="restartButton">RESTART</button>
-        </div>
-    </div>
-    <div id="videoModal">
-        <div id="introText">
-            <h2>Gefeliciteerd!</h2>
-            <p>Je hebt Joop gevonden!</p>
-        </div>
-        <div class="button-container">
-            <a href="https://joopvanhetgroenewoud.nl" class="buttonLink">HOME</a>
-            <button id="victoryRestart">RESTART</button>
-        </div>
-        <div class="victory-content" id="victoryContent">
-            <a href="https://onderweg8.joopvanhetgroenewoud.nl" class="victory-link-left">
-                <img src="" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkjeLeft">
-                <img src="" alt="Klik hier om door te gaan" id="victoryOwlLeft">
-            </a>
-            <a href="https://onderweg8.joopvanhetgroenewoud.nl" class="victory-link-right">
-                <img src="" alt="Klik hier om naar de wolk te gaan" class="wolkje" id="wolkjeRight">
-                <img src="" alt="Klik hier om door te gaan" id="victoryOwlRight">
-            </a>
-        </div>
-    </div>
-    <script>
-        // Fix voor Safari viewport height
-        function setViewportHeight() {
-            let vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-        }
+  <div id="background" style="background-image: url('Joop.png');"></div>
+  <img id="wolkje_versla" src="Wolkje_versla.png" alt="Decoratie" class="overlay-static"/>
+
+  <div class="choices">
+    <img src="Water1.png" class="choice" onclick="play('steen')" alt="Water"/>
+    <img src="Plant1.png" class="choice" onclick="play('papier')" alt="Plant"/>
+    <img src="Vuur1.png" class="choice" onclick="play('schaar')" alt="Vuur"/>
+  </div>
+
+  <div class="result" id="result">Maak je keuze!</div>
+  <div class="score" id="score">Jij: 0 - Joop: 0</div>
+
+  <img id="lossRedirect" class="overlay-image" src="Wolkje6.png" alt="Joop redirect"/>
+  <img id="winRedirect" class="overlay-image" src="Wolkje7.png"/>
+  <img id="continueGame" class="overlay-image" src="Wolkje5.png"/>
+  <img id="puntWinst" class="overlay-image" src="Wolkje3.png"/>
+  <img id="puntVerlies" class="overlay-image" src="Wolkje4.png"/>
+  <img id="wolkje_2_uit_3" class="overlay-image" src="Wolkje_2_uit_3.png" />
+  <img id="wolkje_grrr" class="overlay-image" src="Wolkje_grrr.png" />
+
+  <script>
+    // Fix voor Safari viewport height - PLAATS DIT ALS EERSTE
+    function setViewportHeight() {
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', vh + 'px');
+    }
+
+    setViewportHeight();
+    window.addEventListener('resize', setViewportHeight);
+    window.addEventListener('orientationchange', setViewportHeight);
+
+    function vertaalKeuze(keuze) {
+      switch (keuze) {
+        case 'steen': return 'Water';
+        case 'papier': return 'Plant';
+        case 'schaar': return 'Vuur';
+        default: return keuze;
+      }
+    }
+
+    let userScore = 0;
+    let computerScore = 0;
+    let paused = false;
+    let gameEnded = false;
+
+    const options = ['steen', 'papier', 'schaar'];
+
+    function resetGame() {
+      userScore = 0;
+      computerScore = 0;
+      paused = false;
+      gameEnded = false;
+      document.getElementById('result').textContent = 'Maak je keuze!';
+      document.getElementById('score').textContent = 'Jij: 0 - Joop: 0';
+      resetOverlays();
+    }
+
+    function showTempImage(id) {
+      const img = document.getElementById(id);
+      img.classList.add('fade-in-out');
+
+      setTimeout(function() {
+        img.classList.remove('fade-in-out');
+      }, 4500);
+    }
     
-        setViewportHeight();
-        window.addEventListener('resize', setViewportHeight);
-        window.addEventListener('orientationchange', setViewportHeight);
+    function play(userChoice) {
+      if (paused || gameEnded) return;
 
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
+      const computerChoice = options[Math.floor(Math.random() * 3)];
+      let resultText = '';
 
-        const cols = 30, rows = 30;
-        const LOGICAL_BOX_SIZE = 20;
+      const previousUserScore = userScore;
+      const previousComputerScore = computerScore;
+
+      if (userChoice === computerChoice) {
+        resultText = 'Gelijkspel! Beiden kozen ' + vertaalKeuze(userChoice);
+      } else if (
+        (userChoice === 'steen' && computerChoice === 'schaar') ||
+        (userChoice === 'papier' && computerChoice === 'steen') ||
+        (userChoice === 'schaar' && computerChoice === 'papier')
+      ) {
+        userScore++;
+        resultText = 'Jij wint! ' + vertaalKeuze(userChoice) + ' verslaat ' + vertaalKeuze(computerChoice);
+
+        if (previousUserScore === 0 && previousComputerScore === 0 && userScore === 1) {
+          showTempImage('puntWinst');
+          setTimeout(function() {
+            showTempImage('wolkje_2_uit_3');
+          }, 1600);
+        } else if (
+          (previousUserScore === 1 && previousComputerScore === 0 && userScore === 2) ||
+          (previousUserScore === 1 && previousComputerScore === 1 && userScore === 2)
+        ) {
+          showTempImage('continueGame');
+        } else if (
+          (previousUserScore === 0 && previousComputerScore === 1 && userScore === 1) ||
+          (previousUserScore === 1 && previousComputerScore === 2 && userScore === 2)
+        ) {
+          showTempImage('wolkje_grrr');
+        } else {
+          showTempImage('puntWinst');
+        }
+
+      } else {
+        computerScore++;
+        resultText = 'Joop wint! ' + vertaalKeuze(computerChoice) + ' verslaat ' + vertaalKeuze(userChoice);
+        showTempImage('puntVerlies');
+      }
+
+      document.getElementById('result').textContent = resultText;
+      document.getElementById('score').textContent = 'Jij: ' + userScore + ' - Joop: ' + computerScore;
+
+      if (userScore === 3) {
+        gameEnded = true;
+        const winRedirect = document.getElementById('winRedirect');
+        winRedirect.style.display = 'block';
+        winRedirect.style.opacity = 1;
         
-        canvas.width = LOGICAL_BOX_SIZE * cols;
-        canvas.height = LOGICAL_BOX_SIZE * rows;
+        console.log('Win wolkje wordt zichtbaar');
         
-        const snakeImg = new Image();
-        snakeImg.src = 'Monster.png';
-        const foodImg = new Image();
-        foodImg.src = 'Koek.png';
-        const obstacleImg = new Image();
-        obstacleImg.src = 'Uil.png';
-        const cloudImgLeft = new Image();
-        cloudImgLeft.src = 'Wolkje_snake.png';
-        const cloudImgRight = new Image();
-        cloudImgRight.src = 'wolkje_snakeR.png';
-
-        let snake, food, score, d, playerCount, gameInterval, obstacle;
-
-        function addTouchSupport(element) {
-            if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
-                element.addEventListener("touchstart", () => {
-                    element.classList.add("touched");
-                });
-                element.addEventListener("touchend", () => {
-                    setTimeout(() => {
-                        element.classList.remove("touched");
-                    }, 300);
-                });
-            }
-        }
-
-        const wolkjeLeft = document.getElementById("wolkjeLeft");
-        const wolkjeRight = document.getElementById("wolkjeRight");
-        const victoryOwlLeft = document.getElementById("victoryOwlLeft");
-        const victoryOwlRight = document.getElementById("victoryOwlRight");
+        winRedirect.onclick = function(e) {
+          console.log('Win wolkje geklikt!');
+          e.preventDefault();
+          e.stopPropagation();
+          resetGame();
+          window.location.href = 'https://onderweg4.joopvanhetgroenewoud.nl';
+        };
         
-        if (wolkjeLeft) addTouchSupport(wolkjeLeft);
-        if (wolkjeRight) addTouchSupport(wolkjeRight);
-        if (victoryOwlLeft) addTouchSupport(victoryOwlLeft);
-        if (victoryOwlRight) addTouchSupport(victoryOwlRight);
+        setTimeout(function() {
+          addUrlPreview(winRedirect, 'https://onderweg4.joopvanhetgroenewoud.nl');
+        }, 100);
+      }
 
-        document.getElementById("singlePlayer").addEventListener("click", () => startGame(1));
-        document.getElementById("twoPlayer").addEventListener("click", () => startGame(2));
-        document.getElementById("restartButton").addEventListener("click", () => location.reload());
-        document.getElementById("victoryRestart").addEventListener("click", () => location.reload());
-
-        let resizeTimeout;
-        let orientationTimeout;
-        let currentOrientation = window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
+      if (computerScore === 3) {
+        gameEnded = true;
+        const lossRedirect = document.getElementById('lossRedirect');
+        lossRedirect.style.display = 'block';
+        lossRedirect.style.opacity = 1;
         
-        function handleResize() {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {}, 100);
-        }
+        console.log('Loss wolkje wordt zichtbaar');
         
-        function handleOrientationChange() {
-            clearTimeout(orientationTimeout);
-            orientationTimeout = setTimeout(() => {
-                const newOrientation = window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
-                if (newOrientation !== currentOrientation) {
-                    currentOrientation = newOrientation;
-                    document.body.style.display = 'none';
-                    document.body.offsetHeight;
-                    document.body.style.display = 'flex';
-                }
-            }, 300);
-        }
-
-        window.addEventListener('resize', handleResize);
-        window.addEventListener('orientationchange', handleOrientationChange);
+        lossRedirect.onclick = function(e) {
+          console.log('Loss wolkje geklikt!');
+          e.preventDefault();
+          e.stopPropagation();
+          resetGame();
+          window.location.href = 'https://joopvanhetgroenewoud.nl';
+        };
         
-        let lastWidth = window.innerWidth;
-        let lastHeight = window.innerHeight;
-        
-        setInterval(() => {
-            if (window.innerWidth !== lastWidth || window.innerHeight !== lastHeight) {
-                lastWidth = window.innerWidth;
-                lastHeight = window.innerHeight;
-                handleOrientationChange();
-            }
-        }, 500);
+        setTimeout(function() {
+          addUrlPreview(lossRedirect, 'https://joopvanhetgroenewoud.nl');
+        }, 100);
+      }
+    }
 
-        function getRandomPosition(sizeInBoxes = 1, avoid = []) {
-            let position, isValid = false;
-            const snakeAreas = snake.map(seg => ({ 
-                x: seg.x, 
-                y: seg.y, 
-                width: LOGICAL_BOX_SIZE, 
-                height: LOGICAL_BOX_SIZE 
-            }));
-            const allAvoid = avoid.concat(snakeAreas);
-            
-            while (!isValid) {
-                position = {
-                    x: Math.floor(Math.random() * (cols - sizeInBoxes)) * LOGICAL_BOX_SIZE,
-                    y: Math.floor(Math.random() * (rows - sizeInBoxes)) * LOGICAL_BOX_SIZE
-                };
-                isValid = !allAvoid.some(item =>
-                    position.x < item.x + (item.width || LOGICAL_BOX_SIZE) &&
-                    position.x + sizeInBoxes * LOGICAL_BOX_SIZE > item.x &&
-                    position.y < item.y + (item.height || LOGICAL_BOX_SIZE) &&
-                    position.y + sizeInBoxes * LOGICAL_BOX_SIZE > item.y
-                );
-            }
-            return position;
+    function resetOverlays() {
+      const ids = [
+        'continueGame', 'puntWinst', 'puntVerlies', 'wolkje_grrr', 'wolkje_2_uit_3', 'wolkje_versla', 'winRedirect', 'lossRedirect'
+      ];
+
+      ids.forEach(function(id) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.style.display = 'none';
+          el.style.opacity = 0;
+          el.onclick = null;
         }
+      });
+    }
 
-        function resetGame() {
-            clearInterval(gameInterval);
-            
-            snake = [{ 
-                x: Math.floor(cols/2) * LOGICAL_BOX_SIZE, 
-                y: Math.floor(rows/2) * LOGICAL_BOX_SIZE 
-            }];
-            
-            obstacle = getRandomPosition(6, snake);
-            
-            food = getRandomPosition(1, [
-                { x: snake[0].x, y: snake[0].y, width: LOGICAL_BOX_SIZE, height: LOGICAL_BOX_SIZE },
-                { x: obstacle.x, y: obstacle.y, width: LOGICAL_BOX_SIZE*6, height: LOGICAL_BOX_SIZE*6 }
-            ]);
-            
-            score = 0;
-            d = null;
-            
-            document.getElementById("menu").classList.remove("active");
-            document.getElementById("gameOver").classList.remove("active");
-            document.getElementById("videoModal").classList.remove("active");
+    function addUrlPreview(element, url) {
+      let previewDiv = null;
+      
+      const showPreview = function() {
+        if (previewDiv) return;
+
+        previewDiv = document.createElement('div');
+        previewDiv.textContent = url;
+        previewDiv.className = "url-preview";
+        document.body.appendChild(previewDiv);
+      };
+      
+      const hidePreview = function() {
+        if (previewDiv && previewDiv.parentNode) {
+          document.body.removeChild(previewDiv);
+          previewDiv = null;
         }
+      };
+      
+      element.addEventListener('mouseenter', showPreview);
+      element.addEventListener('mouseleave', hidePreview);
+      element.addEventListener('click', hidePreview);
+    }
 
-        document.addEventListener("keydown", (e) => {
-            if (playerCount === 1) {
-                if (e.key === "ArrowLeft" && d !== "RIGHT") d = "LEFT";
-                else if (e.key === "ArrowUp" && d !== "DOWN") d = "UP";
-                else if (e.key === "ArrowRight" && d !== "LEFT") d = "RIGHT";
-                else if (e.key === "ArrowDown" && d !== "UP") d = "DOWN";
-            } else {
-                if (e.key === "a" && d !== "RIGHT") d = "LEFT";
-                else if (e.key === "w" && d !== "DOWN") d = "UP";
-                else if (e.key === "d" && d !== "LEFT") d = "RIGHT";
-                else if (e.key === "s" && d !== "UP") d = "DOWN";
-            }
-        });
+    const winRedirect = document.getElementById('winRedirect');
+    const lossRedirect = document.getElementById('lossRedirect');
+    
+    if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
+      winRedirect.addEventListener("touchstart", function() {
+        winRedirect.classList.add("touched");
+      });
 
-        let touchStartX = 0, touchStartY = 0;
-        canvas.addEventListener("touchstart", (e) => {
-            const t = e.touches[0];
-            touchStartX = t.clientX;
-            touchStartY = t.clientY;
-        });
+      winRedirect.addEventListener("touchend", function() {
+        setTimeout(function() {
+          winRedirect.classList.remove("touched");
+        }, 300);
+      });
 
-        canvas.addEventListener("touchmove", (e) => {
-            if (!touchStartX || !touchStartY) return;
-            const t = e.touches[0];
-            const dx = t.clientX - touchStartX, dy = t.clientY - touchStartY;
-            
-            if (Math.abs(dx) > Math.abs(dy)) {
-                if (dx > 0 && d !== "LEFT") d = "RIGHT";
-                else if (dx < 0 && d !== "RIGHT") d = "LEFT";
-            } else {
-                if (dy > 0 && d !== "UP") d = "DOWN";
-                else if (dy < 0 && d !== "DOWN") d = "UP";
-            }
-            touchStartX = 0;
-            touchStartY = 0;
-        });
+      lossRedirect.addEventListener("touchstart", function() {
+        lossRedirect.classList.add("touched");
+      });
 
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, LOGICAL_BOX_SIZE * 6, LOGICAL_BOX_SIZE * 6);
-            snake.forEach(seg => ctx.drawImage(snakeImg, seg.x, seg.y, LOGICAL_BOX_SIZE, LOGICAL_BOX_SIZE));
-            ctx.drawImage(foodImg, food.x, food.y, LOGICAL_BOX_SIZE, LOGICAL_BOX_SIZE);
+      lossRedirect.addEventListener("touchend", function() {
+        setTimeout(function() {
+          lossRedirect.classList.remove("touched");
+        }, 300);
+      });
+    }
 
-            let snakeX = snake[0].x, snakeY = snake[0].y;
-            
-            if (d === "LEFT") snakeX -= LOGICAL_BOX_SIZE;
-            if (d === "UP") snakeY -= LOGICAL_BOX_SIZE;
-            if (d === "RIGHT") snakeX += LOGICAL_BOX_SIZE;
-            if (d === "DOWN") snakeY += LOGICAL_BOX_SIZE;
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+        resetGame();
+      }
+    });
 
-            if (snakeX < 0) snakeX = canvas.width - LOGICAL_BOX_SIZE;
-            if (snakeX >= canvas.width) snakeX = 0;
-            if (snakeY < 0) snakeY = canvas.height - LOGICAL_BOX_SIZE;
-            if (snakeY >= canvas.height) snakeY = 0;
-
-            if (snakeX === food.x && snakeY === food.y) {
-                score++;
-                obstacle = getRandomPosition(6, [
-                    { x: food.x, y: food.y, width: LOGICAL_BOX_SIZE, height: LOGICAL_BOX_SIZE }
-                ]);
-                food = getRandomPosition(1, [
-                    { x: obstacle.x, y: obstacle.y, width: LOGICAL_BOX_SIZE*6, height: LOGICAL_BOX_SIZE*6 }
-                ]);
-            } else {
-                snake.pop();
-            }
-
-            const newHead = { x: snakeX, y: snakeY };
-            
-            if ((snakeX >= obstacle.x && snakeX < obstacle.x + LOGICAL_BOX_SIZE*6 && 
-                 snakeY >= obstacle.y && snakeY < obstacle.y + LOGICAL_BOX_SIZE*6) || 
-                collision(newHead, snake)) {
-                endGame();
-            }
-            
-            snake.unshift(newHead);
-            
-            if (score >= 1) showVideo();
-        }
-
-        function collision(head, array) {
-            return array.some(seg => seg.x === head.x && seg.y === head.y);
-        }
-
-        function endGame() {
-            clearInterval(gameInterval);
-            document.getElementById("gameOver").classList.add("active");
-        }
-        
-        function showVideo() {
-            clearInterval(gameInterval);
-            const victoryContent = document.getElementById("victoryContent");
-            
-            if (playerCount === 1) {
-                // Rechtsaf - single player
-                victoryContent.setAttribute("data-mode", "single");
-                wolkjeRight.src = 'wolkje_snakeR.png';
-                victoryOwlRight.src = 'Uil.png';
-            } else {
-                // Linksaf - two player
-                victoryContent.setAttribute("data-mode", "two");
-                wolkjeLeft.src = 'Wolkje_snake.png';
-                victoryOwlLeft.src = 'Uil.png';
-            }
-            document.getElementById("videoModal").classList.add("active");
-        }
-
-        function startGame(selectedPlayerCount) {
-            playerCount = selectedPlayerCount;
-            document.getElementById("menu").classList.remove("active");
-            resetGame();
-            gameInterval = setInterval(draw, 100);
-        }
-    </script>
+    window.addEventListener('load', function() {
+      resetGame();
+    });
+  </script>
 </body>
 </html>
