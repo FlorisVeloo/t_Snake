@@ -627,6 +627,40 @@
         </div>
     </div>
     <script>
+        // ANTI-ZOOM FIX - Voorkom dat Chrome de pagina uitzoomt
+        (function() {
+            // Reset zoom
+            document.documentElement.style.zoom = '1';
+            document.body.style.zoom = '1';
+            
+            // Disable all scaling
+            const meta = document.querySelector('meta[name="viewport"]');
+            if (meta) {
+                meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
+            }
+            
+            // Force zoom reset multiple times
+            function resetZoom() {
+                document.documentElement.style.zoom = '1';
+                document.body.style.zoom = '1';
+                
+                // Check actual zoom level
+                const actualWidth = window.innerWidth;
+                const visualWidth = document.documentElement.clientWidth;
+                const zoomLevel = visualWidth / actualWidth;
+                
+                if (zoomLevel !== 1) {
+                    document.body.style.zoom = String(1 / zoomLevel);
+                }
+            }
+            
+            resetZoom();
+            setTimeout(resetZoom, 100);
+            setTimeout(resetZoom, 300);
+            setTimeout(resetZoom, 500);
+            
+            window.addEventListener('resize', resetZoom);
+        })();
                 // ULTIEME FIX - Forceer styles via JavaScript NADAT pagina geladen is
         (function() {
             function forceCorrectSizes() {
