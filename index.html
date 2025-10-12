@@ -666,9 +666,30 @@
         </div>
     </div>
     <script>
-
+        (function() {
+            console.log('Browser:', navigator.userAgent);
+            console.log('Window width:', window.innerWidth);
+            console.log('Window height:', window.innerHeight);
+            console.log('Device Pixel Ratio:', window.devicePixelRatio);
+            console.log('Screen width:', screen.width);
+            console.log('Screen height:', screen.height);
+            
+            // Check computed styles
+            setTimeout(() => {
+                const introText = document.getElementById('introText');
+                const button = document.getElementById('twoPlayer');
+                if (introText && button) {
+                    const introStyle = window.getComputedStyle(introText);
+                    const buttonStyle = window.getComputedStyle(button);
+                    console.log('IntroText computed font-size:', introStyle.fontSize);
+                    console.log('Button computed width:', buttonStyle.width);
+                    console.log('Button computed height:', buttonStyle.height);
+                    console.log('Button computed font-size:', buttonStyle.fontSize);
+                }
+            }, 1000);
+        })();
             // Force Chrome to respect viewport scale
-         (function() {
+        (function() {
             // Detect if Chrome/Blink
             const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
             
