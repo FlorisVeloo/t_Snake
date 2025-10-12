@@ -114,6 +114,8 @@
 
         /* DEFAULT PORTRAIT MOBILE */
         #menu, #gameOver, #videoModal {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
             display: none;
             flex-direction: column;
             align-items: center;
@@ -128,6 +130,9 @@
             transform: translateX(-50%);
             max-width: 90vw;
             width: 100%;
+            zoom: 1;
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
         }
 
         #menu.active, #gameOver.active, #videoModal.active {
@@ -135,6 +140,8 @@
         }
 
         #introText {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
             background-color: rgba(0,0,0,0.8);
             padding: 8px 10px;
             border-radius: 8px;
