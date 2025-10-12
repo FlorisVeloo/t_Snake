@@ -636,23 +636,37 @@
             if (screenWidth < 768 && actualWidth > screenWidth * 1.5) {
                 // Bereken zoom factor
                 const zoomFactor = screenWidth / actualWidth;
+                const inverseZoom = 1 / zoomFactor;
                 
-                // Pas CSS transform scale toe op body
-                document.documentElement.style.transform = `scale(${1/zoomFactor})`;
-                document.documentElement.style.transformOrigin = 'top left';
-                document.documentElement.style.width = (actualWidth * zoomFactor) + 'px';
-                document.documentElement.style.height = (window.innerHeight * zoomFactor) + 'px';
+                // Pas CSS transform scale toe op ALLEEN de menu elementen, NIET op canvas
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    #menu, #gameOver, #videoModal {
+                        transform: translateX(-50%) scale(${inverseZoom}) !important;
+                        -webkit-transform: translateX(-50%) scale(${inverseZoom}) !important;
+                    }
+                    
+                    /* Canvas blijft normaal */
+                    canvas {
+                        transform: none !important;
+                        -webkit-transform: none !important;
+                    }
+                    
+                    /* Victory images blijven normaal */
+                    .victory-content img {
+                        transform: none !important;
+                        -webkit-transform: none !important;
+                    }
+                    
+                    .victory-content img:hover,
+                    .victory-content img.touched {
+                        transform: scale(1.1) translateY(-7%) !important;
+                        -webkit-transform: scale(1.1) translateY(-7%) !important;
+                    }
+                `;
+                document.head.appendChild(style);
                 
-                // Fix canvas positioning
-                const canvas = document.getElementById('gameCanvas');
-                if (canvas) {
-                    canvas.style.right = '8px';
-                    canvas.style.bottom = '8vh';
-                    canvas.style.width = 'calc(100vw - 16px)';
-                    canvas.style.height = 'calc(100vh - 208px - 8vh)';
-                }
-                
-                alert('Zoom fix toegepast! Factor: ' + zoomFactor.toFixed(2));
+                alert('Zoom fix V3 toegepast! Factor: ' + zoomFactor.toFixed(2));
             }
         })();
         
