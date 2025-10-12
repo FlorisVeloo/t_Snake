@@ -633,6 +633,41 @@
         </div>
     </div>
     <script>
+
+            // Force Chrome to respect viewport scale
+         function() {
+            // Detect if Chrome/Blink
+            const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+            
+            if (isChrome) {
+                // Force layout recalculation
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    * {
+                        transform: scale(1) !important;
+                    }
+                    #menu, #gameOver, #videoModal {
+                        transform: translateX(-50%) scale(1) !important;
+                        -webkit-transform: translateX(-50%) scale(1) !important;
+                    }
+                    #introText {
+                        font-size: 13px !important;
+                    }
+                    #introText h1, #introText h2 {
+                        font-size: 16px !important;
+                    }
+                    #introText p {
+                        font-size: 12px !important;
+                    }
+                    #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
+                        font-size: 14px !important;
+                        width: 140px !important;
+                        height: 50px !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        })();
         // Fix voor Safari viewport height
         function setViewportHeight() {
             let vh = window.innerHeight * 0.01;
