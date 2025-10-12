@@ -585,35 +585,35 @@
 </head>
 <body>
     <img id="background" src="pad_hel.png" alt="pad met hel">
-    <div id="menu" class="active" style="max-width: 90vw !important; width: 100% !important;">
-        <div id="introText" style="font-size: 13px !important; padding: 8px 10px !important; max-width: 85vw !important; min-width: 280px !important;">
-            <h1 style="font-size: 16px !important;">Welkom in Joopies kelder!</h1>
-            <p style="font-size: 12px !important;">Vind Joop, maar pas op voor de Uil! Volg het spoor van koekjes.</p>
+    <div id="menu" class="active">
+        <div id="introText">
+            <h1>Welkom in Joopies kelder!</h1>
+            <p>Vind Joop, maar pas op voor de Uil! Volg het spoor van koekjes.</p>
         </div>
         <div class="button-container">
-            <button id="twoPlayer" style="font-size: 14px !important; width: 140px !important; height: 50px !important; min-width: 140px !important; min-height: 50px !important;">Ga linksaf</button>
-            <button id="singlePlayer" style="font-size: 14px !important; width: 140px !important; height: 50px !important; min-width: 140px !important; min-height: 50px !important;">Ga rechtsaf</button>
+            <button id="twoPlayer">Ga linksaf</button>
+            <button id="singlePlayer">Ga rechtsaf</button>
         </div>
     </div>
     <canvas id="gameCanvas"></canvas>
-    <div id="gameOver" style="max-width: 90vw !important; width: 100% !important;">
-        <div id="introText" style="font-size: 13px !important; padding: 8px 10px !important; max-width: 85vw !important; min-width: 280px !important;">
-            <h2 style="font-size: 16px !important;">Game over</h2>
-            <p style="font-size: 12px !important;">Je bent een pannenkoek!</p>
+    <div id="gameOver">
+        <div id="introText">
+            <h2>Game over</h2>
+            <p>Je bent een pannenkoek!</p>
         </div>
         <div class="button-container">
-            <a href="https://joopvanhetgroenewoud.nl" class="buttonLink" style="font-size: 14px !important; width: 140px !important; height: 50px !important; min-width: 140px !important; min-height: 50px !important;">HOME</a>
-            <button id="restartButton" style="font-size: 14px !important; width: 140px !important; height: 50px !important; min-width: 140px !important; min-height: 50px !important;">RESTART</button>
+            <a href="https://joopvanhetgroenewoud.nl" class="buttonLink">HOME</a>
+            <button id="restartButton">RESTART</button>
         </div>
     </div>
-    <div id="videoModal" style="max-width: 90vw !important; width: 100% !important;">
-        <div id="introText" style="font-size: 13px !important; padding: 8px 10px !important; max-width: 85vw !important; min-width: 280px !important;">
-            <h2 style="font-size: 16px !important;">Gefeliciteerd!</h2>
-            <p style="font-size: 12px !important;">Je hebt Joop gevonden!</p>
+    <div id="videoModal">
+        <div id="introText">
+            <h2>Gefeliciteerd!</h2>
+            <p>Je hebt Joop gevonden!</p>
         </div>
         <div class="button-container">
-            <a href="https://joopvanhetgroenewoud.nl" class="buttonLink" style="font-size: 14px !important; width: 140px !important; height: 50px !important; min-width: 140px !important; min-height: 50px !important;">HOME</a>
-            <button id="victoryRestart" style="font-size: 14px !important; width: 140px !important; height: 50px !important; min-width: 140px !important; min-height: 50px !important;">RESTART</button>
+            <a href="https://joopvanhetgroenewoud.nl" class="buttonLink">HOME</a>
+            <button id="victoryRestart">RESTART</button>
         </div>
         <div class="victory-content" id="victoryContent">
             <a href="https://onderweg8.joopvanhetgroenewoud.nl" class="victory-link-left">
@@ -627,54 +627,26 @@
         </div>
     </div>
     <script>
-        // ANTI-ZOOM FIX - Voorkom dat Chrome de pagina uitzoomt
+        // ANTI-ZOOM FIX
         (function() {
-            // Reset zoom
-            document.documentElement.style.zoom = '1';
-            document.body.style.zoom = '1';
+            const actualWidth = window.innerWidth;
+            const screenWidth = screen.width;
             
-            // Disable all scaling
-            const meta = document.querySelector('meta[name="viewport"]');
-            if (meta) {
-                meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
-            }
-            
-            // Force zoom reset multiple times
-            function resetZoom() {
-                document.documentElement.style.zoom = '1';
-                document.body.style.zoom = '1';
+            // Als window width veel groter is dan screen width, betekent dat Chrome in desktop mode zit
+            if (screenWidth < 768 && actualWidth > screenWidth * 1.5) {
+                // Bereken zoom factor
+                const zoomFactor = screenWidth / actualWidth;
                 
-                // Check actual zoom level
-                const actualWidth = window.innerWidth;
-                const visualWidth = document.documentElement.clientWidth;
-                const zoomLevel = visualWidth / actualWidth;
+                // Pas CSS transform scale toe op body
+                document.documentElement.style.transform = `scale(${1/zoomFactor})`;
+                document.documentElement.style.transformOrigin = 'top left';
+                document.documentElement.style.width = (actualWidth * zoomFactor) + 'px';
+                document.documentElement.style.height = (window.innerHeight * zoomFactor) + 'px';
                 
-                if (zoomLevel !== 1) {
-                    document.body.style.zoom = String(1 / zoomLevel);
-                }
+                alert('Zoom fix toegepast! Factor: ' + zoomFactor.toFixed(2));
             }
-            
-            resetZoom();
-            setTimeout(resetZoom, 100);
-            setTimeout(resetZoom, 300);
-            setTimeout(resetZoom, 500);
-            
-            window.addEventListener('resize', resetZoom);
         })();
-            // Pas toe zodra DOM ready is
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', forceCorrectSizes);
-            } else {
-                forceCorrectSizes();
-            }
-            
-            // Herhaal na 50ms, 100ms, 200ms, 500ms voor de zekerheid
-            setTimeout(forceCorrectSizes, 50);
-            setTimeout(forceCorrectSizes, 100);
-            setTimeout(forceCorrectSizes, 200);
-            setTimeout(forceCorrectSizes, 500);
-        })();
-
+        
         function setViewportHeight() {
             let vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
