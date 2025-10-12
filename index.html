@@ -675,6 +675,69 @@
         </div>
     </div>
     <script>
+        // Agressieve fix voor Chrome Desktop mode op mobiel
+        (function() {
+            // Detecteer of we in een smalle viewport zitten (mobiel)
+            if (window.innerWidth <= 1024) {
+                // Forceer juiste styling via JavaScript
+                const forceStyles = () => {
+                    const menu = document.getElementById('menu');
+                    const gameOver = document.getElementById('gameOver');
+                    const videoModal = document.getElementById('videoModal');
+                    const introTexts = document.querySelectorAll('#introText');
+                    const buttons = document.querySelectorAll('#twoPlayer, #singlePlayer, #restartButton, #victoryRestart, .buttonLink');
+                    
+                    [menu, gameOver, videoModal].forEach(el => {
+                        if (el) {
+                            el.style.maxWidth = '90vw';
+                            el.style.width = '100%';
+                            el.style.transform = 'translateX(-50%)';
+                            el.style.webkitTransform = 'translateX(-50%)';
+                        }
+                    });
+                    
+                    introTexts.forEach(el => {
+                        if (el) {
+                            el.style.fontSize = '13px';
+                            el.style.padding = '8px 10px';
+                            el.style.maxWidth = '85vw';
+                            el.style.minWidth = '280px';
+                        }
+                    });
+                    
+                    const headers = document.querySelectorAll('#introText h1, #introText h2');
+                    headers.forEach(el => {
+                        if (el) el.style.fontSize = '16px';
+                    });
+                    
+                    const paragraphs = document.querySelectorAll('#introText p');
+                    paragraphs.forEach(el => {
+                        if (el) el.style.fontSize = '12px';
+                    });
+                    
+                    buttons.forEach(el => {
+                        if (el) {
+                            el.style.fontSize = '14px';
+                            el.style.width = '140px';
+                            el.style.height = '50px';
+                            el.style.minWidth = '140px';
+                            el.style.minHeight = '50px';
+                        }
+                    });
+                };
+                
+                // Pas stijlen toe wanneer DOM ready is
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', forceStyles);
+                } else {
+                    forceStyles();
+                }
+                
+                // Herzie stijlen na 100ms voor de zekerheid
+                setTimeout(forceStyles, 100);
+            }
+        })();
+        
         function setViewportHeight() {
             let vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
