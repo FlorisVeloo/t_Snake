@@ -643,6 +643,15 @@
                 document.documentElement.style.width = (actualWidth * zoomFactor) + 'px';
                 document.documentElement.style.height = (window.innerHeight * zoomFactor) + 'px';
                 
+                // Fix canvas positioning
+                const canvas = document.getElementById('gameCanvas');
+                if (canvas) {
+                    canvas.style.right = '8px';
+                    canvas.style.bottom = '8vh';
+                    canvas.style.width = 'calc(100vw - 16px)';
+                    canvas.style.height = 'calc(100vh - 208px - 8vh)';
+                }
+                
                 alert('Zoom fix toegepast! Factor: ' + zoomFactor.toFixed(2));
             }
         })();
