@@ -163,15 +163,6 @@
             max-width: 90vw;
             width: 100%;
         }
-        
-        /* Mobiele Chrome specifieke fix */
-        @media (max-width: 767px) {
-            #menu, #gameOver, #videoModal {
-                transform: translateX(-50%) scale(2) !important;
-                -webkit-transform: translateX(-50%) scale(2) !important;
-                transform-origin: center top;
-            }
-        }
 
         #menu.active, #gameOver.active, #videoModal.active {
             display: flex;
@@ -627,6 +618,55 @@
             .wolkje {
                 max-width: 200px;
                 width: 55vw;
+            }
+        }
+
+
+                /* Fix voor Chrome "Desktopsite" mode op mobiel */
+        @media (max-width: 767px) and (min-width: 360px) {
+            /* Forceer mobiele stijlen ook in desktop mode */
+            #menu, #gameOver, #videoModal {
+                max-width: 90vw !important;
+                width: 100% !important;
+            }
+            
+            #introText {
+                font-size: 13px !important;
+                padding: 8px 10px !important;
+                max-width: 85vw !important;
+                min-width: 280px !important;
+            }
+            
+            #introText h1, #introText h2 {
+                font-size: 16px !important;
+            }
+            
+            #introText p {
+                font-size: 12px !important;
+            }
+            
+            #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
+                font-size: 14px !important;
+                width: 140px !important;
+                height: 50px !important;
+                flex: 0 0 140px !important;
+            }
+            
+            canvas {
+                top: 200px !important;
+                right: 8px !important;
+                bottom: 8vh !important;
+                left: 8px !important;
+                width: calc(100vw - 16px) !important;
+                height: calc(100vh - 208px - 8vh) !important;
+            }
+        }
+        
+        /* Extra check voor zeer kleine schermen in desktop mode */
+        @media (max-width: 480px) {
+            body {
+                zoom: 1 !important;
+                -webkit-text-size-adjust: 100% !important;
             }
         }
     </style>
