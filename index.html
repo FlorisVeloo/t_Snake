@@ -675,24 +675,60 @@
         </div>
     </div>
     <script>
-        // DIAGNOSTISCHE TEST
+<script>
+        // Fix voor Chrome Desktop mode - gebruik screen.width in plaats van window.innerWidth
         (function() {
-            alert('Window width: ' + window.innerWidth + '\nScreen width: ' + screen.width + '\nDevice Pixel Ratio: ' + window.devicePixelRatio);
-            
-            setTimeout(() => {
-                const introText = document.getElementById('introText');
-                const button = document.getElementById('twoPlayer');
-                
-                if (introText && button) {
-                    const introStyle = window.getComputedStyle(introText);
-                    const buttonStyle = window.getComputedStyle(button);
+            // Check of we daadwerkelijk op een klein scherm zitten
+            if (screen.width <= 768) {
+                // Injecteer een style tag die altijd wordt toegepast
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    html {
+                        font-size: 16px !important;
+                    }
                     
-                    alert('IntroText font-size: ' + introStyle.fontSize + 
-                          '\nButton width: ' + buttonStyle.width + 
-                          '\nButton height: ' + buttonStyle.height +
-                          '\nButton font-size: ' + buttonStyle.fontSize);
-                }
-            }, 1000);
+                    #menu, #gameOver, #videoModal {
+                        max-width: 90vw !important;
+                        width: 100% !important;
+                        transform: translateX(-50%) !important;
+                        -webkit-transform: translateX(-50%) !important;
+                    }
+                    
+                    #introText {
+                        font-size: 13px !important;
+                        padding: 8px 10px !important;
+                        max-width: 85vw !important;
+                        min-width: 280px !important;
+                    }
+                    
+                    #introText h1, #introText h2 {
+                        font-size: 16px !important;
+                    }
+                    
+                    #introText p {
+                        font-size: 12px !important;
+                    }
+                    
+                    #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
+                        font-size: 14px !important;
+                        width: 140px !important;
+                        height: 50px !important;
+                        min-width: 140px !important;
+                        min-height: 50px !important;
+                        flex: 0 0 140px !important;
+                    }
+                    
+                    canvas {
+                        top: 200px !important;
+                        right: 8px !important;
+                        bottom: 8vh !important;
+                        left: 8px !important;
+                        width: calc(100vw - 16px) !important;
+                        height: calc(100vh - 208px - 8vh) !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
         })();
         // Agressieve fix voor Chrome Desktop mode op mobiel
         (function() {
