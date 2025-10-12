@@ -163,6 +163,15 @@
             max-width: 90vw;
             width: 100%;
         }
+        
+        /* Mobiele Chrome specifieke fix */
+        @media (max-width: 767px) {
+            #menu, #gameOver, #videoModal {
+                transform: translateX(-50%) scale(2) !important;
+                -webkit-transform: translateX(-50%) scale(2) !important;
+                transform-origin: center top;
+            }
+        }
 
         #menu.active, #gameOver.active, #videoModal.active {
             display: flex;
