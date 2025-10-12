@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
@@ -58,43 +58,6 @@
         
         body * {
             box-sizing: border-box;
-            -webkit-text-size-adjust: 100%;
-            -moz-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
-            text-size-adjust: 100%;
-        }
-        
-        /* Chrome specific fix - moet direct na body * komen */
-        @media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm) {
-            #menu, #gameOver, #videoModal {
-                zoom: 1 !important;
-                -webkit-transform: translateX(-50%) scale(1) !important;
-                transform: translateX(-50%) scale(1) !important;
-            }
-            
-            #introText {
-                font-size: 13px !important;
-                min-font-size: 13px !important;
-            }
-            
-            #introText h1, #introText h2 {
-                font-size: 16px !important;
-                min-font-size: 16px !important;
-            }
-            
-            #introText p {
-                font-size: 12px !important;
-                min-font-size: 12px !important;
-            }
-            
-            #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
-                font-size: 14px !important;
-                min-font-size: 14px !important;
-                width: 140px !important;
-                min-width: 140px !important;
-                height: 50px !important;
-                min-height: 50px !important;
-            }
         }
         
         body::before,
@@ -169,8 +132,6 @@
         }
 
         #introText {
-           -webkit-text-size-adjust: 100%;
-            text-size-adjust: 100%;
             background-color: rgba(0,0,0,0.8);
             padding: 8px 10px;
             border-radius: 8px;
@@ -183,7 +144,7 @@
             word-wrap: break-word;
             margin-top: 0;
             font-size: 13px;
-            min-width: 280px;  /* ← NIEUW: forceer minimum breedte */
+            min-width: 280px;
         }
 
         #introText h1,
@@ -621,13 +582,18 @@
             }
         }
 
-
-                /* Fix voor Chrome "Desktopsite" mode op mobiel */
-        @media (max-width: 767px) and (min-width: 360px) {
-            /* Forceer mobiele stijlen ook in desktop mode */
+        /* Fix voor Chrome "Desktopsite" mode op mobiel - MOET ONDERAAN STAAN */
+        @media (max-width: 1024px) {
+            html {
+                -webkit-text-size-adjust: none !important;
+                text-size-adjust: none !important;
+            }
+            
             #menu, #gameOver, #videoModal {
                 max-width: 90vw !important;
                 width: 100% !important;
+                transform: translateX(-50%) scale(1) !important;
+                -webkit-transform: translateX(-50%) scale(1) !important;
             }
             
             #introText {
@@ -649,6 +615,8 @@
                 font-size: 14px !important;
                 width: 140px !important;
                 height: 50px !important;
+                min-width: 140px !important;
+                min-height: 50px !important;
                 flex: 0 0 140px !important;
             }
             
@@ -659,14 +627,6 @@
                 left: 8px !important;
                 width: calc(100vw - 16px) !important;
                 height: calc(100vh - 208px - 8vh) !important;
-            }
-        }
-        
-        /* Extra check voor zeer kleine schermen in desktop mode */
-        @media (max-width: 480px) {
-            body {
-                zoom: 1 !important;
-                -webkit-text-size-adjust: 100% !important;
             }
         }
     </style>
@@ -715,63 +675,6 @@
         </div>
     </div>
     <script>
-        (function() {
-            console.log('Browser:', navigator.userAgent);
-            console.log('Window width:', window.innerWidth);
-            console.log('Window height:', window.innerHeight);
-            console.log('Device Pixel Ratio:', window.devicePixelRatio);
-            console.log('Screen width:', screen.width);
-            console.log('Screen height:', screen.height);
-            
-            // Check computed styles
-            setTimeout(() => {
-                const introText = document.getElementById('introText');
-                const button = document.getElementById('twoPlayer');
-                if (introText && button) {
-                    const introStyle = window.getComputedStyle(introText);
-                    const buttonStyle = window.getComputedStyle(button);
-                    console.log('IntroText computed font-size:', introStyle.fontSize);
-                    console.log('Button computed width:', buttonStyle.width);
-                    console.log('Button computed height:', buttonStyle.height);
-                    console.log('Button computed font-size:', buttonStyle.fontSize);
-                }
-            }, 1000);
-        })();
-            // Force Chrome to respect viewport scale
-        (function() {
-            // Detect if Chrome/Blink
-            const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-            
-            if (isChrome) {
-                // Force layout recalculation
-                const style = document.createElement('style');
-                style.innerHTML = `
-                    * {
-                        transform: scale(1) !important;
-                    }
-                    #menu, #gameOver, #videoModal {
-                        transform: translateX(-50%) scale(1) !important;
-                        -webkit-transform: translateX(-50%) scale(1) !important;
-                    }
-                    #introText {
-                        font-size: 13px !important;
-                    }
-                    #introText h1, #introText h2 {
-                        font-size: 16px !important;
-                    }
-                    #introText p {
-                        font-size: 12px !important;
-                    }
-                    #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
-                        font-size: 14px !important;
-                        width: 140px !important;
-                        height: 50px !important;
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-        })();
-        // Fix voor Safari viewport height
         function setViewportHeight() {
             let vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -1010,12 +913,10 @@
             const victoryContent = document.getElementById("victoryContent");
             
             if (playerCount === 1) {
-                // Rechtsaf - single player
                 victoryContent.setAttribute("data-mode", "single");
                 wolkjeRight.src = 'wolkje_snakeR.png';
                 victoryOwlRight.src = 'Uil.png';
             } else {
-                // Linksaf - two player
                 victoryContent.setAttribute("data-mode", "two");
                 wolkjeLeft.src = 'Wolkje_snake.png';
                 victoryOwlLeft.src = 'Uil.png';
