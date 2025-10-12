@@ -675,6 +675,25 @@
         </div>
     </div>
     <script>
+        // DIAGNOSTISCHE TEST
+        (function() {
+            alert('Window width: ' + window.innerWidth + '\nScreen width: ' + screen.width + '\nDevice Pixel Ratio: ' + window.devicePixelRatio);
+            
+            setTimeout(() => {
+                const introText = document.getElementById('introText');
+                const button = document.getElementById('twoPlayer');
+                
+                if (introText && button) {
+                    const introStyle = window.getComputedStyle(introText);
+                    const buttonStyle = window.getComputedStyle(button);
+                    
+                    alert('IntroText font-size: ' + introStyle.fontSize + 
+                          '\nButton width: ' + buttonStyle.width + 
+                          '\nButton height: ' + buttonStyle.height +
+                          '\nButton font-size: ' + buttonStyle.fontSize);
+                }
+            }, 1000);
+        })();
         // Agressieve fix voor Chrome Desktop mode op mobiel
         (function() {
             // Detecteer of we in een smalle viewport zitten (mobiel)
