@@ -88,15 +88,29 @@
             position: absolute;
             top: 200px;
             right: 8px;
-            bottom: 8vh;
             left: 8px;
             width: calc(100vw - 16px);
-            height: calc(100vh - 208px - 8vh);
+            height: auto;
+            max-height: calc(100vh - 208px - 8vh);
+            min-height: 300px;
+            aspect-ratio: 1 / 1;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            /* Safari/Chrome specifieke fixes */
+            canvas {
+                height: calc(100vh - 208px - 8vh);
+                max-height: calc(100vh - 208px - 8vh);
+            }
+            
+            #menu, #gameOver, #videoModal {
+                min-height: 180px;
+            }
         }
 
         @media (orientation: landscape) {
