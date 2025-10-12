@@ -581,87 +581,39 @@
                 width: 55vw;
             }
         }
-
-        /* Fix voor Chrome "Desktopsite" mode op mobiel - MOET ONDERAAN STAAN */
-        @media (max-width: 1024px) {
-            html {
-                -webkit-text-size-adjust: none !important;
-                text-size-adjust: none !important;
-            }
-            
-            #menu, #gameOver, #videoModal {
-                max-width: 90vw !important;
-                width: 100% !important;
-                transform: translateX(-50%) scale(1) !important;
-                -webkit-transform: translateX(-50%) scale(1) !important;
-            }
-            
-            #introText {
-                font-size: 13px !important;
-                padding: 8px 10px !important;
-                max-width: 85vw !important;
-                min-width: 280px !important;
-            }
-            
-            #introText h1, #introText h2 {
-                font-size: 16px !important;
-            }
-            
-            #introText p {
-                font-size: 12px !important;
-            }
-            
-            #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
-                font-size: 14px !important;
-                width: 140px !important;
-                height: 50px !important;
-                min-width: 140px !important;
-                min-height: 50px !important;
-                flex: 0 0 140px !important;
-            }
-            
-            canvas {
-                top: 200px !important;
-                right: 8px !important;
-                bottom: 8vh !important;
-                left: 8px !important;
-                width: calc(100vw - 16px) !important;
-                height: calc(100vh - 208px - 8vh) !important;
-            }
-        }
     </style>
 </head>
 <body>
     <img id="background" src="pad_hel.png" alt="pad met hel">
-    <div id="menu" class="active">
-        <div id="introText">
-            <h1>Welkom in Joopies kelder!</h1>
-            <p>Vind Joop, maar pas op voor de Uil! Volg het spoor van koekjes.</p>
+    <div id="menu" class="active" style="max-width: 90vw !important; width: 100% !important;">
+        <div id="introText" style="font-size: 13px !important; padding: 8px 10px !important; max-width: 85vw !important; min-width: 280px !important;">
+            <h1 style="font-size: 16px !important;">Welkom in Joopies kelder!</h1>
+            <p style="font-size: 12px !important;">Vind Joop, maar pas op voor de Uil! Volg het spoor van koekjes.</p>
         </div>
         <div class="button-container">
-            <button id="twoPlayer">Ga linksaf</button>
-            <button id="singlePlayer">Ga rechtsaf</button>
+            <button id="twoPlayer" style="font-size: 14px !important; width: 140px !important; height: 50px !important; min-width: 140px !important; min-height: 50px !important;">Ga linksaf</button>
+            <button id="singlePlayer" style="font-size: 14px !important; width: 140px !important; height: 50px !important; min-width: 140px !important; min-height: 50px !important;">Ga rechtsaf</button>
         </div>
     </div>
     <canvas id="gameCanvas"></canvas>
-    <div id="gameOver">
-        <div id="introText">
-            <h2>Game over</h2>
-            <p>Je bent een pannenkoek!</p>
+    <div id="gameOver" style="max-width: 90vw !important; width: 100% !important;">
+        <div id="introText" style="font-size: 13px !important; padding: 8px 10px !important; max-width: 85vw !important; min-width: 280px !important;">
+            <h2 style="font-size: 16px !important;">Game over</h2>
+            <p style="font-size: 12px !important;">Je bent een pannenkoek!</p>
         </div>
         <div class="button-container">
-            <a href="https://joopvanhetgroenewoud.nl" class="buttonLink">HOME</a>
-            <button id="restartButton">RESTART</button>
+            <a href="https://joopvanhetgroenewoud.nl" class="buttonLink" style="font-size: 14px !important; width: 140px !important; height: 50px !important; min-width: 140px !important; min-height: 50px !important;">HOME</a>
+            <button id="restartButton" style="font-size: 14px !important; width: 140px !important; height: 50px !important; min-width: 140px !important; min-height: 50px !important;">RESTART</button>
         </div>
     </div>
-    <div id="videoModal">
-        <div id="introText">
-            <h2>Gefeliciteerd!</h2>
-            <p>Je hebt Joop gevonden!</p>
+    <div id="videoModal" style="max-width: 90vw !important; width: 100% !important;">
+        <div id="introText" style="font-size: 13px !important; padding: 8px 10px !important; max-width: 85vw !important; min-width: 280px !important;">
+            <h2 style="font-size: 16px !important;">Gefeliciteerd!</h2>
+            <p style="font-size: 12px !important;">Je hebt Joop gevonden!</p>
         </div>
         <div class="button-container">
-            <a href="https://joopvanhetgroenewoud.nl" class="buttonLink">HOME</a>
-            <button id="victoryRestart">RESTART</button>
+            <a href="https://joopvanhetgroenewoud.nl" class="buttonLink" style="font-size: 14px !important; width: 140px !important; height: 50px !important; min-width: 140px !important; min-height: 50px !important;">HOME</a>
+            <button id="victoryRestart" style="font-size: 14px !important; width: 140px !important; height: 50px !important; min-width: 140px !important; min-height: 50px !important;">RESTART</button>
         </div>
         <div class="victory-content" id="victoryContent">
             <a href="https://onderweg8.joopvanhetgroenewoud.nl" class="victory-link-left">
@@ -675,124 +627,6 @@
         </div>
     </div>
     <script>
-<script>
-        // Fix voor Chrome Desktop mode - gebruik screen.width in plaats van window.innerWidth
-        (function() {
-            // Check of we daadwerkelijk op een klein scherm zitten
-            if (screen.width <= 768) {
-                // Injecteer een style tag die altijd wordt toegepast
-                const style = document.createElement('style');
-                style.innerHTML = `
-                    html {
-                        font-size: 16px !important;
-                    }
-                    
-                    #menu, #gameOver, #videoModal {
-                        max-width: 90vw !important;
-                        width: 100% !important;
-                        transform: translateX(-50%) !important;
-                        -webkit-transform: translateX(-50%) !important;
-                    }
-                    
-                    #introText {
-                        font-size: 13px !important;
-                        padding: 8px 10px !important;
-                        max-width: 85vw !important;
-                        min-width: 280px !important;
-                    }
-                    
-                    #introText h1, #introText h2 {
-                        font-size: 16px !important;
-                    }
-                    
-                    #introText p {
-                        font-size: 12px !important;
-                    }
-                    
-                    #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
-                        font-size: 14px !important;
-                        width: 140px !important;
-                        height: 50px !important;
-                        min-width: 140px !important;
-                        min-height: 50px !important;
-                        flex: 0 0 140px !important;
-                    }
-                    
-                    canvas {
-                        top: 200px !important;
-                        right: 8px !important;
-                        bottom: 8vh !important;
-                        left: 8px !important;
-                        width: calc(100vw - 16px) !important;
-                        height: calc(100vh - 208px - 8vh) !important;
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-        })();
-        // Agressieve fix voor Chrome Desktop mode op mobiel
-        (function() {
-            // Detecteer of we in een smalle viewport zitten (mobiel)
-            if (window.innerWidth <= 1024) {
-                // Forceer juiste styling via JavaScript
-                const forceStyles = () => {
-                    const menu = document.getElementById('menu');
-                    const gameOver = document.getElementById('gameOver');
-                    const videoModal = document.getElementById('videoModal');
-                    const introTexts = document.querySelectorAll('#introText');
-                    const buttons = document.querySelectorAll('#twoPlayer, #singlePlayer, #restartButton, #victoryRestart, .buttonLink');
-                    
-                    [menu, gameOver, videoModal].forEach(el => {
-                        if (el) {
-                            el.style.maxWidth = '90vw';
-                            el.style.width = '100%';
-                            el.style.transform = 'translateX(-50%)';
-                            el.style.webkitTransform = 'translateX(-50%)';
-                        }
-                    });
-                    
-                    introTexts.forEach(el => {
-                        if (el) {
-                            el.style.fontSize = '13px';
-                            el.style.padding = '8px 10px';
-                            el.style.maxWidth = '85vw';
-                            el.style.minWidth = '280px';
-                        }
-                    });
-                    
-                    const headers = document.querySelectorAll('#introText h1, #introText h2');
-                    headers.forEach(el => {
-                        if (el) el.style.fontSize = '16px';
-                    });
-                    
-                    const paragraphs = document.querySelectorAll('#introText p');
-                    paragraphs.forEach(el => {
-                        if (el) el.style.fontSize = '12px';
-                    });
-                    
-                    buttons.forEach(el => {
-                        if (el) {
-                            el.style.fontSize = '14px';
-                            el.style.width = '140px';
-                            el.style.height = '50px';
-                            el.style.minWidth = '140px';
-                            el.style.minHeight = '50px';
-                        }
-                    });
-                };
-                
-                // Pas stijlen toe wanneer DOM ready is
-                if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', forceStyles);
-                } else {
-                    forceStyles();
-                }
-                
-                // Herzie stijlen na 100ms voor de zekerheid
-                setTimeout(forceStyles, 100);
-            }
-        })();
-        
         function setViewportHeight() {
             let vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
