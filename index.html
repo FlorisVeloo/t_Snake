@@ -661,53 +661,6 @@
             
             window.addEventListener('resize', resetZoom);
         })();
-                // ULTIEME FIX - Forceer styles via JavaScript NADAT pagina geladen is
-        (function() {
-            function forceCorrectSizes() {
-                // Haal alle elementen op
-                const menus = document.querySelectorAll('#menu, #gameOver, #videoModal');
-                const introTexts = document.querySelectorAll('#introText');
-                const headers = document.querySelectorAll('#introText h1, #introText h2');
-                const paragraphs = document.querySelectorAll('#introText p');
-                const buttons = document.querySelectorAll('#twoPlayer, #singlePlayer, #restartButton, #victoryRestart, .buttonLink');
-                
-                // Forceer menu containers
-                menus.forEach(el => {
-                    el.style.setProperty('max-width', '90vw', 'important');
-                    el.style.setProperty('width', '100%', 'important');
-                    el.style.setProperty('transform', 'translateX(-50%)', 'important');
-                });
-                
-                // Forceer introText
-                introTexts.forEach(el => {
-                    el.style.setProperty('font-size', '13px', 'important');
-                    el.style.setProperty('padding', '8px 10px', 'important');
-                    el.style.setProperty('max-width', '85vw', 'important');
-                    el.style.setProperty('min-width', '280px', 'important');
-                });
-                
-                // Forceer headers
-                headers.forEach(el => {
-                    el.style.setProperty('font-size', '16px', 'important');
-                });
-                
-                // Forceer paragraphs
-                paragraphs.forEach(el => {
-                    el.style.setProperty('font-size', '12px', 'important');
-                });
-                
-                // Forceer buttons
-                buttons.forEach(el => {
-                    el.style.setProperty('font-size', '14px', 'important');
-                    el.style.setProperty('width', '140px', 'important');
-                    el.style.setProperty('height', '50px', 'important');
-                    el.style.setProperty('min-width', '140px', 'important');
-                    el.style.setProperty('min-height', '50px', 'important');
-                });
-                
-                alert('Styles geforceerd! Button width: ' + buttons[0].style.width);
-            }
-            
             // Pas toe zodra DOM ready is
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', forceCorrectSizes);
