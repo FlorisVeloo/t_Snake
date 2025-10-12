@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
@@ -62,6 +62,39 @@
             -moz-text-size-adjust: 100%;
             -ms-text-size-adjust: 100%;
             text-size-adjust: 100%;
+        }
+        
+        /* Chrome specific fix - moet direct na body * komen */
+        @media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm) {
+            #menu, #gameOver, #videoModal {
+                zoom: 1 !important;
+                -webkit-transform: translateX(-50%) scale(1) !important;
+                transform: translateX(-50%) scale(1) !important;
+            }
+            
+            #introText {
+                font-size: 13px !important;
+                min-font-size: 13px !important;
+            }
+            
+            #introText h1, #introText h2 {
+                font-size: 16px !important;
+                min-font-size: 16px !important;
+            }
+            
+            #introText p {
+                font-size: 12px !important;
+                min-font-size: 12px !important;
+            }
+            
+            #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
+                font-size: 14px !important;
+                min-font-size: 14px !important;
+                width: 140px !important;
+                min-width: 140px !important;
+                height: 50px !important;
+                min-height: 50px !important;
+            }
         }
         
         body::before,
