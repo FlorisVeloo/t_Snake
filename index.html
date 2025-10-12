@@ -85,7 +85,7 @@
             background-color: #000;
             touch-action: none;
             z-index: 1;
-            position: fixed;  /* Changed from absolute */
+            position: absolute;
             top: 200px;
             right: 8px;
             bottom: 8vh;
@@ -97,18 +97,6 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-        }
-
-        @supports (-webkit-touch-callout: none) {
-            /* Safari/Chrome specifieke fixes */
-            canvas {
-                height: calc(100vh - 208px - 8vh);
-                max-height: calc(100vh - 208px - 8vh);
-            }
-            
-            #menu, #gameOver, #videoModal {
-                min-height: 180px;
-            }
         }
 
         @media (orientation: landscape) {
@@ -126,8 +114,6 @@
 
         /* DEFAULT PORTRAIT MOBILE */
         #menu, #gameOver, #videoModal {
-            -webkit-text-size-adjust: 100%;
-            text-size-adjust: 100%;
             display: none;
             flex-direction: column;
             align-items: center;
@@ -139,11 +125,10 @@
             position: absolute;
             top: 0;
             left: 50%;
-            transform: translateX(-50%) translateZ(0);
-            -webkit-transform: translateX(-50%) translateZ(0);
+            transform: translateX(-50%);
+            -webkit-transform: translateX(-50%);
             max-width: 90vw;
             width: 100%;
-            zoom: 1;
         }
 
         #menu.active, #gameOver.active, #videoModal.active {
@@ -165,6 +150,7 @@
             word-wrap: break-word;
             margin-top: 0;
             font-size: 13px;
+            min-width: 280px;  /* ← NIEUW: forceer minimum breedte */
         }
 
         #introText h1,
