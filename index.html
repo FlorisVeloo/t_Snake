@@ -177,11 +177,11 @@
         }
         
         #gameOver .button-container {
-            margin-top: 8px;
+            margin-top: 0px;
         }
         
         #videoModal .button-container {
-            margin-top: 8px;
+            margin-top: 0px;
         }
 
         #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
@@ -556,7 +556,7 @@
                 bottom: 200px;
                 left: 8px;
                 width: calc(100vw - 16px);
-                height: calc(100vh - 208px - 8vh);
+                height: calc(100vh - 400px);
             }
             
             #introText {
@@ -586,9 +586,49 @@
                 margin-top: 10px;
             }
 
+            #menu .button-container {
+                margin-top: 24px; /* Pas dit aan voor linksaf/rechtsaf positie */
+            }
+            
+            #gameOver .button-container {
+                margin-top: 32px; /* Pas dit aan voor game over knoppen positie */
+            }
+            
+            #videoModal .button-container {
+                margin-top: 32px; /* Pas dit aan voor victory knoppen positie */
+            }
+
             .wolkje {
                 max-width: 200px;
                 width: 55vw;
+            }
+            
+            .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje) {
+                max-width: 150px;
+                width: 30vw;
+                right: 0vw;
+                bottom: 15vh;
+            }
+            
+            .victory-content[data-mode="single"] .victory-link-right .wolkje {
+                max-width: 150px;
+                width: 30vw;
+                right: 10vw;
+                bottom: 60vh;
+            }
+            
+            .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
+                max-width: 250px;
+                width: 30vw;
+                left: 0vw;
+                bottom: 15vh;
+            }
+            
+            .victory-content[data-mode="two"] .victory-link-left .wolkje {
+                max-width: 250px;
+                width: 30vw;
+                left: 10vw;
+                bottom: 60vh;
             }
         }
     </style>
