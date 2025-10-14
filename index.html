@@ -224,9 +224,14 @@
             align-items: center;
             justify-content: flex-start;
             text-align: center;
-            margin-top: 10px;
+            margin-top: 0;
+            padding-top: 20px;
             z-index: 2;
             position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            -webkit-transform: translateX(-50%);
             max-width: 90vw;
             width: 100%;
         }
@@ -350,11 +355,12 @@
         /* LANDSCAPE MOBILE/TABLET */
         @media (max-width: 1024px) and (min-height: 350px) and (orientation: landscape) {
             canvas {
-                right: 16vw;
-                bottom: 32px;
-                left: 16vw;
-                width: calc(100vw - 32vw);
-                height: 100vh;
+                top: 5vh !important;
+                right: 16vw !important;
+                bottom: 5vh !important;
+                left: 16vw !important;
+                width: calc(100vw - 32vw) !important;
+                height: calc(100vh - 10vh) !important;
             }
 
             #introText {
@@ -376,13 +382,13 @@
             }
 
             #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
-                font-size: 32px;
-                width: 160px;
-                height: 48px;
+                font-size: 13px;
+                width: 120px;
+                height: 45px;
             }
 
             .button-container {
-                gap: 32px;
+                gap: 15px;
                 margin-top: 10px;
             }
 
@@ -392,37 +398,41 @@
                 margin-top: 10px;
             }
 
+            /* Force kleine wolkje en uil in landscape */
             .wolkje {
-                max-width: 250px;
-                width: 30vw;
+                width: 80px !important;
+                max-width: 80px !important;
+                height: auto !important;
             }
 
             .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje) {
-                width: 20vw;
-                max-width: 64px;
+                width: 80px !important;
+                max-width: 80px !important;
+                height: auto !important;
                 right: 5vw;
-                bottom: 15vh;
+                bottom: 10vh;
             }
             
             .victory-content[data-mode="single"] .victory-link-right .wolkje {
-                width: 20vw;
-                max-width: 64px;
+                width: 80px !important;
+                max-width: 80px !important;
                 right: 10vw;
-                bottom: 50vh;
+                bottom: 45vh;
             }
             
             .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
-                width: 20vw;
-                max-width: 64px;
+                width: 80px !important;
+                max-width: 80px !important;
+                height: auto !important;
                 left: 5vw;
-                bottom: 15vh;
+                bottom: 10vh;
             }
             
             .victory-content[data-mode="two"] .victory-link-left .wolkje {
-                width: 20vw;
-                max-width: 64px;
+                width: 80px !important;
+                max-width: 80px !important;
                 left: 10vw;
-                bottom: 50vh;
+                bottom: 45vh;
             }
         }
 
@@ -467,7 +477,7 @@
             }
 
             #menu .button-container {
-                margin-top: 48x;
+                margin-top: 48px;
             }
 
             .wolkje {
@@ -587,15 +597,15 @@
             }
 
             #menu .button-container {
-                margin-top: 24px; /* Pas dit aan voor linksaf/rechtsaf positie */
+                margin-top: 24px;
             }
             
             #gameOver .button-container {
-                margin-top: 32px; /* Pas dit aan voor game over knoppen positie */
+                margin-top: 32px;
             }
             
             #videoModal .button-container {
-                margin-top: 32px; /* Pas dit aan voor victory knoppen positie */
+                margin-top: 32px;
             }
 
             .wolkje {
@@ -715,8 +725,6 @@
                     }
                 `;
                 document.head.appendChild(style);
-                
-                alert('Zoom fix V3 toegepast! Factor: ' + zoomFactor.toFixed(2));
             }
         })();
         
