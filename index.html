@@ -87,7 +87,7 @@
             bottom: 16vh;
             left: 8px;
             width: calc(100vw - 16px);
-            height: calc(100vh - 208px - 8vh);
+            height: calc(100vh - 216px - 16vh);
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -355,12 +355,12 @@
         /* LANDSCAPE MOBILE/TABLET */
         @media (max-width: 1024px) and (min-height: 350px) and (orientation: landscape) {
             canvas {
-                top: 5vh !important;
-                right: 16vw !important;
-                bottom: 5vh !important;
-                left: 16vw !important;
-                width: calc(100vw - 32vw) !important;
-                height: calc(100vh - 10vh) !important;
+                top: 10vh;
+                right: 20vw;
+                bottom: 10vh;
+                left: 20vw;
+                width: 60vw;
+                height: 80vh;
             }
 
             #introText {
@@ -378,7 +378,7 @@
 
             #introText p {
                 font-size: 10px;
-                margin-top: 16px;
+                margin-top: 8px;
             }
 
             #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
@@ -399,40 +399,36 @@
             }
 
             /* Force kleine wolkje en uil in landscape */
-            .wolkje {
-                width: 80px !important;
-                max-width: 80px !important;
-                height: auto !important;
+            .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje),
+            .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
+                width: 100px;
+                max-width: 100px;
+                height: auto;
+                bottom: 5vh;
             }
-
+            
+            .victory-content[data-mode="single"] .victory-link-right .wolkje,
+            .victory-content[data-mode="two"] .victory-link-left .wolkje {
+                width: 100px;
+                max-width: 100px;
+                height: auto;
+                bottom: 40vh;
+            }
+            
             .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje) {
-                width: 80px !important;
-                max-width: 80px !important;
-                height: auto !important;
                 right: 5vw;
-                bottom: 10vh;
             }
             
             .victory-content[data-mode="single"] .victory-link-right .wolkje {
-                width: 80px !important;
-                max-width: 80px !important;
                 right: 10vw;
-                bottom: 45vh;
             }
             
             .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
-                width: 80px !important;
-                max-width: 80px !important;
-                height: auto !important;
                 left: 5vw;
-                bottom: 10vh;
             }
             
             .victory-content[data-mode="two"] .victory-link-left .wolkje {
-                width: 80px !important;
-                max-width: 80px !important;
                 left: 10vw;
-                bottom: 45vh;
             }
         }
 
