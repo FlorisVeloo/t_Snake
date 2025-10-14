@@ -740,10 +740,11 @@
         function applyLandscapeFix() {
             const isLandscape = window.innerWidth > window.innerHeight;
             const isSmallScreen = window.innerWidth <= 1024;
+            const canvas = document.getElementById('gameCanvas');
+            const allImages = document.querySelectorAll('.victory-content img');
             
             if (isLandscape && isSmallScreen) {
-                // Force canvas positioning
-                const canvas = document.getElementById('gameCanvas');
+                // Force canvas positioning in LANDSCAPE
                 canvas.style.setProperty('top', '5vh', 'important');
                 canvas.style.setProperty('bottom', '5vh', 'important');
                 canvas.style.setProperty('left', '18vw', 'important');
@@ -752,7 +753,6 @@
                 canvas.style.setProperty('height', '90vh', 'important');
                 
                 // Force victory images klein
-                const allImages = document.querySelectorAll('.victory-content img');
                 allImages.forEach(img => {
                     img.style.setProperty('width', '90px', 'important');
                     img.style.setProperty('max-width', '90px', 'important');
@@ -760,6 +760,23 @@
                 });
                 
                 console.log('Landscape fix applied!');
+            } else {
+                // RESET to portrait defaults
+                canvas.style.removeProperty('top');
+                canvas.style.removeProperty('bottom');
+                canvas.style.removeProperty('left');
+                canvas.style.removeProperty('right');
+                canvas.style.removeProperty('width');
+                canvas.style.removeProperty('height');
+                
+                // Reset victory images
+                allImages.forEach(img => {
+                    img.style.removeProperty('width');
+                    img.style.removeProperty('max-width');
+                    img.style.removeProperty('min-width');
+                });
+                
+                console.log('Portrait mode - styles reset!');
             }
         }
         
