@@ -745,8 +745,8 @@
             
             if (isLandscape && isSmallScreen) {
                 // Force canvas positioning in LANDSCAPE
-                canvas.style.setProperty('top', '5vh', 'important');
-                canvas.style.setProperty('bottom', '5vh', 'important');
+                canvas.style.setProperty('top', '6vh', 'important');
+                canvas.style.setProperty('bottom', '12vh', 'important');
                 canvas.style.setProperty('left', '18vw', 'important');
                 canvas.style.setProperty('right', '18vw', 'important');
                 canvas.style.setProperty('width', '64vw', 'important');
@@ -754,9 +754,9 @@
                 
                 // Force victory images klein
                 allImages.forEach(img => {
-                    img.style.setProperty('width', '90px', 'important');
-                    img.style.setProperty('max-width', '90px', 'important');
-                    img.style.setProperty('min-width', '90px', 'important');
+                    img.style.setProperty('width', '270px', 'important');
+                    img.style.setProperty('max-width', '270px', 'important');
+                    img.style.setProperty('min-width', '270px', 'important');
                 });
                 
                 console.log('Landscape fix applied!');
