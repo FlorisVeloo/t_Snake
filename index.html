@@ -137,9 +137,9 @@
             border-radius: 8px;
             color: #810000;
             box-shadow: 0 0 20px rgba(255,255,255,0.2);
-            margin-bottom: 6px;
+            margin-bottom: 64px;
             max-width: 85vw;
-            max-height: 320px;
+            max-height: 270px;
             overflow-y: auto;
             word-wrap: break-word;
             margin-top: 0;
@@ -350,12 +350,11 @@
         /* LANDSCAPE MOBILE/TABLET */
         @media (max-width: 1024px) and (min-height: 350px) and (orientation: landscape) {
             canvas {
-                top: 5vh;
                 right: 16vw;
                 bottom: 10vh;
                 left: 16vw;
                 width: calc(100vw - 32vw);
-                height: calc(100vh - 5vh);
+                height: auto;
             }
 
             #introText {
@@ -373,16 +372,17 @@
 
             #introText p {
                 font-size: 10px;
+                margin-top: 16px;
             }
 
             #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
-                font-size: 13px;
-                width: 120px;
-                height: 45px;
+                font-size: 32px;
+                width: 160px;
+                height: 48px;
             }
 
             .button-container {
-                gap: 15px;
+                gap: 32px;
                 margin-top: 10px;
             }
 
@@ -457,17 +457,17 @@
 
             #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
                 font-size: 32px;
-                width: 360px;
+                width: 450px;
                 height: 90px;
             }
 
             .button-container {
-                gap: 40px;
-                margin-top: 25px;
+                gap: 64px;
+                margin-top: 32px;
             }
 
             #menu .button-container {
-                margin-top: 40px;
+                margin-top: 48x;
             }
 
             .wolkje {
