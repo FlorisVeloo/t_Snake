@@ -735,6 +735,40 @@
         setViewportHeight();
         window.addEventListener('resize', setViewportHeight);
         window.addEventListener('orientationchange', setViewportHeight);
+        
+        // LANDSCAPE FIX - Force canvas en images
+        function applyLandscapeFix() {
+            const isLandscape = window.innerWidth > window.innerHeight;
+            const isSmallScreen = window.innerWidth <= 1024;
+            
+            if (isLandscape && isSmallScreen) {
+                // Force canvas positioning
+                const canvas = document.getElementById('gameCanvas');
+                canvas.style.setProperty('top', '5vh', 'important');
+                canvas.style.setProperty('bottom', '5vh', 'important');
+                canvas.style.setProperty('left', '18vw', 'important');
+                canvas.style.setProperty('right', '18vw', 'important');
+                canvas.style.setProperty('width', '64vw', 'important');
+                canvas.style.setProperty('height', '90vh', 'important');
+                
+                // Force victory images klein
+                const allImages = document.querySelectorAll('.victory-content img');
+                allImages.forEach(img => {
+                    img.style.setProperty('width', '90px', 'important');
+                    img.style.setProperty('max-width', '90px', 'important');
+                    img.style.setProperty('min-width', '90px', 'important');
+                });
+                
+                console.log('Landscape fix applied!');
+            }
+        }
+        
+        // Run op page load en bij resize
+        applyLandscapeFix();
+        window.addEventListener('resize', applyLandscapeFix);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(applyLandscapeFix, 100);
+        });
 
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
