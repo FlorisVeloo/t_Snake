@@ -355,80 +355,83 @@
         /* LANDSCAPE MOBILE/TABLET */
         @media (max-width: 1024px) and (min-height: 350px) and (orientation: landscape) {
             canvas {
-                top: 10vh;
-                right: 20vw;
-                bottom: 10vh;
-                left: 20vw;
-                width: 60vw;
-                height: 80vh;
+                top: 5vh !important;
+                right: 18vw !important;
+                bottom: 5vh !important;
+                left: 18vw !important;
+                width: 64vw !important;
+                height: 90vh !important;
+                max-height: none !important;
             }
 
             #introText {
-                font-size: 11px;
-                padding: 8px;
-                max-width: 60vw;
-                max-height: 120px;
-                margin-top: 8px;
+                font-size: 11px !important;
+                padding: 8px !important;
+                max-width: 60vw !important;
+                max-height: 120px !important;
+                margin-top: 8px !important;
             }
 
             #introText h1,
             #introText h2 {
-                font-size: 14px;
+                font-size: 14px !important;
             }
 
             #introText p {
-                font-size: 10px;
-                margin-top: 8px;
+                font-size: 10px !important;
+                margin-top: 8px !important;
             }
 
             #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
-                font-size: 13px;
-                width: 120px;
-                height: 45px;
+                font-size: 13px !important;
+                width: 120px !important;
+                height: 45px !important;
             }
 
             .button-container {
-                gap: 15px;
-                margin-top: 10px;
+                gap: 15px !important;
+                margin-top: 10px !important;
             }
 
             #menu .button-container,
             #gameOver .button-container,
             #videoModal .button-container {
-                margin-top: 10px;
+                margin-top: 10px !important;
             }
 
-            /* Force kleine wolkje en uil in landscape */
+            /* FORCE kleine wolkje en uil in landscape met !important */
             .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje),
             .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
-                width: 100px;
-                max-width: 100px;
-                height: auto;
-                bottom: 5vh;
+                width: 90px !important;
+                max-width: 90px !important;
+                min-width: 90px !important;
+                height: auto !important;
+                bottom: 5vh !important;
             }
             
             .victory-content[data-mode="single"] .victory-link-right .wolkje,
             .victory-content[data-mode="two"] .victory-link-left .wolkje {
-                width: 100px;
-                max-width: 100px;
-                height: auto;
-                bottom: 40vh;
+                width: 90px !important;
+                max-width: 90px !important;
+                min-width: 90px !important;
+                height: auto !important;
+                bottom: 40vh !important;
             }
             
             .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje) {
-                right: 5vw;
+                right: 5vw !important;
             }
             
             .victory-content[data-mode="single"] .victory-link-right .wolkje {
-                right: 10vw;
+                right: 10vw !important;
             }
             
             .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
-                left: 5vw;
+                left: 5vw !important;
             }
             
             .victory-content[data-mode="two"] .victory-link-left .wolkje {
-                left: 10vw;
+                left: 10vw !important;
             }
         }
 
