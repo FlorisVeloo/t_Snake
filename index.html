@@ -137,7 +137,7 @@
             border-radius: 8px;
             color: #810000;
             box-shadow: 0 0 20px rgba(255,255,255,0.2);
-            margin-bottom: 64px;
+            margin-bottom: 0px;
             max-width: 80vw;
             max-height: 270px;
             overflow-y: auto;
@@ -173,15 +173,15 @@
         }
 
         #menu .button-container {
-            margin-top: 8px;
+            margin-top: 72px;
         }
         
         #gameOver .button-container {
-            margin-top: 0px;
+            margin-top: 48px;
         }
         
         #videoModal .button-container {
-            margin-top: 0px;
+            margin-top: 48px;
         }
 
         #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
@@ -285,7 +285,7 @@
             max-width: 400px;
             width: 60vw;
             height: auto;
-            right: 5vw;
+            right: 0vw;
             bottom: 0vh;
             transform-origin: bottom right;
             transition: transform 0.3s ease-in-out;
@@ -312,7 +312,7 @@
             max-width: 400px;
             width: 60vw;
             height: auto;
-            left: 5vw;
+            left: 0vw;
             bottom: 0vh;
             transform-origin: bottom left;
             transition: transform 0.3s ease-in-out;
@@ -326,7 +326,7 @@
             width: 60vw;
             height: auto;
             left: 20vw;
-            bottom: 25vh;
+            bottom: 35vh;
             transform-origin: bottom left;
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
@@ -351,10 +351,10 @@
         @media (max-width: 1024px) and (min-height: 350px) and (orientation: landscape) {
             canvas {
                 right: 16vw;
-                bottom: 10vh;
+                bottom: 32px;
                 left: 16vw;
                 width: calc(100vw - 32vw);
-                height: auto;
+                height: 100vh;
             }
 
             #introText {
@@ -398,29 +398,29 @@
             }
 
             .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje) {
-                max-width: 150px;
-                width: 30vw;
+                width: 20vw;
+                max-width: 64px;
                 right: 5vw;
                 bottom: 15vh;
             }
             
             .victory-content[data-mode="single"] .victory-link-right .wolkje {
-                max-width: 150px;
-                width: 30vw;
+                width: 20vw;
+                max-width: 64px;
                 right: 10vw;
                 bottom: 50vh;
             }
             
             .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
-                max-width: 250px;
-                width: 30vw;
+                width: 20vw;
+                max-width: 64px;
                 left: 5vw;
                 bottom: 15vh;
             }
             
             .victory-content[data-mode="two"] .victory-link-left .wolkje {
-                max-width: 250px;
-                width: 30vw;
+                width: 20vw;
+                max-width: 64px;
                 left: 10vw;
                 bottom: 50vh;
             }
