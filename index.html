@@ -84,7 +84,7 @@
             position: absolute;
             top: 200px;
             right: 8px;
-            bottom: 16vh;
+            bottom: 8px;
             left: 8px;
             width: calc(100vw - 16px);
             height: calc(100vh - 216px - 16vh);
@@ -149,7 +149,7 @@
 
         #introText h1,
         #introText h2 {
-            font-size: 28px;
+            font-size: 26px;
             margin-bottom: 6px;
             line-height: 1.1;
         }
@@ -165,7 +165,7 @@
             flex-direction: row;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
             width: 100%;
             max-width: 2000px;
@@ -177,11 +177,11 @@
         }
         
         #gameOver .button-container {
-            margin-top: 36px;
+            margin-top: 24px;
         }
         
         #videoModal .button-container {
-            margin-top: 36px;
+            margin-top: 24px;
         }
 
         #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
@@ -194,8 +194,8 @@
             font-size: 18px;
             border-radius: 8px;
             flex: 0 0 140px;
-            width: 140px;
-            height: 50px;
+            width: 144px;
+            height: 48px;
             text-align: center;
             white-space: nowrap;
             display: flex;
@@ -304,7 +304,7 @@
             width: 60vw;
             height: auto;
             right: 20vw;
-            bottom: 35vh;
+            bottom: 32vh;
             transform-origin: bottom right;
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
@@ -331,7 +331,7 @@
             width: 60vw;
             height: auto;
             left: 20vw;
-            bottom: 35vh;
+            bottom: 32vh;
             transform-origin: bottom left;
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
@@ -516,44 +516,60 @@
         /* EXTRA LARGE DESKTOP */
         @media (min-width: 1921px) and (orientation: landscape) {
             #introText {
-                font-size: 28px;
-                padding: 20px;
+                font-size: 18px;
+                padding: 16px;
+                max-width: 48vw;
+                max-height: 600px;
+                margin-top: 160px;
             }
 
             #introText h1,
             #introText h2 {
-                font-size: 35px;
+                font-size: 96px;
             }
 
             #introText p {
-                font-size: 26px;
+                font-size: 64px;
+                margin-top: 128px;
             }
 
             #startButton, #restartButton, #twoPlayer, #singlePlayer, .buttonLink, #victoryRestart {
-                font-size: 25px;
-                width: 400px;
-                height: 150px;
+                font-size: 64px;
+                height: 90px;
+                min-width: 270px;
             }
 
             .button-container {
-                gap: 50px;
-            }
-
-            .wolkje {
-                max-width: 600px;
-                width: 40vw;
-            }
-
-            .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje),
-            .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
-                max-width: 600px;
-                width: 40vw;
+                gap: 64px;
+                margin-top: 64px;
             }
             
-            .victory-content[data-mode="single"] .victory-link-right .wolkje,
-            .victory-content[data-mode="two"] .victory-link-left .wolkje {
-                max-width: 600px;
+            .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje) {
                 width: 40vw;
+                max-width: 600px;
+                right: 0vw;
+                bottom: 0vh;
+            }
+            
+            .victory-content[data-mode="single"] .victory-link-right .wolkje {
+                width: 40vw;
+                max-width: 600px;
+                right: 10vw;
+                bottom: 30vh;
+            }
+            
+            .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
+                width: 40vw;
+                max-width: 600px;
+                left: 0vw;
+                bottom: 0vh;
+            }
+            
+            .victory-content[data-mode="two"] .victory-link-left .wolkje {
+                width: 40vw;
+                max-width: 600px;
+                left: 10vw;
+                bottom: 30vh;
             }
         }
 
@@ -671,8 +687,8 @@
             <p>Je hebt Joop gevonden!</p>
         </div>
         <div class="button-container">
-            <a href="https://joopvanhetgroenewoud.nl" class="buttonLink">HOME</a>
-            <button id="victoryRestart">RESTART</button>
+            <a href="https://joopvanhetgroenewoud.nl" class="buttonLink">Home</a>
+            <button id="victoryRestart">Restart</button>
         </div>
         <div class="victory-content" id="victoryContent">
             <a href="https://onderweg8.joopvanhetgroenewoud.nl" class="victory-link-left">
