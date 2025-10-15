@@ -365,11 +365,11 @@
             }
 
             #introText {
-                font-size: 11px !important;
+                font-size: 12px !important;
                 padding: 8px !important;
                 max-width: 50vw !important;
                 max-height: 160px !important;
-                margin-top: 16px !important;
+                margin-top: 32px !important;
             }
 
             #introText h1,
@@ -401,30 +401,30 @@
             
             .victory-content[data-mode="single"] .victory-link-right img:not(.wolkje) {
                 width: 35vw;
-                max-width: 250px;
+                max-width: 320px;
                 right: 0vw;
-                bottom: 10vh;
+                bottom: 20vh;
             }
             
             .victory-content[data-mode="single"] .victory-link-right .wolkje {
                 width: 35vw;
-                max-width: 250px;
-                right: 10vw;
-                bottom: 95vh;
+                max-width: 320px;
+                right: 5vw;
+                bottom: 5vh;
             }
             
             .victory-content[data-mode="two"] .victory-link-left img:not(.wolkje) {
                 width: 35vw;
-                max-width: 250px;
+                max-width: 320px;
                 left: 0vw;
-                bottom: 10vh;
+                bottom: 20vh;
             }
             
             .victory-content[data-mode="two"] .victory-link-left .wolkje {
                 width: 35vw;
-                max-width: 250px;
-                left: 10vw;
-                bottom: 95vh;
+                max-width: 320px;
+                left: 5vw;
+                bottom: 5vh;
             }
         }
 
@@ -755,11 +755,11 @@
             if (isLandscape && isSmallScreen) {
                 // Force canvas positioning in LANDSCAPE
                 canvas.style.setProperty('top', '6vh', 'important');
-                canvas.style.setProperty('bottom', '48vh', 'important');
+                canvas.style.setProperty('bottom', '24vh', 'important');
                 canvas.style.setProperty('left', '18vw', 'important');
                 canvas.style.setProperty('right', '18vw', 'important');
                 canvas.style.setProperty('width', '64vw', 'important');
-                canvas.style.setProperty('height', '56vh', 'important');
+                canvas.style.setProperty('height', '64vh', 'important');
                 
                 // Force victory images klein
                 allImages.forEach(img => {
