@@ -751,22 +751,61 @@
             const isSmallScreen = window.innerWidth <= 1024;
             const canvas = document.getElementById('gameCanvas');
             const allImages = document.querySelectorAll('.victory-content img');
+            const introText = document.getElementById('introText');
+            const buttonContainers = document.querySelectorAll('.button-container');
             
             if (isLandscape && isSmallScreen) {
                 // Force canvas positioning in LANDSCAPE
-                canvas.style.setProperty('top', '6vh', 'important');
-                canvas.style.setProperty('bottom', '24vh', 'important');
-                canvas.style.setProperty('left', '18vw', 'important');
-                canvas.style.setProperty('right', '18vw', 'important');
+                canvas.style.setProperty('top', '5vh', 'important');
+                canvas.style.setProperty('bottom', '20vh', 'important');
+                canvas.style.setProperty('left', '20vw', 'important');
+                canvas.style.setProperty('right', '20vw', 'important');
                 canvas.style.setProperty('width', '64vw', 'important');
-                canvas.style.setProperty('height', '64vh', 'important');
+                canvas.style.setProperty('height', '84vh', 'important');
                 
-                // Force victory images klein
-                allImages.forEach(img => {
-                    img.style.setProperty('width', '160px', 'important');
-                    img.style.setProperty('max-width', '160px', 'important');
-                    img.style.setProperty('min-width', '160px', 'important');
+                // Force introText smaller
+                introText.style.setProperty('max-width', '50vw', 'important');
+                introText.style.setProperty('margin-top', '32px', 'important');
+                
+                // Force button container gap
+                buttonContainers.forEach(container => {
+                    container.style.setProperty('margin-top', '8px', 'important');
+                    container.style.setProperty('gap', '16px', 'important');
                 });
+                
+                // Force victory images positioning
+                const rightOwl = document.getElementById('victoryOwlRight');
+                const rightCloud = document.getElementById('wolkjeRight');
+                const leftOwl = document.getElementById('victoryOwlLeft');
+                const leftCloud = document.getElementById('wolkjeLeft');
+                
+                if (rightOwl) {
+                    rightOwl.style.setProperty('width', '35vw', 'important');
+                    rightOwl.style.setProperty('max-width', '320px', 'important');
+                    rightOwl.style.setProperty('bottom', '5vh', 'important');
+                    rightOwl.style.setProperty('right', '0vw', 'important');
+                }
+                
+                if (rightCloud) {
+                    rightCloud.style.setProperty('width', '35vw', 'important');
+                    rightCloud.style.setProperty('max-width', '320px', 'important');
+                    rightCloud.style.setProperty('bottom', '35vh', 'important');
+                    rightCloud.style.setProperty('right', '5vw', 'important');
+                }
+                
+                if (leftOwl) {
+                    leftOwl.style.setProperty('width', '35vw', 'important');
+                    leftOwl.style.setProperty('max-width', '320px', 'important');
+                    leftOwl.style.setProperty('bottom', '5vh', 'important');
+                    leftOwl.style.setProperty('left', '0vw', 'important');
+                }
+                
+                if (leftCloud) {
+                    leftCloud.style.setProperty('width', '35vw', 'important');
+                    leftCloud.style.setProperty('max-width', '320px', 'important');
+                    leftCloud.style.setProperty('bottom', '35vh', 'important');
+                    leftCloud.style.setProperty('left', '5vw', 'important');
+                }
                 
                 console.log('Landscape fix applied!');
             } else {
@@ -778,11 +817,21 @@
                 canvas.style.removeProperty('width');
                 canvas.style.removeProperty('height');
                 
+                introText.style.removeProperty('max-width');
+                introText.style.removeProperty('margin-top');
+                
+                buttonContainers.forEach(container => {
+                    container.style.removeProperty('margin-top');
+                    container.style.removeProperty('gap');
+                });
+                
                 // Reset victory images
                 allImages.forEach(img => {
                     img.style.removeProperty('width');
                     img.style.removeProperty('max-width');
-                    img.style.removeProperty('min-width');
+                    img.style.removeProperty('bottom');
+                    img.style.removeProperty('left');
+                    img.style.removeProperty('right');
                 });
                 
                 console.log('Portrait mode - styles reset!');
