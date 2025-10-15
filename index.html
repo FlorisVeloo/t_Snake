@@ -87,7 +87,7 @@
             bottom: 8px;
             left: 8px;
             width: calc(100vw - 16px);
-            height: calc(100vh - 216px - 16vh);
+            height: calc(100vh - 216px - 8px);
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -759,7 +759,7 @@
             if (isLandscape && isSmallScreen) {
                 // Force canvas positioning in LANDSCAPE
                 canvas.style.setProperty('top', '5vh', 'important');
-                canvas.style.setProperty('bottom', '20vh', 'important');
+                canvas.style.setProperty('bottom', '30vh', 'important');
                 canvas.style.setProperty('left', '50%', 'important');
                 canvas.style.setProperty('right', 'auto', 'important');
                 canvas.style.setProperty('transform', 'translateX(-50%)', 'important');
@@ -772,7 +772,7 @@
                 
                 // Force button container gap
                 buttonContainers.forEach(container => {
-                    container.style.setProperty('margin-top', '8px', 'important');
+                    container.style.setProperty('margin-top', '16px', 'important');
                     container.style.setProperty('gap', '16px', 'important');
                 });
                 
